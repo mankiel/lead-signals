@@ -22,7 +22,7 @@ export default function Home() {
         <div className="grid md:grid-cols-3 gap-8 mb-16">
           <div className="bg-white p-6 rounded-lg shadow-md">
             <div className="text-4xl mb-4">💰</div>
-            <h3 className="text-xl font-semibold mb-2">Funding Signals</h3>
+            <h3 className="text-xl font-semibold mb-2 text-gray-900">Funding Signals</h3>
             <p className="text-gray-600">
               Track companies that just raised funding and are ready to spend
             </p>
@@ -30,7 +30,7 @@ export default function Home() {
 
           <div className="bg-white p-6 rounded-lg shadow-md">
             <div className="text-4xl mb-4">��</div>
-            <h3 className="text-xl font-semibold mb-2">Hiring Alerts</h3>
+            <h3 className="text-xl font-semibold mb-2 text-gray-900">Hiring Alerts</h3>
             <p className="text-gray-600">
               Monitor job postings that indicate growing teams and budgets
             </p>
@@ -38,7 +38,7 @@ export default function Home() {
 
           <div className="bg-white p-6 rounded-lg shadow-md">
             <div className="text-4xl mb-4">⚙️</div>
-            <h3 className="text-xl font-semibold mb-2">Tech Changes</h3>
+            <h3 className="text-xl font-semibold mb-2 text-gray-900">Tech Changes</h3>
             <p className="text-gray-600">
               Detect technology stack changes that create sales opportunities
             </p>
