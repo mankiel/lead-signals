@@ -11,6 +11,7 @@ interface LeadSignal {
   source: string
   sourceUrl?: string
   createdAt: string
+  metadata?: any
 }
 
 interface Subscription {
@@ -25,7 +26,8 @@ const SIGNAL_TYPES = [
   { value: 'job_posting', label: 'New Job Postings', icon: '💼' },
   { value: 'tech_change', label: 'Technology Changes', icon: '⚙️' },
   { value: 'growth', label: 'Company Growth', icon: '📈' },
-  { value: 'executive_change', label: 'Executive Changes', icon: '👔' }
+  { value: 'executive_change', label: 'Executive Changes', icon: '👔' },
+  { value: 'government_contract', label: 'Government Contracts', icon: '🏛️' }
 ]
 
 export default function Dashboard() {
@@ -169,6 +171,16 @@ export default function Dashboard() {
                               {SIGNAL_TYPES.find(t => t.value === signal.signalType)?.label}
                             </span>
                           </div>
+                          
+                          {/* Show contract type prominently for government contracts */}
+                          {signal.signalType === 'government_contract' && signal.metadata?.contractType && (
+                            <div className="mb-2">
+                              <span className="inline-flex items-center px-3 py-1 bg-blue-100 text-blue-800 text-sm font-medium rounded-full">
+                                {signal.metadata.contractType}
+                              </span>
+                            </div>
+                          )}
+                          
                           <p className="text-black mb-2">{signal.description}</p>
                           <div className="flex items-center gap-4 text-sm text-black">
                             <span>Source: {signal.source}</span>
