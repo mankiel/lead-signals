@@ -54,6 +54,10 @@ async function main() {
           const responseDeadline = opp.responseDeadLine || opp.archiveDate || 'TBD'
           const postedDate = opp.postedDate || ''
           
+          // Extract resource links (attachments/documents)
+          const resourceLinks = opp.resourceLinks || []
+          const hasAttachments = resourceLinks.length > 0
+          
           // Build comprehensive description
           const description = [
             opp.title || 'Contract Opportunity',
@@ -63,8 +67,9 @@ async function main() {
             office ? `Office: ${office}` : null,
             `NAICS: ${opp.naicsCode || 'N/A'}`,
             `Value: ${awardValue}`,
-            `Response Deadline: ${responseDeadline}`
-          ].filter(Boolean).join(' | ').substring(0, 300)
+            `Response Deadline: ${responseDeadline}`,
+            hasAttachments ? `📎 ${resourceLinks.length} attachment(s)` : null
+          ].filter(Boolean).join(' | ').substring(0, 350)
           
           const contract = {
             companyName: agency,
@@ -87,7 +92,9 @@ async function main() {
               setAsideType: opp.setAsideCode,
               value: awardValue,
               placeOfPerformance: opp.placeOfPerformance,
-              classificationCode: opp.classificationCode
+              classificationCode: opp.classificationCode,
+              resourceLinks: resourceLinks,
+              solicitationNumber: opp.solicitationNumber
             }
           }
 
@@ -95,7 +102,7 @@ async function main() {
             data: contract
           })
           console.log(`✅ Added: ${agency} - ${opp.title?.substring(0, 50)}...`)
-          console.log(`   Type: ${opp.type} | Response: ${responseDeadline} | NAICS: ${opp.naicsCode || 'N/A'}`)
+          console.log(`   Type: ${opp.type} | Response: ${responseDeadline} | NAICS: ${opp.naicsCode || 'N/A'} | Attachments: ${resourceLinks.length}`)
         }
 
         if (openOpportunities.length > 0) {

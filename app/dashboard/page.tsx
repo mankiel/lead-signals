@@ -172,16 +172,50 @@ export default function Dashboard() {
                             </span>
                           </div>
                           
-                          {/* Show contract type prominently for government contracts */}
+                          {/* Show contract type and solicitation number for government contracts */}
                           {signal.signalType === 'government_contract' && signal.metadata?.contractType && (
-                            <div className="mb-2">
+                            <div className="mb-2 flex items-center gap-2">
                               <span className="inline-flex items-center px-3 py-1 bg-blue-100 text-blue-800 text-sm font-medium rounded-full">
                                 {signal.metadata.contractType}
                               </span>
+                              {signal.metadata.solicitationNumber && (
+                                <span className="text-xs text-gray-600">
+                                  #{signal.metadata.solicitationNumber}
+                                </span>
+                              )}
                             </div>
                           )}
                           
                           <p className="text-black mb-2">{signal.description}</p>
+                          
+                          {/* Show document attachments for government contracts */}
+                          {signal.signalType === 'government_contract' && signal.metadata?.resourceLinks && signal.metadata.resourceLinks.length > 0 && (
+                            <div className="mb-3 p-3 bg-gray-50 rounded-lg border border-gray-200">
+                              <div className="flex items-center gap-2 mb-2">
+                                <span className="text-sm font-medium text-gray-700">📎 Contract Documents ({signal.metadata.resourceLinks.length})</span>
+                                <span className="text-xs text-gray-500">- Contains detailed contract type (FFP, CPFF, T&M, etc.)</span>
+                              </div>
+                              <div className="flex flex-wrap gap-2">
+                                {signal.metadata.resourceLinks.slice(0, 3).map((link: string, idx: number) => (
+                                  <a
+                                    key={idx}
+                                    href={link}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="inline-flex items-center px-2 py-1 bg-white border border-gray-300 rounded text-xs text-blue-600 hover:bg-blue-50 hover:border-blue-300 transition-colors"
+                                  >
+                                    Document {idx + 1} ↗
+                                  </a>
+                                ))}
+                                {signal.metadata.resourceLinks.length > 3 && (
+                                  <span className="inline-flex items-center px-2 py-1 text-xs text-gray-500">
+                                    +{signal.metadata.resourceLinks.length - 3} more
+                                  </span>
+                                )}
+                              </div>
+                            </div>
+                          )}
+                          
                           <div className="flex items-center gap-4 text-sm text-black">
                             <span>Source: {signal.source}</span>
                             {signal.sourceUrl && (
@@ -191,7 +225,7 @@ export default function Dashboard() {
                                 rel="noopener noreferrer"
                                 className="text-blue-600 hover:underline"
                               >
-                                View source →
+                                View full opportunity →
                               </a>
                             )}
                           </div>
