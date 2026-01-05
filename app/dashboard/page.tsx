@@ -118,13 +118,13 @@ export default function Dashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <header className="bg-white border-b border-gray-200 sticky top-0 z-10 backdrop-blur-sm bg-white/95">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
+      <header className="bg-white/80 backdrop-blur-lg border-b border-gray-200/50 sticky top-0 z-10 shadow-sm">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5">
           <div className="flex justify-between items-center">
             <div>
-              <h1 className="text-2xl font-bold text-gray-900 tracking-tight">Lead Signals</h1>
-              <p className="text-sm text-gray-500 mt-0.5">Government contract opportunities tracker</p>
+              <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent tracking-tight">Lead Signals</h1>
+              <p className="text-sm text-gray-600 mt-1 font-medium">🏛️ Government Contract Opportunities Intelligence</p>
             </div>
             <UserButton />
           </div>
@@ -132,6 +132,51 @@ export default function Dashboard() {
       </header>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Stats Overview */}
+        <div className="mb-8 grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="bg-white/90 backdrop-blur-sm rounded-2xl shadow-lg border border-gray-200/50 p-6 hover:shadow-xl transition-all duration-300">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-gray-600 uppercase tracking-wide">Active Opportunities</p>
+                <p className="text-3xl font-bold text-gray-900 mt-2">{signals.length}</p>
+              </div>
+              <div className="bg-blue-100 rounded-full p-4">
+                <span className="text-3xl">📊</span>
+              </div>
+            </div>
+          </div>
+          <div className="bg-white/90 backdrop-blur-sm rounded-2xl shadow-lg border border-gray-200/50 p-6 hover:shadow-xl transition-all duration-300">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-gray-600 uppercase tracking-wide">Subscriptions</p>
+                <p className="text-3xl font-bold text-gray-900 mt-2">{subscriptions.length}</p>
+              </div>
+              <div className="bg-green-100 rounded-full p-4">
+                <span className="text-3xl">✅</span>
+              </div>
+            </div>
+          </div>
+          <div className="bg-gradient-to-br from-blue-500 to-indigo-600 rounded-2xl shadow-lg p-6 hover:shadow-xl transition-all duration-300">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-blue-100 uppercase tracking-wide">Urgent Deadlines</p>
+                <p className="text-3xl font-bold text-white mt-2">{signals.filter(s => {
+                  if (s.metadata?.responseDeadline) {
+                    const deadline = new Date(s.metadata.responseDeadline)
+                    const now = new Date()
+                    const daysUntil = Math.floor((deadline.getTime() - now.getTime()) / (1000 * 60 * 60 * 24))
+                    return daysUntil <= 7
+                  }
+                  return false
+                }).length}</p>
+              </div>
+              <div className="bg-white/20 rounded-full p-4">
+                <span className="text-3xl">⏰</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
         {/* Chart Section - Full Width */}
         <div className="mb-6 grid grid-cols-1 lg:grid-cols-2 gap-6">
           <OfficeChart />
@@ -139,51 +184,51 @@ export default function Dashboard() {
         </div>
         
         {/* Agency Budget Chart */}
-        <div className="mb-6">
+        <div className="mb-8">
           <AgencyBudgetChart />
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Subscriptions Sidebar */}
           <div className="lg:col-span-1">
-            <Card>
-              <CardHeader>
-                <CardTitle>Your Subscriptions</CardTitle>
-                <p className="text-sm text-gray-500 mt-1">
-                  Subscribe to signal types to get notified
+            <div className="bg-white/90 backdrop-blur-sm rounded-2xl shadow-lg border border-gray-200/50 overflow-hidden">
+              <div className="bg-gradient-to-r from-blue-600 to-indigo-600 p-6">
+                <h2 className="text-xl font-bold text-white">Your Subscriptions</h2>
+                <p className="text-sm text-blue-100 mt-1">
+                  🔔 Get notified about new opportunities
                 </p>
-              </CardHeader>
+              </div>
               
-              <div className="space-y-2">
+              <div className="p-6 space-y-3">
                 {SIGNAL_TYPES.map(({ value, label, icon }) => (
                   <button
                     key={value}
                     onClick={() => toggleSubscription(value)}
-                    className={`w-full flex items-center justify-between p-3 rounded-lg border transition-all duration-150 ${
+                    className={`w-full flex items-center justify-between p-4 rounded-xl border-2 transition-all duration-200 transform hover:scale-105 ${
                       isSubscribed(value)
-                        ? 'border-primary-500 bg-primary-50 shadow-sm'
-                        : 'border-gray-200 hover:border-gray-300 hover:shadow-sm'
+                        ? 'border-blue-500 bg-gradient-to-r from-blue-50 to-indigo-50 shadow-md'
+                        : 'border-gray-200 hover:border-blue-300 hover:shadow-md bg-white'
                     }`}
                   >
-                    <span className="flex items-center gap-2">
-                      <span className="text-lg">{icon}</span>
-                      <span className="text-sm font-medium text-gray-900">{label}</span>
+                    <span className="flex items-center gap-3">
+                      <span className="text-2xl">{icon}</span>
+                      <span className="text-sm font-semibold text-gray-900">{label}</span>
                     </span>
                     {isSubscribed(value) && (
-                      <span className="text-primary-600 font-semibold">✓</span>
+                      <span className="text-blue-600 font-bold text-lg">✓</span>
                     )}
                   </button>
                 ))}
               </div>
-            </Card>
+            </div>
           </div>
 
           {/* Signals Feed */}
           <div className="lg:col-span-2">
-            <Card padding="none">
-              <div className="p-6 border-b border-gray-100">
+            <div className="bg-white/90 backdrop-blur-sm rounded-2xl shadow-lg border border-gray-200/50 overflow-hidden">
+              <div className="bg-gradient-to-r from-slate-700 to-gray-800 p-6">
                 <div className="flex items-center justify-between mb-4">
-                  <CardTitle>Recent Signals</CardTitle>
+                  <h2 className="text-xl font-bold text-white">Recent Signals</h2>
                   <div className="flex gap-2">
                     <select
                       value={selectedType}
@@ -191,7 +236,7 @@ export default function Dashboard() {
                         setSelectedType(e.target.value)
                         setSelectedSubtier('all') // Reset subtier when type changes
                       }}
-                      className="px-3 py-2 border border-gray-300 rounded-lg text-sm text-gray-900 bg-white"
+                      className="px-4 py-2 border-2 border-gray-300 rounded-xl text-sm text-gray-900 bg-white font-medium hover:border-blue-400 transition-colors shadow-sm"
                     >
                       <option value="all">All Types</option>
                       {SIGNAL_TYPES.map(({ value, label }) => (
@@ -202,7 +247,7 @@ export default function Dashboard() {
                       <select
                         value={selectedSubtier}
                         onChange={(e) => setSelectedSubtier(e.target.value)}
-                        className="px-3 py-2 border border-gray-300 rounded-lg text-sm text-gray-900 bg-white"
+                        className="px-4 py-2 border-2 border-gray-300 rounded-xl text-sm text-gray-900 bg-white font-medium hover:border-blue-400 transition-colors shadow-sm"
                       >
                         <option value="all">All Subtiers</option>
                         {availableSubtiers.map((subtier) => (
@@ -224,10 +269,10 @@ export default function Dashboard() {
                 ) : (
                   <>
                     {/* Pagination Info & Controls */}
-                    <div className="px-6 py-4 border-b border-gray-200 flex items-center justify-between bg-gray-50">
+                    <div className="px-6 py-4 border-b border-gray-200 flex items-center justify-between bg-gradient-to-r from-slate-50 to-blue-50">
                       <div className="flex items-center gap-4">
-                        <span className="text-sm text-gray-700 font-medium">
-                          Showing {((currentPage - 1) * itemsPerPage) + 1}-{Math.min(currentPage * itemsPerPage, signals.length)} of {signals.length} opportunities
+                        <span className="text-sm text-gray-800 font-semibold">
+                          📄 Showing {((currentPage - 1) * itemsPerPage) + 1}-{Math.min(currentPage * itemsPerPage, signals.length)} of {signals.length} opportunities
                         </span>
                         <select
                           value={itemsPerPage}
@@ -235,7 +280,7 @@ export default function Dashboard() {
                             setItemsPerPage(Number(e.target.value))
                             setCurrentPage(1)
                           }}
-                          className="px-2 py-1 border border-gray-300 rounded text-sm text-gray-900 bg-white"
+                          className="px-3 py-1.5 border-2 border-gray-300 rounded-lg text-sm text-gray-900 bg-white font-medium hover:border-blue-400 transition-colors"
                         >
                           <option value={10}>10 per page</option>
                           <option value={20}>20 per page</option>
@@ -270,14 +315,16 @@ export default function Dashboard() {
                       (currentPage - 1) * itemsPerPage,
                       currentPage * itemsPerPage
                     ).map((signal) => (
-                      <div key={signal.id} className="p-6 hover:bg-gray-50 transition-colors border-b border-gray-100 last:border-0">
+                      <div key={signal.id} className="p-6 hover:bg-gradient-to-r hover:from-blue-50/50 hover:to-indigo-50/50 transition-all duration-200 border-b border-gray-100 last:border-0 group">
                         <div className="flex items-start justify-between">
                           <div className="flex-1">
                           <div className="flex items-center gap-3 mb-3">
-                            <span className="text-2xl">
-                              {SIGNAL_TYPES.find(t => t.value === signal.signalType)?.icon}
-                            </span>
-                            <h3 className="font-semibold text-lg text-gray-900">{signal.companyName}</h3>
+                            <div className="bg-gradient-to-br from-blue-100 to-indigo-100 p-2 rounded-xl group-hover:scale-110 transition-transform">
+                              <span className="text-2xl">
+                                {SIGNAL_TYPES.find(t => t.value === signal.signalType)?.icon}
+                              </span>
+                            </div>
+                            <h3 className="font-bold text-xl text-gray-900">{signal.companyName}</h3>
                             <Badge variant="gray" size="sm">
                               {SIGNAL_TYPES.find(t => t.value === signal.signalType)?.label}
                             </Badge>
@@ -358,7 +405,7 @@ export default function Dashboard() {
                   </>
                 )}
               </div>
-            </Card>
+            </div>
           </div>
         </div>
       </div>
