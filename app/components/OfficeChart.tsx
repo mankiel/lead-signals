@@ -16,7 +16,7 @@ export default function OfficeChart() {
     fetch('/api/stats/offices')
       .then(res => res.json())
       .then(result => {
-        setData(result.offices || [])
+        setData(result.data || [])
         setLoading(false)
       })
       .catch(err => {
