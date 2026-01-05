@@ -49,31 +49,32 @@ export default function DeadlineHistogram() {
   const colors = ['#ef4444', '#f97316', '#eab308', '#22c55e']
 
   return (
-    <div className="bg-white/90 backdrop-blur-sm rounded-2xl shadow-lg border border-gray-200/50 p-6 hover:shadow-xl transition-shadow duration-300">
-      <div className="flex justify-between items-center mb-4">
+    <div className="bg-white/90 backdrop-blur-sm rounded-xl sm:rounded-2xl shadow-lg border border-gray-200/50 p-4 sm:p-6 hover:shadow-xl transition-shadow duration-300">
+      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2 mb-3 sm:mb-4">
         <div className="flex items-center gap-2">
-          <span className="text-2xl">⏰</span>
-          <h3 className="text-lg font-bold bg-gradient-to-r from-orange-600 to-red-600 bg-clip-text text-transparent">Upcoming Deadlines (Next 30 Days)</h3>
+          <span className="text-xl sm:text-2xl">⏰</span>
+          <h3 className="text-base sm:text-lg font-bold bg-gradient-to-r from-orange-600 to-red-600 bg-clip-text text-transparent">Upcoming Deadlines (30 Days)</h3>
         </div>
-        <span className="bg-gradient-to-r from-blue-500 to-indigo-500 text-white px-3 py-1 rounded-full text-sm font-bold">
+        <span className="bg-gradient-to-r from-blue-500 to-indigo-500 text-white px-2 sm:px-3 py-1 rounded-full text-xs sm:text-sm font-bold self-start">
           {totalSolicitations} active
         </span>
       </div>
-      <ResponsiveContainer width="100%" height={300}>
+      <ResponsiveContainer width="100%" height={250}>
         <BarChart data={data}>
           <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
           <XAxis 
             dataKey="range" 
-            tick={{ fontSize: 12, fill: '#374151' }}
+            tick={{ fontSize: 10, fill: '#374151' }}
           />
-          <YAxis allowDecimals={false} tick={{ fill: '#374151' }} />
+          <YAxis allowDecimals={false} tick={{ fontSize: 10, fill: '#374151' }} />
           <Tooltip 
             formatter={(value: number | undefined) => value ? [`${value} solicitation${value !== 1 ? 's' : ''}`, 'Count'] : ['0 solicitations', 'Count']}
             contentStyle={{ 
               backgroundColor: 'rgba(255, 255, 255, 0.95)', 
               borderRadius: '12px', 
               border: '1px solid #e5e7eb',
-              boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)'
+              boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+              fontSize: '12px'
             }}
             labelStyle={{ color: '#000', fontWeight: 'bold' }}
           />
@@ -84,22 +85,22 @@ export default function DeadlineHistogram() {
           </Bar>
         </BarChart>
       </ResponsiveContainer>
-      <div className="mt-4 flex justify-center gap-4 text-xs">
-        <div className="flex items-center gap-2 px-3 py-1.5 bg-red-50 rounded-lg border border-red-200">
-          <div className="w-3 h-3 rounded-full" style={{ backgroundColor: '#ef4444' }}></div>
-          <span className="text-gray-700 font-medium">Urgent (0-7 days)</span>
+      <div className="mt-3 sm:mt-4 grid grid-cols-2 sm:flex sm:justify-center gap-2 sm:gap-4 text-xs">
+        <div className="flex items-center gap-1.5 sm:gap-2 px-2 sm:px-3 py-1 sm:py-1.5 bg-red-50 rounded-lg border border-red-200">
+          <div className="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full" style={{ backgroundColor: '#ef4444' }}></div>
+          <span className="text-gray-700 font-medium">Urgent (0-7)</span>
         </div>
-        <div className="flex items-center gap-2 px-3 py-1.5 bg-orange-50 rounded-lg border border-orange-200">
-          <div className="w-3 h-3 rounded-full" style={{ backgroundColor: '#f97316' }}></div>
-          <span className="text-gray-700 font-medium">Soon (8-14 days)</span>
+        <div className="flex items-center gap-1.5 sm:gap-2 px-2 sm:px-3 py-1 sm:py-1.5 bg-orange-50 rounded-lg border border-orange-200">
+          <div className="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full" style={{ backgroundColor: '#f97316' }}></div>
+          <span className="text-gray-700 font-medium">Soon (8-14)</span>
         </div>
-        <div className="flex items-center gap-2 px-3 py-1.5 bg-yellow-50 rounded-lg border border-yellow-200">
-          <div className="w-3 h-3 rounded-full" style={{ backgroundColor: '#eab308' }}></div>
-          <span className="text-gray-700 font-medium">Moderate (15-21 days)</span>
+        <div className="flex items-center gap-1.5 sm:gap-2 px-2 sm:px-3 py-1 sm:py-1.5 bg-yellow-50 rounded-lg border border-yellow-200">
+          <div className="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full" style={{ backgroundColor: '#eab308' }}></div>
+          <span className="text-gray-700 font-medium">Moderate (15-21)</span>
         </div>
-        <div className="flex items-center gap-2 px-3 py-1.5 bg-green-50 rounded-lg border border-green-200">
-          <div className="w-3 h-3 rounded-full" style={{ backgroundColor: '#22c55e' }}></div>
-          <span className="text-gray-700 font-medium">More Time (22-30 days)</span>
+        <div className="flex items-center gap-1.5 sm:gap-2 px-2 sm:px-3 py-1 sm:py-1.5 bg-green-50 rounded-lg border border-green-200">
+          <div className="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full" style={{ backgroundColor: '#22c55e' }}></div>
+          <span className="text-gray-700 font-medium">More Time (22-30)</span>
         </div>
       </div>
     </div>

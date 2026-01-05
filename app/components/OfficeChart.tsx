@@ -44,12 +44,12 @@ export default function OfficeChart() {
   }
 
   return (
-    <div className="bg-white/90 backdrop-blur-sm rounded-2xl shadow-lg border border-gray-200/50 p-6 hover:shadow-xl transition-shadow duration-300">
-      <div className="flex items-center gap-2 mb-4">
-        <span className="text-2xl">🏛️</span>
-        <h3 className="text-lg font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">Active Solicitations by Office (Top 10)</h3>
+    <div className="bg-white/90 backdrop-blur-sm rounded-xl sm:rounded-2xl shadow-lg border border-gray-200/50 p-4 sm:p-6 hover:shadow-xl transition-shadow duration-300">
+      <div className="flex items-center gap-2 mb-3 sm:mb-4">
+        <span className="text-xl sm:text-2xl">🏛️</span>
+        <h3 className="text-base sm:text-lg font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">Active Solicitations by Office (Top 10)</h3>
       </div>
-      <ResponsiveContainer width="100%" height={300}>
+      <ResponsiveContainer width="100%" height={250}>
         <BarChart data={data}>
           <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
           <XAxis 
@@ -57,15 +57,16 @@ export default function OfficeChart() {
             angle={-45}
             textAnchor="end"
             height={100}
-            tick={{ fontSize: 12, fill: '#374151' }}
+            tick={{ fontSize: 10, fill: '#374151' }}
           />
-          <YAxis tick={{ fill: '#374151' }} />
+          <YAxis tick={{ fontSize: 10, fill: '#374151' }} />
           <Tooltip 
             contentStyle={{ 
               backgroundColor: 'rgba(255, 255, 255, 0.95)', 
               borderRadius: '12px', 
               border: '1px solid #e5e7eb',
-              boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)'
+              boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+              fontSize: '12px'
             }}
           />
           <Bar dataKey="count" fill="url(#blueGradient)" radius={[8, 8, 0, 0]} />

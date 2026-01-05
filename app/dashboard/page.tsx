@@ -120,11 +120,12 @@ export default function Dashboard() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
       <header className="bg-white/80 backdrop-blur-lg border-b border-gray-200/50 sticky top-0 z-10 shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 sm:py-5">
           <div className="flex justify-between items-center">
             <div>
-              <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent tracking-tight">Lead Signals</h1>
-              <p className="text-sm text-gray-600 mt-1 font-medium">🏛️ Government Contract Opportunities Intelligence</p>
+              <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent tracking-tight">Lead Signals</h1>
+              <p className="text-xs sm:text-sm text-gray-600 mt-0.5 sm:mt-1 font-medium hidden sm:block">🏛️ Government Contract Opportunities Intelligence</p>
+              <p className="text-xs text-gray-600 mt-0.5 font-medium sm:hidden">🏛️ Gov Contracts</p>
             </div>
             <UserButton />
           </div>
@@ -133,34 +134,34 @@ export default function Dashboard() {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Stats Overview */}
-        <div className="mb-8 grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div className="bg-white/90 backdrop-blur-sm rounded-2xl shadow-lg border border-gray-200/50 p-6 hover:shadow-xl transition-all duration-300">
+        <div className="mb-6 sm:mb-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
+          <div className="bg-white/90 backdrop-blur-sm rounded-xl sm:rounded-2xl shadow-lg border border-gray-200/50 p-4 sm:p-6 hover:shadow-xl transition-all duration-300">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600 uppercase tracking-wide">Active Opportunities</p>
-                <p className="text-3xl font-bold text-gray-900 mt-2">{signals.length}</p>
+                <p className="text-xs sm:text-sm font-medium text-gray-600 uppercase tracking-wide">Active Opportunities</p>
+                <p className="text-2xl sm:text-3xl font-bold text-gray-900 mt-1 sm:mt-2">{signals.length}</p>
               </div>
-              <div className="bg-blue-100 rounded-full p-4">
-                <span className="text-3xl">📊</span>
+              <div className="bg-blue-100 rounded-full p-2 sm:p-4">
+                <span className="text-2xl sm:text-3xl">📊</span>
               </div>
             </div>
           </div>
-          <div className="bg-white/90 backdrop-blur-sm rounded-2xl shadow-lg border border-gray-200/50 p-6 hover:shadow-xl transition-all duration-300">
+          <div className="bg-white/90 backdrop-blur-sm rounded-xl sm:rounded-2xl shadow-lg border border-gray-200/50 p-4 sm:p-6 hover:shadow-xl transition-all duration-300">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600 uppercase tracking-wide">Subscriptions</p>
-                <p className="text-3xl font-bold text-gray-900 mt-2">{subscriptions.length}</p>
+                <p className="text-xs sm:text-sm font-medium text-gray-600 uppercase tracking-wide">Subscriptions</p>
+                <p className="text-2xl sm:text-3xl font-bold text-gray-900 mt-1 sm:mt-2">{subscriptions.length}</p>
               </div>
-              <div className="bg-green-100 rounded-full p-4">
-                <span className="text-3xl">✅</span>
+              <div className="bg-green-100 rounded-full p-2 sm:p-4">
+                <span className="text-2xl sm:text-3xl">✅</span>
               </div>
             </div>
           </div>
-          <div className="bg-gradient-to-br from-blue-500 to-indigo-600 rounded-2xl shadow-lg p-6 hover:shadow-xl transition-all duration-300">
+          <div className="bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl sm:rounded-2xl shadow-lg p-4 sm:p-6 hover:shadow-xl transition-all duration-300 sm:col-span-2 lg:col-span-1">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-blue-100 uppercase tracking-wide">Urgent Deadlines</p>
-                <p className="text-3xl font-bold text-white mt-2">{signals.filter(s => {
+                <p className="text-xs sm:text-sm font-medium text-blue-100 uppercase tracking-wide">Urgent Deadlines</p>
+                <p className="text-2xl sm:text-3xl font-bold text-white mt-1 sm:mt-2">{signals.filter(s => {
                   if (s.metadata?.responseDeadline) {
                     const deadline = new Date(s.metadata.responseDeadline)
                     const now = new Date()
@@ -170,8 +171,8 @@ export default function Dashboard() {
                   return false
                 }).length}</p>
               </div>
-              <div className="bg-white/20 rounded-full p-4">
-                <span className="text-3xl">⏰</span>
+              <div className="bg-white/20 rounded-full p-2 sm:p-4">
+                <span className="text-2xl sm:text-3xl">⏰</span>
               </div>
             </div>
           </div>
@@ -192,30 +193,30 @@ export default function Dashboard() {
           {/* Subscriptions Sidebar */}
           <div className="lg:col-span-1">
             <div className="bg-white/90 backdrop-blur-sm rounded-2xl shadow-lg border border-gray-200/50 overflow-hidden">
-              <div className="bg-gradient-to-r from-blue-600 to-indigo-600 p-6">
-                <h2 className="text-xl font-bold text-white">Your Subscriptions</h2>
-                <p className="text-sm text-blue-100 mt-1">
+              <div className="bg-gradient-to-r from-blue-600 to-indigo-600 p-4 sm:p-6">
+                <h2 className="text-lg sm:text-xl font-bold text-white">Your Subscriptions</h2>
+                <p className="text-xs sm:text-sm text-blue-100 mt-1">
                   🔔 Get notified about new opportunities
                 </p>
               </div>
               
-              <div className="p-6 space-y-3">
+              <div className="p-4 sm:p-6 space-y-2 sm:space-y-3">
                 {SIGNAL_TYPES.map(({ value, label, icon }) => (
                   <button
                     key={value}
                     onClick={() => toggleSubscription(value)}
-                    className={`w-full flex items-center justify-between p-4 rounded-xl border-2 transition-all duration-200 transform hover:scale-105 ${
+                    className={`w-full flex items-center justify-between p-3 sm:p-4 rounded-lg sm:rounded-xl border-2 transition-all duration-200 active:scale-95 sm:hover:scale-105 ${
                       isSubscribed(value)
                         ? 'border-blue-500 bg-gradient-to-r from-blue-50 to-indigo-50 shadow-md'
                         : 'border-gray-200 hover:border-blue-300 hover:shadow-md bg-white'
                     }`}
                   >
-                    <span className="flex items-center gap-3">
-                      <span className="text-2xl">{icon}</span>
-                      <span className="text-sm font-semibold text-gray-900">{label}</span>
+                    <span className="flex items-center gap-2 sm:gap-3">
+                      <span className="text-xl sm:text-2xl">{icon}</span>
+                      <span className="text-xs sm:text-sm font-semibold text-gray-900">{label}</span>
                     </span>
                     {isSubscribed(value) && (
-                      <span className="text-blue-600 font-bold text-lg">✓</span>
+                      <span className="text-blue-600 font-bold text-base sm:text-lg">✓</span>
                     )}
                   </button>
                 ))}
@@ -226,17 +227,17 @@ export default function Dashboard() {
           {/* Signals Feed */}
           <div className="lg:col-span-2">
             <div className="bg-white/90 backdrop-blur-sm rounded-2xl shadow-lg border border-gray-200/50 overflow-hidden">
-              <div className="bg-gradient-to-r from-slate-700 to-gray-800 p-6">
-                <div className="flex items-center justify-between mb-4">
-                  <h2 className="text-xl font-bold text-white">Recent Signals</h2>
-                  <div className="flex gap-2">
+              <div className="bg-gradient-to-r from-slate-700 to-gray-800 p-4 sm:p-6">
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-0 mb-4">
+                  <h2 className="text-lg sm:text-xl font-bold text-white">Recent Signals</h2>
+                  <div className="flex flex-col sm:flex-row gap-2">
                     <select
                       value={selectedType}
                       onChange={(e) => {
                         setSelectedType(e.target.value)
                         setSelectedSubtier('all') // Reset subtier when type changes
                       }}
-                      className="px-4 py-2 border-2 border-gray-300 rounded-xl text-sm text-gray-900 bg-white font-medium hover:border-blue-400 transition-colors shadow-sm"
+                      className="w-full sm:w-auto px-3 sm:px-4 py-2 border-2 border-gray-300 rounded-lg sm:rounded-xl text-xs sm:text-sm text-gray-900 bg-white font-medium hover:border-blue-400 transition-colors shadow-sm"
                     >
                       <option value="all">All Types</option>
                       {SIGNAL_TYPES.map(({ value, label }) => (
@@ -247,7 +248,7 @@ export default function Dashboard() {
                       <select
                         value={selectedSubtier}
                         onChange={(e) => setSelectedSubtier(e.target.value)}
-                        className="px-4 py-2 border-2 border-gray-300 rounded-xl text-sm text-gray-900 bg-white font-medium hover:border-blue-400 transition-colors shadow-sm"
+                        className="w-full sm:w-auto px-3 sm:px-4 py-2 border-2 border-gray-300 rounded-lg sm:rounded-xl text-xs sm:text-sm text-gray-900 bg-white font-medium hover:border-blue-400 transition-colors shadow-sm"
                       >
                         <option value="all">All Subtiers</option>
                         {availableSubtiers.map((subtier) => (
@@ -269,10 +270,10 @@ export default function Dashboard() {
                 ) : (
                   <>
                     {/* Pagination Info & Controls */}
-                    <div className="px-6 py-4 border-b border-gray-200 flex items-center justify-between bg-gradient-to-r from-slate-50 to-blue-50">
-                      <div className="flex items-center gap-4">
-                        <span className="text-sm text-gray-800 font-semibold">
-                          📄 Showing {((currentPage - 1) * itemsPerPage) + 1}-{Math.min(currentPage * itemsPerPage, signals.length)} of {signals.length} opportunities
+                    <div className="px-3 sm:px-6 py-3 sm:py-4 border-b border-gray-200 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 bg-gradient-to-r from-slate-50 to-blue-50">
+                      <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4">
+                        <span className="text-xs sm:text-sm text-gray-800 font-semibold">
+                          📄 Showing {((currentPage - 1) * itemsPerPage) + 1}-{Math.min(currentPage * itemsPerPage, signals.length)} of {signals.length}
                         </span>
                         <select
                           value={itemsPerPage}
@@ -280,7 +281,7 @@ export default function Dashboard() {
                             setItemsPerPage(Number(e.target.value))
                             setCurrentPage(1)
                           }}
-                          className="px-3 py-1.5 border-2 border-gray-300 rounded-lg text-sm text-gray-900 bg-white font-medium hover:border-blue-400 transition-colors"
+                          className="px-2 sm:px-3 py-1.5 border-2 border-gray-300 rounded-lg text-xs sm:text-sm text-gray-900 bg-white font-medium hover:border-blue-400 transition-colors"
                         >
                           <option value={10}>10 per page</option>
                           <option value={20}>20 per page</option>
@@ -288,17 +289,18 @@ export default function Dashboard() {
                           <option value={100}>100 per page</option>
                         </select>
                       </div>
-                      <div className="flex items-center gap-2">
+                      <div className="flex items-center justify-between sm:justify-start gap-2">
                         <Button
                           onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
                           disabled={currentPage === 1}
                           variant="ghost"
                           size="sm"
                         >
-                          Previous
+                          <span className="hidden sm:inline">Previous</span>
+                          <span className="sm:hidden">←</span>
                         </Button>
-                        <span className="text-sm text-gray-600 px-3">
-                          Page {currentPage} of {Math.ceil(signals.length / itemsPerPage)}
+                        <span className="text-xs sm:text-sm text-gray-600 px-2 sm:px-3">
+                          {currentPage} / {Math.ceil(signals.length / itemsPerPage)}
                         </span>
                         <Button
                           onClick={() => setCurrentPage(p => Math.min(Math.ceil(signals.length / itemsPerPage), p + 1))}
@@ -306,7 +308,8 @@ export default function Dashboard() {
                           variant="ghost"
                           size="sm"
                         >
-                          Next
+                          <span className="hidden sm:inline">Next</span>
+                          <span className="sm:hidden">→</span>
                         </Button>
                       </div>
                     </div>
@@ -315,16 +318,16 @@ export default function Dashboard() {
                       (currentPage - 1) * itemsPerPage,
                       currentPage * itemsPerPage
                     ).map((signal) => (
-                      <div key={signal.id} className="p-6 hover:bg-gradient-to-r hover:from-blue-50/50 hover:to-indigo-50/50 transition-all duration-200 border-b border-gray-100 last:border-0 group">
-                        <div className="flex items-start justify-between">
+                      <div key={signal.id} className="p-4 sm:p-6 hover:bg-gradient-to-r hover:from-blue-50/50 hover:to-indigo-50/50 transition-all duration-200 border-b border-gray-100 last:border-0 group">
+                        <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2">
                           <div className="flex-1">
-                          <div className="flex items-center gap-3 mb-3">
-                            <div className="bg-gradient-to-br from-blue-100 to-indigo-100 p-2 rounded-xl group-hover:scale-110 transition-transform">
-                              <span className="text-2xl">
+                          <div className="flex flex-wrap items-center gap-2 sm:gap-3 mb-3">
+                            <div className="bg-gradient-to-br from-blue-100 to-indigo-100 p-1.5 sm:p-2 rounded-lg sm:rounded-xl group-hover:scale-110 transition-transform">
+                              <span className="text-xl sm:text-2xl">
                                 {SIGNAL_TYPES.find(t => t.value === signal.signalType)?.icon}
                               </span>
                             </div>
-                            <h3 className="font-bold text-xl text-gray-900">{signal.companyName}</h3>
+                            <h3 className="font-bold text-base sm:text-xl text-gray-900 break-words">{signal.companyName}</h3>
                             <Badge variant="gray" size="sm">
                               {SIGNAL_TYPES.find(t => t.value === signal.signalType)?.label}
                             </Badge>
