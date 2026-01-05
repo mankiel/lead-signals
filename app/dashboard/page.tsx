@@ -170,46 +170,28 @@ export default function Dashboard() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Stats Overview */}
         <div className="mb-8 grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="bg-white rounded-2xl shadow-md border-l-4 border-blue-500 p-6 hover:shadow-xl transition-all duration-200 group">
-            <div className="flex items-start justify-between">
-              <div className="flex-1">
-                <div className="flex items-center gap-2 mb-3">
-                  <p className="text-xs font-bold text-gray-500 uppercase tracking-wider">Active Opportunities</p>
-                </div>
-                <p className="text-5xl font-extrabold text-gray-900">{signals.length}</p>
-                <p className="text-sm text-gray-600 mt-2">Government contracts</p>
-              </div>
-            </div>
+          <div className="bg-white rounded-2xl shadow-md border-l-4 border-blue-500 p-6 hover:shadow-xl transition-all duration-200">
+            <p className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-3">Active Opportunities</p>
+            <p className="text-5xl font-extrabold text-gray-900 mb-2">{signals.length}</p>
+            <p className="text-sm text-gray-600">Government contracts</p>
           </div>
-          <div className="bg-white rounded-2xl shadow-md border-l-4 border-green-500 p-6 hover:shadow-xl transition-all duration-200 group">
-            <div className="flex items-start justify-between">
-              <div className="flex-1">
-                <div className="flex items-center gap-2 mb-3">
-                  <p className="text-xs font-bold text-gray-500 uppercase tracking-wider">Subscriptions</p>
-                </div>
-                <p className="text-5xl font-extrabold text-gray-900">{subscriptions.length}</p>
-                <p className="text-sm text-gray-600 mt-2">Active notifications</p>
-              </div>
-            </div>
+          <div className="bg-white rounded-2xl shadow-md border-l-4 border-green-500 p-6 hover:shadow-xl transition-all duration-200">
+            <p className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-3">Subscriptions</p>
+            <p className="text-5xl font-extrabold text-gray-900 mb-2">{subscriptions.length}</p>
+            <p className="text-sm text-gray-600">Active notifications</p>
           </div>
-          <div className="bg-white rounded-2xl shadow-md border-l-4 border-red-500 p-6 hover:shadow-xl transition-all duration-200 group">
-            <div className="flex items-start justify-between">
-              <div className="flex-1">
-                <div className="flex items-center gap-2 mb-3">
-                  <p className="text-xs font-bold text-gray-500 uppercase tracking-wider">Urgent Deadlines</p>
-                </div>
-                <p className="text-5xl font-extrabold text-gray-900">{signals.filter(s => {
-                  if (s.metadata?.responseDeadline) {
-                    const deadline = new Date(s.metadata.responseDeadline)
-                    const now = new Date()
-                    const daysUntil = Math.floor((deadline.getTime() - now.getTime()) / (1000 * 60 * 60 * 24))
-                    return daysUntil <= 7
-                  }
-                  return false
-                }).length}</p>
-                <p className="text-sm text-gray-600 mt-2">Within 7 days</p>
-              </div>
-            </div>
+          <div className="bg-white rounded-2xl shadow-md border-l-4 border-red-500 p-6 hover:shadow-xl transition-all duration-200">
+            <p className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-3">Urgent Deadlines</p>
+            <p className="text-5xl font-extrabold text-gray-900 mb-2">{signals.filter(s => {
+              if (s.metadata?.responseDeadline) {
+                const deadline = new Date(s.metadata.responseDeadline)
+                const now = new Date()
+                const daysUntil = Math.floor((deadline.getTime() - now.getTime()) / (1000 * 60 * 60 * 24))
+                return daysUntil <= 7
+              }
+              return false
+            }).length}</p>
+            <p className="text-sm text-gray-600">Within 7 days</p>
           </div>
         </div>
 
