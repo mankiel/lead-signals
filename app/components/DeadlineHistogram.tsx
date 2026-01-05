@@ -49,27 +49,52 @@ export default function DeadlineHistogram() {
   const colors = ['#ef4444', '#f97316', '#eab308', '#22c55e']
 
   return (
-    <div className="bg-white rounded-lg shadow p-6">
+    <div className="bg-white rounded-lg shadow-lg border border-gray-200 p-6">
       <div className="flex justify-between items-center mb-4">
-        <h3 className="text-lg font-semibold text-black">⏰ Upcoming Deadlines (Next 30 Days)</h3>
-        <span className="text-sm bg-blue-100 text-blue-700 px-3 py-1 rounded-full font-semibold">{totalSolicitations} active</span>
+        <h3 className="text-lg font-bold text-gray-800">⏰ Upcoming Deadlines (Next 30 Days)</h3>
+        <span className="text-sm bg-blue-100 text-blue-700 px-3 py-1.5 rounded-full font-semibold">{totalSolicitations} active</span>
       </div>
       <ResponsiveContainer width="100%" height={300}>
         <BarChart data={data}>
-          <CartesianGrid strokeDasharray="3 3" />
+          <defs>
+            <linearGradient id="urgentGrad" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stopColor="#ef4444" stopOpacity={0.9} />
+              <stop offset="100%" stopColor="#dc2626" stopOpacity={0.7} />
+            </linearGradient>
+            <linearGradient id="soonGrad" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stopColor="#f97316" stopOpacity={0.9} />
+              <stop offset="100%" stopColor="#ea580c" stopOpacity={0.7} />
+            </linearGradient>
+            <linearGradient id="upcomingGrad" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stopColor="#eab308" stopOpacity={0.9} />
+              <stop offset="100%" stopColor="#ca8a04" stopOpacity={0.7} />
+            </linearGradient>
+            <linearGradient id="laterGrad" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stopColor="#22c55e" stopOpacity={0.9} />
+              <stop offset="100%" stopColor="#16a34a" stopOpacity={0.7} />
+            </linearGradient>
+          </defs>
+          <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" opacity={0.5} />
           <XAxis 
             dataKey="range" 
-            tick={{ fontSize: 12 }}
+            tick={{ fontSize: 11, fill: '#4b5563' }}
           />
-          <YAxis allowDecimals={false} />
+          <YAxis allowDecimals={false} tick={{ fill: '#4b5563' }} />
           <Tooltip 
             formatter={(value: number | undefined) => value ? [`${value} solicitation${value !== 1 ? 's' : ''}`, 'Count'] : ['0 solicitations', 'Count']}
-            labelStyle={{ color: '#000' }}
+            contentStyle={{ 
+              backgroundColor: 'white', 
+              border: '1px solid #e5e7eb',
+              borderRadius: '8px',
+              boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)'
+            }}
+            cursor={{ fill: 'rgba(0, 0, 0, 0.05)' }}
           />
-          <Bar dataKey="count" radius={[8, 8, 0, 0]}>
-            {data.map((entry, index) => (
-              <Cell key={`cell-${index}`} fill={colors[index]} />
-            ))}
+          <Bar dataKey="count" radius={[8, 8, 0, 0]} animationDuration={800}>
+            {data.map((entry, index) => {
+              const gradients = ['url(#urgentGrad)', 'url(#soonGrad)', 'url(#upcomingGrad)', 'url(#laterGrad)']
+              return <Cell key={`cell-${index}`} fill={gradients[index] || colors[index]} />
+            })}
           </Bar>
         </BarChart>
       </ResponsiveContainer>
