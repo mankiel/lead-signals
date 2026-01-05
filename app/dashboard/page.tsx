@@ -42,6 +42,7 @@ export default function Dashboard() {
   const [itemsPerPage, setItemsPerPage] = useState(20)
 
   useEffect(() => {
+    setCurrentPage(1) // Reset to first page when filter changes
     fetchSignals()
     fetchSubscriptions()
   }, [selectedType])
