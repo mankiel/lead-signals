@@ -191,7 +191,7 @@ export default function Dashboard() {
                         setSelectedType(e.target.value)
                         setSelectedSubtier('all') // Reset subtier when type changes
                       }}
-                      className="px-3 py-2 border border-gray-300 rounded-lg text-sm text-black"
+                      className="px-3 py-2 border border-gray-300 rounded-lg text-sm text-gray-900 bg-white"
                     >
                       <option value="all">All Types</option>
                       {SIGNAL_TYPES.map(({ value, label }) => (
@@ -202,7 +202,7 @@ export default function Dashboard() {
                       <select
                         value={selectedSubtier}
                         onChange={(e) => setSelectedSubtier(e.target.value)}
-                        className="px-3 py-2 border border-gray-300 rounded-lg text-sm text-black"
+                        className="px-3 py-2 border border-gray-300 rounded-lg text-sm text-gray-900 bg-white"
                       >
                         <option value="all">All Subtiers</option>
                         {availableSubtiers.map((subtier) => (
@@ -216,9 +216,9 @@ export default function Dashboard() {
 
               <div className="divide-y">
                 {loading ? (
-                  <div className="p-8 text-center text-black">Loading...</div>
+                  <div className="p-8 text-center text-gray-700">Loading...</div>
                 ) : signals.length === 0 ? (
-                  <div className="p-8 text-center text-black">
+                  <div className="p-8 text-center text-gray-700">
                     No signals found. Check back later!
                   </div>
                 ) : (
@@ -235,7 +235,7 @@ export default function Dashboard() {
                             setItemsPerPage(Number(e.target.value))
                             setCurrentPage(1)
                           }}
-                          className="px-2 py-1 border border-gray-300 rounded text-sm text-black"
+                          className="px-2 py-1 border border-gray-300 rounded text-sm text-gray-900 bg-white"
                         >
                           <option value={10}>10 per page</option>
                           <option value={20}>20 per page</option>
@@ -335,7 +335,7 @@ export default function Dashboard() {
                             </div>
                           )}
                           
-                          <div className="flex items-center gap-4 text-sm text-black">
+                          <div className="flex items-center gap-4 text-sm text-gray-700">
                             <span>Source: {signal.source}</span>
                             {signal.sourceUrl && (
                               <a
