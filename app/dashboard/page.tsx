@@ -170,33 +170,44 @@ export default function Dashboard() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Stats Overview */}
         <div className="mb-8 grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl shadow-lg border border-blue-400 p-6 hover:shadow-xl transition-all duration-200">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-medium text-blue-100 uppercase tracking-wide">Active Opportunities</p>
-                <p className="text-4xl font-bold text-white mt-2">{signals.length}</p>
-              </div>
-              <div className="bg-white/20 backdrop-blur-sm rounded-full p-3">
-                <span className="text-3xl">📊</span>
-              </div>
-            </div>
-          </div>
-          <div className="bg-gradient-to-br from-green-500 to-emerald-600 rounded-xl shadow-lg border border-green-400 p-6 hover:shadow-xl transition-all duration-200">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-medium text-green-100 uppercase tracking-wide">Subscriptions</p>
-                <p className="text-4xl font-bold text-white mt-2">{subscriptions.length}</p>
-              </div>
-              <div className="bg-white/20 backdrop-blur-sm rounded-full p-3">
-                <span className="text-3xl">✅</span>
+          <div className="bg-white rounded-2xl shadow-md border-l-4 border-blue-500 p-6 hover:shadow-xl transition-all duration-200 group">
+            <div className="flex items-start justify-between">
+              <div className="flex-1">
+                <div className="flex items-center gap-2 mb-3">
+                  <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center group-hover:bg-blue-200 transition-colors">
+                    <span className="text-xl">📊</span>
+                  </div>
+                  <p className="text-xs font-bold text-gray-500 uppercase tracking-wider">Active Opportunities</p>
+                </div>
+                <p className="text-5xl font-extrabold text-gray-900">{signals.length}</p>
+                <p className="text-sm text-gray-600 mt-2">Government contracts</p>
               </div>
             </div>
           </div>
-          <div className="bg-gradient-to-br from-red-500 to-orange-600 rounded-xl shadow-lg border border-red-400 p-6 hover:shadow-xl transition-all duration-200">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-medium text-red-100 uppercase tracking-wide">Urgent Deadlines</p>
-                <p className="text-4xl font-bold text-white mt-2">{signals.filter(s => {
+          <div className="bg-white rounded-2xl shadow-md border-l-4 border-green-500 p-6 hover:shadow-xl transition-all duration-200 group">
+            <div className="flex items-start justify-between">
+              <div className="flex-1">
+                <div className="flex items-center gap-2 mb-3">
+                  <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center group-hover:bg-green-200 transition-colors">
+                    <span className="text-xl">✅</span>
+                  </div>
+                  <p className="text-xs font-bold text-gray-500 uppercase tracking-wider">Subscriptions</p>
+                </div>
+                <p className="text-5xl font-extrabold text-gray-900">{subscriptions.length}</p>
+                <p className="text-sm text-gray-600 mt-2">Active notifications</p>
+              </div>
+            </div>
+          </div>
+          <div className="bg-white rounded-2xl shadow-md border-l-4 border-red-500 p-6 hover:shadow-xl transition-all duration-200 group">
+            <div className="flex items-start justify-between">
+              <div className="flex-1">
+                <div className="flex items-center gap-2 mb-3">
+                  <div className="w-10 h-10 bg-red-100 rounded-lg flex items-center justify-center group-hover:bg-red-200 transition-colors">
+                    <span className="text-xl">⏰</span>
+                  </div>
+                  <p className="text-xs font-bold text-gray-500 uppercase tracking-wider">Urgent Deadlines</p>
+                </div>
+                <p className="text-5xl font-extrabold text-gray-900">{signals.filter(s => {
                   if (s.metadata?.responseDeadline) {
                     const deadline = new Date(s.metadata.responseDeadline)
                     const now = new Date()
@@ -205,9 +216,7 @@ export default function Dashboard() {
                   }
                   return false
                 }).length}</p>
-              </div>
-              <div className="bg-white/20 backdrop-blur-sm rounded-full p-3">
-                <span className="text-3xl">⏰</span>
+                <p className="text-sm text-gray-600 mt-2">Within 7 days</p>
               </div>
             </div>
           </div>
