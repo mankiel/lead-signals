@@ -348,11 +348,10 @@ export default function Dashboard() {
                             )}
                           </div>
                         </div>
-                        <span className="text-xs text-black">
+                        <span className="text-xs text-gray-500">
                           {new Date(signal.createdAt).toLocaleDateString()}
                         </span>
                       </div>
-                    </div>
                     ))}
                   </>
                 )}
