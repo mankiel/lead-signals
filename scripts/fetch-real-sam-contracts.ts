@@ -51,6 +51,8 @@ async function main() {
           agency = agency.replace(/,?\s*(Department of|Dept of|DEPARTMENT OF|DEPT OF)\s*$/i, '').trim()
           
           const subtier = opp.subtier || opp.fullParentPathName?.split('.')[1] || ''
+          const cleanedSubtier = subtier.replace(/^(DEPT OF|Dept of|Department of|DEPARTMENT OF)\s+/i, '').replace(/,?\s*(DEPT OF|Dept of|Department of|DEPARTMENT OF)\s*$/i, '').trim()
+          
           const office = opp.office || opp.fullParentPathName?.split('.')[2] || ''
           
           // Extract value and period information
@@ -68,7 +70,7 @@ async function main() {
             cleanTitle,
             `Type: ${opp.type || 'RFP'}`,
             `Agency: ${agency}`,
-            subtier ? `Subtier: ${subtier}` : null,
+            subtier ? `Subtier: ${cleanedSubtier}` : null,
             office ? `Office: ${office}` : null,
             `NAICS: ${opp.naicsCode || 'N/A'}`,
             `Value: ${awardValue}`,
@@ -88,7 +90,7 @@ async function main() {
               postedDate: postedDate,
               responseDeadline: responseDeadline,
               agency: agency,
-              subtier: subtier,
+              subtier: cleanedSubtier,
               office: office,
               majorCommand: office,
               detailUrl: detailUrl,
