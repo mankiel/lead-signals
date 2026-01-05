@@ -15,7 +15,11 @@ async function cleanData() {
 
     // Clean agency name
     if (metadata?.agency) {
-      const cleanAgency = metadata.agency.replace(/^(Department of|Dept of|DEPARTMENT OF|DEPT OF)\s+/i, '').trim()
+      let cleanAgency = metadata.agency
+      // Remove prefix "Department of" or "Dept of"
+      cleanAgency = cleanAgency.replace(/^(Department of|Dept of|DEPARTMENT OF|DEPT OF)\s+/i, '').trim()
+      // Remove suffix ", Department of" or ", Dept of"
+      cleanAgency = cleanAgency.replace(/,?\s*(Department of|Dept of|DEPARTMENT OF|DEPT OF)\s*$/i, '').trim()
       if (cleanAgency !== metadata.agency) {
         metadata.agency = cleanAgency
         updated = true
@@ -35,6 +39,7 @@ async function cleanData() {
     let cleanCompanyName = contract.companyName
     if (cleanCompanyName) {
       cleanCompanyName = cleanCompanyName.replace(/^(Department of|Dept of|DEPARTMENT OF|DEPT OF)\s+/i, '').trim()
+      cleanCompanyName = cleanCompanyName.replace(/,?\s*(Department of|Dept of|DEPARTMENT OF|DEPT OF)\s*$/i, '').trim()
     }
 
     // Update description

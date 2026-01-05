@@ -46,8 +46,9 @@ async function main() {
           
           // Extract organizational hierarchy
           let agency = opp.department || opp.fullParentPathName?.split('.')[0] || 'Federal Agency'
-          // Clean up agency name - remove "Department of" or "Dept of" prefix
+          // Clean up agency name - remove "Department of" or "Dept of" prefix/suffix
           agency = agency.replace(/^(Department of|Dept of|DEPARTMENT OF|DEPT OF)\s+/i, '').trim()
+          agency = agency.replace(/,?\s*(Department of|Dept of|DEPARTMENT OF|DEPT OF)\s*$/i, '').trim()
           
           const subtier = opp.subtier || opp.fullParentPathName?.split('.')[1] || ''
           const office = opp.office || opp.fullParentPathName?.split('.')[2] || ''
