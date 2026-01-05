@@ -170,33 +170,33 @@ export default function Dashboard() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Stats Overview */}
         <div className="mb-8 grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="bg-white rounded-xl shadow-md border border-gray-100 p-6 hover:shadow-lg transition-all duration-200">
+          <div className="bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl shadow-lg border border-blue-400 p-6 hover:shadow-xl transition-all duration-200">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-500 uppercase tracking-wide">Active Opportunities</p>
-                <p className="text-3xl font-bold text-gray-900 mt-2">{signals.length}</p>
+                <p className="text-sm font-medium text-blue-100 uppercase tracking-wide">Active Opportunities</p>
+                <p className="text-4xl font-bold text-white mt-2">{signals.length}</p>
               </div>
-              <div className="bg-blue-100 rounded-full p-3">
+              <div className="bg-white/20 backdrop-blur-sm rounded-full p-3">
                 <span className="text-3xl">📊</span>
               </div>
             </div>
           </div>
-          <div className="bg-white rounded-xl shadow-md border border-gray-100 p-6 hover:shadow-lg transition-all duration-200">
+          <div className="bg-gradient-to-br from-green-500 to-emerald-600 rounded-xl shadow-lg border border-green-400 p-6 hover:shadow-xl transition-all duration-200">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-500 uppercase tracking-wide">Subscriptions</p>
-                <p className="text-3xl font-bold text-gray-900 mt-2">{subscriptions.length}</p>
+                <p className="text-sm font-medium text-green-100 uppercase tracking-wide">Subscriptions</p>
+                <p className="text-4xl font-bold text-white mt-2">{subscriptions.length}</p>
               </div>
-              <div className="bg-green-100 rounded-full p-3">
+              <div className="bg-white/20 backdrop-blur-sm rounded-full p-3">
                 <span className="text-3xl">✅</span>
               </div>
             </div>
           </div>
-          <div className="bg-blue-600 rounded-xl shadow-md p-6 hover:shadow-lg transition-all duration-200">
+          <div className="bg-gradient-to-br from-red-500 to-orange-600 rounded-xl shadow-lg border border-red-400 p-6 hover:shadow-xl transition-all duration-200">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-blue-100 uppercase tracking-wide">Urgent Deadlines</p>
-                <p className="text-3xl font-bold text-white mt-2">{signals.filter(s => {
+                <p className="text-sm font-medium text-red-100 uppercase tracking-wide">Urgent Deadlines</p>
+                <p className="text-4xl font-bold text-white mt-2">{signals.filter(s => {
                   if (s.metadata?.responseDeadline) {
                     const deadline = new Date(s.metadata.responseDeadline)
                     const now = new Date()
@@ -206,7 +206,7 @@ export default function Dashboard() {
                   return false
                 }).length}</p>
               </div>
-              <div className="bg-blue-500 rounded-full p-3">
+              <div className="bg-white/20 backdrop-blur-sm rounded-full p-3">
                 <span className="text-3xl">⏰</span>
               </div>
             </div>
@@ -227,8 +227,8 @@ export default function Dashboard() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Subscriptions Sidebar */}
           <div className="lg:col-span-1">
-            <div className="bg-white rounded-xl shadow-md border border-gray-100 overflow-hidden">
-              <div className="bg-blue-600 p-6">
+            <div className="bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden">
+              <div className="bg-gradient-to-r from-blue-600 to-indigo-600 p-6">
                 <h2 className="text-xl font-bold text-white">Your Subscriptions</h2>
                 <p className="text-sm text-blue-100 mt-1">
                   🔔 Get notified about new opportunities
@@ -261,8 +261,8 @@ export default function Dashboard() {
 
           {/* Signals Feed */}
           <div className="lg:col-span-2">
-            <div className="bg-white rounded-xl shadow-md border border-gray-100 overflow-hidden">
-              <div className="bg-gray-800 p-6">
+            <div className="bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden">
+              <div className="bg-gradient-to-r from-gray-800 to-gray-900 p-6">
                 <div className="flex items-center justify-between mb-4">
                   <h2 className="text-xl font-bold text-white">Recent Signals</h2>
                   <div className="flex gap-2 flex-wrap">
