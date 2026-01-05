@@ -154,8 +154,8 @@ export default function Dashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
-      <header className="bg-white border-b border-gray-200 sticky top-0 z-10 shadow-sm">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50">
+      <header className="bg-white/80 backdrop-blur-md border-b border-gray-200 sticky top-0 z-10 shadow-md">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-5">
           <div className="flex justify-between items-center">
             <div>
@@ -249,16 +249,18 @@ export default function Dashboard() {
                   <button
                     key={value}
                     onClick={() => toggleSubscription(value)}
-                    className={`flex flex-col items-center justify-center p-4 rounded-lg border-2 transition-all duration-150 hover:shadow-sm ${
+                    className={`relative flex flex-col items-center justify-center p-4 rounded-xl border-2 transition-all duration-200 hover:shadow-md transform hover:-translate-y-1 ${
                       isSubscribed(value)
-                        ? 'border-blue-500 bg-blue-50 shadow-sm'
-                        : 'border-gray-200 hover:border-blue-300 bg-white'
+                        ? 'border-blue-500 bg-gradient-to-br from-blue-50 to-blue-100 shadow-md'
+                        : 'border-gray-200 hover:border-blue-300 bg-white hover:bg-gray-50'
                     }`}
                   >
-                    <span className="text-3xl mb-2">{icon}</span>
-                    <span className="text-xs font-semibold text-gray-900 text-center">{label}</span>
+                    <span className="text-3xl mb-2 drop-shadow-sm">{icon}</span>
+                    <span className="text-xs font-semibold text-gray-900 text-center leading-tight">{label}</span>
                     {isSubscribed(value) && (
-                      <span className="text-blue-600 font-bold text-lg mt-1">✓</span>
+                      <div className="absolute -top-2 -right-2 w-6 h-6 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center shadow-lg">
+                        <span className="text-white font-bold text-sm">✓</span>
+                      </div>
                     )}
                   </button>
                 ))}
