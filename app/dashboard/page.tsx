@@ -46,6 +46,7 @@ export default function Dashboard() {
   const [loading, setLoading] = useState(true)
   const [currentPage, setCurrentPage] = useState(1)
   const [itemsPerPage, setItemsPerPage] = useState(20)
+  const [sortBy, setSortBy] = useState<string>('newest')
 
   useEffect(() => {
     setCurrentPage(1) // Reset to first page when filter changes
@@ -115,6 +116,41 @@ export default function Dashboard() {
 
   const isSubscribed = (type: string) => {
     return subscriptions.some(s => s.signalType === type && s.isActive)
+  }
+
+  const calculateElapsedPercentage = (signal: LeadSignal): number => {
+    if (!signal.metadata?.postedDate || !signal.metadata?.responseDeadline) {
+      return -1 // No timeline data
+    }
+    const posted = new Date(signal.metadata.postedDate)
+    const deadline = new Date(signal.metadata.responseDeadline)
+    const now = new Date()
+    
+    const totalDays = Math.ceil((deadline.getTime() - posted.getTime()) / (1000 * 60 * 60 * 24))
+    const elapsedDays = Math.ceil((now.getTime() - posted.getTime()) / (1000 * 60 * 60 * 24))
+    
+    return Math.min(100, Math.max(0, (elapsedDays / totalDays) * 100))
+  }
+
+  const getSortedSignals = () => {
+    const signalsCopy = [...signals]
+    
+    switch (sortBy) {
+      case 'most-elapsed':
+        return signalsCopy.sort((a, b) => calculateElapsedPercentage(b) - calculateElapsedPercentage(a))
+      case 'least-elapsed':
+        return signalsCopy.sort((a, b) => {
+          const aElapsed = calculateElapsedPercentage(a)
+          const bElapsed = calculateElapsedPercentage(b)
+          // Put items without timeline data at the end
+          if (aElapsed === -1) return 1
+          if (bElapsed === -1) return -1
+          return aElapsed - bElapsed
+        })
+      case 'newest':
+      default:
+        return signalsCopy.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+    }
   }
 
   return (
@@ -229,7 +265,19 @@ export default function Dashboard() {
               <div className="bg-gray-800 p-6">
                 <div className="flex items-center justify-between mb-4">
                   <h2 className="text-xl font-bold text-white">Recent Signals</h2>
-                  <div className="flex gap-2">
+                  <div className="flex gap-2 flex-wrap">
+                    <select
+                      value={sortBy}
+                      onChange={(e) => {
+                        setSortBy(e.target.value)
+                        setCurrentPage(1)
+                      }}
+                      className="px-4 py-2 border border-gray-600 rounded-lg text-sm text-white bg-gray-700 font-medium focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    >
+                      <option value="newest">Newest First</option>
+                      <option value="most-elapsed">Most Elapsed %</option>
+                      <option value="least-elapsed">Least Elapsed %</option>
+                    </select>
                     <select
                       value={selectedType}
                       onChange={(e) => {
@@ -311,7 +359,7 @@ export default function Dashboard() {
                       </div>
                     </div>
                     {/* Paginated Signals */}
-                    {signals.slice(
+                    {getSortedSignals().slice(
                       (currentPage - 1) * itemsPerPage,
                       currentPage * itemsPerPage
                     ).map((signal) => (
