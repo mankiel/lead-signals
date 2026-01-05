@@ -17,7 +17,7 @@ export async function GET() {
         obligated: Math.round(agency.obligated_amount / 1000000000),
         outlay: Math.round(agency.outlay_amount / 1000000000)
       }))
-      .sort((a, b) => b.budget_authority - a.budget_authority)
+      .sort((a: any, b: any) => b.budget_authority - a.budget_authority)
 
     return NextResponse.json({ data: budgetData })
   } catch (error) {
