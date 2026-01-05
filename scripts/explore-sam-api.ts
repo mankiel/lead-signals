@@ -1,4 +1,4 @@
-const SAM_API_KEY = 'SAM-f06affbc-a655-4f72-abfe-a3777ad49b0d'
+const SAM_API_KEY = process.env.SAM_API_KEY || ''
 
 async function exploreSamApi() {
   const apiUrl = `https://api.sam.gov/opportunities/v2/search?api_key=${SAM_API_KEY}&limit=20&postedFrom=12/01/2025&postedTo=01/02/2026&ptype=o,k`

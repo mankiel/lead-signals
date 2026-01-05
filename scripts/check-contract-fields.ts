@@ -1,4 +1,4 @@
-const SAM_API_KEY = 'SAM-f06affbc-a655-4f72-abfe-a3777ad49b0d'
+const SAM_API_KEY = process.env.SAM_API_KEY || ''
 
 async function checkFields() {
   // Get a single opportunity with full details

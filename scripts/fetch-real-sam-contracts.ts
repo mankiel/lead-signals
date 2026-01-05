@@ -1,7 +1,7 @@
 import { PrismaClient } from '@prisma/client'
 
 const prisma = new PrismaClient()
-const SAM_API_KEY = 'SAM-f06affbc-a655-4f72-abfe-a3777ad49b0d'
+const SAM_API_KEY = process.env.SAM_API_KEY || ''
 
 async function main() {
   console.log('Fetching real-time SAM.gov opportunities...')
