@@ -68,7 +68,7 @@ export default function AgencyBudgetChart() {
           <CartesianGrid strokeDasharray="3 3" />
           <XAxis type="number" tickFormatter={formatBillion} />
           <YAxis type="category" dataKey="name" width={60} tick={{ fontSize: 12 }} />
-          <Tooltip formatter={(value: number) => formatBillion(value)} />
+          <Tooltip formatter={(value: number | undefined) => value ? formatBillion(value) : '$0B'} />
           <Legend />
           <Bar dataKey="budget_authority" fill="#3b82f6" name="Budget Authority" />
           <Bar dataKey="obligated" fill="#10b981" name="Obligated" />
