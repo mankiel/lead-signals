@@ -353,6 +353,7 @@ export default function Dashboard() {
                           {new Date(signal.createdAt).toLocaleDateString()}
                         </span>
                       </div>
+                    </div>
                     ))}
                   </>
                 )}
