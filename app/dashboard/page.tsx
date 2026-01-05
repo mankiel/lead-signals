@@ -224,43 +224,42 @@ export default function Dashboard() {
           <AgencyBudgetChart />
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* Subscriptions Sidebar */}
-          <div className="lg:col-span-1">
-            <div className="bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden">
-              <div className="bg-gradient-to-r from-blue-600 to-indigo-600 p-6">
-                <h2 className="text-xl font-bold text-white">Your Subscriptions</h2>
-                <p className="text-sm text-blue-100 mt-1">
-                  🔔 Get notified about new opportunities
-                </p>
-              </div>
-              
-              <div className="p-6 space-y-3">
+        {/* Subscriptions Section - Full Width */}
+        <div className="mb-6">
+          <div className="bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden">
+            <div className="bg-gradient-to-r from-blue-600 to-indigo-600 p-6">
+              <h2 className="text-xl font-bold text-white">Your Subscriptions</h2>
+              <p className="text-sm text-blue-100 mt-1">
+                🔔 Get notified about new opportunities
+              </p>
+            </div>
+            
+            <div className="p-6">
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
                 {SIGNAL_TYPES.map(({ value, label, icon }) => (
                   <button
                     key={value}
                     onClick={() => toggleSubscription(value)}
-                    className={`w-full flex items-center justify-between p-4 rounded-lg border-2 transition-all duration-150 hover:shadow-sm ${
+                    className={`flex flex-col items-center justify-center p-4 rounded-lg border-2 transition-all duration-150 hover:shadow-sm ${
                       isSubscribed(value)
                         ? 'border-blue-500 bg-blue-50 shadow-sm'
                         : 'border-gray-200 hover:border-blue-300 bg-white'
                     }`}
                   >
-                    <span className="flex items-center gap-3">
-                      <span className="text-2xl">{icon}</span>
-                      <span className="text-sm font-semibold text-gray-900">{label}</span>
-                    </span>
+                    <span className="text-3xl mb-2">{icon}</span>
+                    <span className="text-xs font-semibold text-gray-900 text-center">{label}</span>
                     {isSubscribed(value) && (
-                      <span className="text-blue-600 font-bold text-lg">✓</span>
+                      <span className="text-blue-600 font-bold text-lg mt-1">✓</span>
                     )}
                   </button>
                 ))}
               </div>
             </div>
           </div>
+        </div>
 
-          {/* Signals Feed */}
-          <div className="lg:col-span-2">
+        {/* Signals Feed - Full Width */}
+        <div>
             <div className="bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden">
               <div className="bg-gradient-to-r from-gray-800 to-gray-900 p-6">
                 <div className="flex items-center justify-between mb-4">
@@ -455,6 +454,5 @@ export default function Dashboard() {
           </div>
         </div>
       </div>
-    </div>
   )
 }
