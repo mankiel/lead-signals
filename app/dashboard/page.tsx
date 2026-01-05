@@ -38,6 +38,8 @@ export default function Dashboard() {
   const [subscriptions, setSubscriptions] = useState<Subscription[]>([])
   const [selectedType, setSelectedType] = useState<string>('all')
   const [loading, setLoading] = useState(true)
+  const [currentPage, setCurrentPage] = useState(1)
+  const [itemsPerPage, setItemsPerPage] = useState(20)
 
   useEffect(() => {
     fetchSignals()
@@ -167,7 +169,53 @@ export default function Dashboard() {
                     No signals found. Check back later!
                   </div>
                 ) : (
-                  signals.map((signal) => (
+                  <>
+                    {/* Pagination Info & Controls */}
+                    <div className="px-6 py-4 border-b border-gray-200 flex items-center justify-between bg-gray-50">
+                      <div className="flex items-center gap-4">
+                        <span className="text-sm text-gray-700 font-medium">
+                          Showing {((currentPage - 1) * itemsPerPage) + 1}-{Math.min(currentPage * itemsPerPage, signals.length)} of {signals.length} opportunities
+                        </span>
+                        <select
+                          value={itemsPerPage}
+                          onChange={(e) => {
+                            setItemsPerPage(Number(e.target.value))
+                            setCurrentPage(1)
+                          }}
+                          className="px-2 py-1 border border-gray-300 rounded text-sm text-black"
+                        >
+                          <option value={10}>10 per page</option>
+                          <option value={20}>20 per page</option>
+                          <option value={50}>50 per page</option>
+                          <option value={100}>100 per page</option>
+                        </select>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <button
+                          onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                          disabled={currentPage === 1}
+                          className="px-3 py-1 border border-gray-300 rounded text-sm text-black disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-100"
+                        >
+                          Previous
+                        </button>
+                        <span className="text-sm text-gray-600">
+                          Page {currentPage} of {Math.ceil(signals.length / itemsPerPage)}
+                        </span>
+                        <button
+                          onClick={() => setCurrentPage(p => Math.min(Math.ceil(signals.length / itemsPerPage), p + 1))}
+                          disabled={currentPage >= Math.ceil(signals.length / itemsPerPage)}
+                          className="px-3 py-1 border border-gray-300 rounded text-sm text-black disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-100"
+                        >
+                          Next
+                        </button>
+                      </div>
+                    </div>
+                    {/* Paginated Signals */}
+                    {
+signals.slice(
+                      (currentPage - 1) * itemsPerPage,
+                      currentPage * itemsPerPage
+                    ).map((signal) => (
                     <div key={signal.id} className="p-6 hover:bg-gray-50">
                       <div className="flex items-start justify-between">
                         <div className="flex-1">
@@ -252,7 +300,8 @@ export default function Dashboard() {
                         </span>
                       </div>
                     </div>
-                  ))
+                    ))}
+                  </>
                 )}
               </div>
             </div>
