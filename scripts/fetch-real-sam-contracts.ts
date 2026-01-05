@@ -15,33 +15,63 @@ async function main() {
   try {
     // Fetch open solicitations and white paper requests from SAM.gov Public API v2
     // ptype: o=Solicitation, k=Combined Synopsis, r=Sources Sought (white papers), s=Special Notice, p=Presolicitation
-    const apiUrl = `https://api.sam.gov/opportunities/v2/search?api_key=${SAM_API_KEY}&limit=50&postedFrom=12/01/2025&postedTo=01/02/2026&ptype=o,k,r,s,p`
+    const limit = 100 // Max records per API call
+    const maxPages = 5 // Max API calls (stay within daily quota of 8-10)
+    let allOpenOpportunities: any[] = []
+    let totalRecords = 0
     
-    console.log('Calling SAM.gov Public API v2...')
-    const response = await fetch(apiUrl, {
-      method: 'GET',
-      headers: {
-        'Accept': 'application/json'
-      }
-    })
-
-    console.log(`API Response Status: ${response.status}`)
-
-    if (response.ok) {
-      const data = await response.json()
+    console.log(`Fetching up to ${maxPages * limit} opportunities using pagination...`)
+    
+    for (let page = 0; page < maxPages; page++) {
+      const offset = page * limit
+      const apiUrl = `https://api.sam.gov/opportunities/v2/search?api_key=${SAM_API_KEY}&limit=${limit}&offset=${offset}&postedFrom=12/01/2025&postedTo=01/05/2026&ptype=o,k,r,s,p`
       
-      if (data.opportunitiesData && data.opportunitiesData.length > 0) {
-        console.log(`✅ Found ${data.opportunitiesData.length} real opportunities from SAM.gov`)
-        
-        // Filter only open solicitations without awarded contractors
-        const openOpportunities = data.opportunitiesData.filter(opp => 
-          !opp.award?.awardee?.name
-        )
-        console.log(`   ${openOpportunities.length} open opportunities (no contractor awarded yet)`)
-        
-        // Process up to 10 open opportunities
-        const processedCount = Math.min(openOpportunities.length, 10)
-        for (const opp of openOpportunities.slice(0, processedCount)) {
+      console.log(`\nAPI Call ${page + 1}/${maxPages} (offset: ${offset})...`)
+      const response = await fetch(apiUrl, {
+        method: 'GET',
+        headers: {
+          'Accept': 'application/json'
+        }
+      })
+
+      console.log(`API Response Status: ${response.status}`)
+
+      if (!response.ok) {
+        const errorText = await response.text()
+        console.log(`API Error: ${errorText.substring(0, 200)}`)
+        break
+      }
+
+      const data = await response.json()
+      totalRecords = data.totalRecords || 0
+      
+      if (!data.opportunitiesData || data.opportunitiesData.length === 0) {
+        console.log('No more opportunities in this page')
+        break
+      }
+      
+      console.log(`✅ Received ${data.opportunitiesData.length} opportunities (${totalRecords} total available)`)
+      
+      // Filter only open solicitations without awarded contractors
+      const openOpps = data.opportunitiesData.filter(opp => !opp.award?.awardee?.name)
+      allOpenOpportunities.push(...openOpps)
+      console.log(`   ${openOpps.length} open (no contractor awarded)`)
+      
+      // Stop if we've retrieved all available records
+      if (offset + limit >= totalRecords) {
+        console.log('Reached end of available records')
+        break
+      }
+      
+      // Small delay to be respectful to API
+      await new Promise(resolve => setTimeout(resolve, 500))
+    }
+    
+    console.log(`\n📊 Total open opportunities collected: ${allOpenOpportunities.length}`)
+    
+    if (allOpenOpportunities.length > 0) {
+      // Process all collected opportunities
+      for (const opp of allOpenOpportunities) {
           const noticeId = opp.noticeId
           const detailUrl = opp.uiLink || `https://sam.gov/opp/${noticeId}/view`
           
@@ -113,25 +143,13 @@ async function main() {
           console.log(`   Type: ${opp.type} | Response: ${responseDeadline} | NAICS: ${opp.naicsCode || 'N/A'} | Attachments: ${resourceLinks.length}`)
         }
 
-        if (openOpportunities.length > 0) {
-          console.log(`✅ ${processedCount} SAM.gov open opportunities loaded!`)
-          return
-        } else {
-          console.log('⚠️ No open opportunities found in date range')
-          throw new Error('No open opportunities')
-        }
+        console.log(`\n✅ ${allOpenOpportunities.length} SAM.gov open opportunities loaded!`)
+        console.log(`📈 Used ${Math.min(maxPages, Math.ceil(totalRecords / limit))} API calls`)
       } else {
-        console.log('No opportunities found in date range')
-        throw new Error('No opportunities found')
+        console.log('⚠️ No open opportunities found in date range')
+        throw new Error('No open opportunities')
       }
-    }
-
-    // If API fails, show error
-    const errorText = await response.text()
-    console.log('API Error Response:', errorText.substring(0, 500))
-    throw new Error(`API returned ${response.status}`)
-
-  } catch (error) {
+    } catch (error) {
     console.error('❌ Error fetching from SAM.gov API:', error)
     console.log('\nFalling back to sample data...')
     
