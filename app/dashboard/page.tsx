@@ -154,13 +154,20 @@ export default function Dashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <header className="bg-white border-b border-gray-200 sticky top-0 z-10 shadow-sm">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50/20 to-gray-50">
+      <header className="bg-white/80 backdrop-blur-md border-b border-gray-200/50 sticky top-0 z-10 shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-5">
           <div className="flex justify-between items-center">
-            <div>
-              <h1 className="text-2xl sm:text-2xl lg:text-3xl font-bold text-gray-900 tracking-tight">Lead Signals</h1>
-              <p className="text-sm text-gray-600 mt-1 font-medium">Government Contract Opportunities Intelligence</p>
+            <div className="flex items-center gap-4">
+              <div className="bg-gradient-to-br from-blue-600 to-blue-800 p-3 rounded-xl shadow-lg">
+                <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                </svg>
+              </div>
+              <div>
+                <h1 className="text-2xl sm:text-2xl lg:text-3xl font-bold bg-gradient-to-r from-blue-600 to-blue-800 bg-clip-text text-transparent tracking-tight">Lead Signals</h1>
+                <p className="text-sm text-gray-600 mt-1 font-medium">Government Contract Opportunities Intelligence</p>
+              </div>
             </div>
             <UserButton />
           </div>
@@ -168,27 +175,83 @@ export default function Dashboard() {
       </header>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Welcome Message */}
+        <div className="mb-8 bg-gradient-to-r from-blue-600 to-blue-800 rounded-2xl shadow-xl p-6 sm:p-8 text-white">
+          <div className="flex items-center justify-between">
+            <div>
+              <h2 className="text-2xl sm:text-3xl font-bold mb-2">Welcome back!</h2>
+              <p className="text-blue-100 text-sm sm:text-base">Track the latest government contract opportunities and never miss a deadline</p>
+            </div>
+            <div className="hidden sm:block">
+              <svg className="w-20 h-20 text-blue-400 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+              </svg>
+            </div>
+          </div>
+        </div>
+
         {/* Stats Overview */}
         <div className="mb-8 grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="bg-white rounded-lg shadow p-6">
-            <p className="text-sm font-medium text-gray-600 mb-2">Active Opportunities</p>
-            <p className="text-3xl font-bold text-gray-900">{signals.length}</p>
+          {/* Active Opportunities Card */}
+          <div className="bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300 p-6 border-l-4 border-blue-500 group hover:-translate-y-1">
+            <div className="flex items-start justify-between">
+              <div className="flex-1">
+                <div className="flex items-center gap-2 mb-3">
+                  <div className="bg-blue-100 p-2 rounded-lg group-hover:scale-110 transition-transform">
+                    <svg className="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                    </svg>
+                  </div>
+                  <p className="text-sm font-semibold text-gray-600">Active Opportunities</p>
+                </div>
+                <p className="text-4xl font-bold text-gray-900 mb-1">{signals.length}</p>
+                <p className="text-xs text-gray-500">Total available contracts</p>
+              </div>
+            </div>
           </div>
-          <div className="bg-white rounded-lg shadow p-6">
-            <p className="text-sm font-medium text-gray-600 mb-2">Subscriptions</p>
-            <p className="text-3xl font-bold text-gray-900">{subscriptions.length}</p>
+
+          {/* Subscriptions Card */}
+          <div className="bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300 p-6 border-l-4 border-green-500 group hover:-translate-y-1">
+            <div className="flex items-start justify-between">
+              <div className="flex-1">
+                <div className="flex items-center gap-2 mb-3">
+                  <div className="bg-green-100 p-2 rounded-lg group-hover:scale-110 transition-transform">
+                    <svg className="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+                    </svg>
+                  </div>
+                  <p className="text-sm font-semibold text-gray-600">Subscriptions</p>
+                </div>
+                <p className="text-4xl font-bold text-gray-900 mb-1">{subscriptions.length}</p>
+                <p className="text-xs text-gray-500">Active alert types</p>
+              </div>
+            </div>
           </div>
-          <div className="bg-white rounded-lg shadow p-6">
-            <p className="text-sm font-medium text-gray-600 mb-2">Urgent Deadlines</p>
-            <p className="text-3xl font-bold text-gray-900">{signals.filter(s => {
-              if (s.metadata?.responseDeadline) {
-                const deadline = new Date(s.metadata.responseDeadline)
-                const now = new Date()
-                const daysUntil = Math.floor((deadline.getTime() - now.getTime()) / (1000 * 60 * 60 * 24))
-                return daysUntil <= 7
-              }
-              return false
-            }).length}</p>
+
+          {/* Urgent Deadlines Card */}
+          <div className="bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300 p-6 border-l-4 border-red-500 group hover:-translate-y-1">
+            <div className="flex items-start justify-between">
+              <div className="flex-1">
+                <div className="flex items-center gap-2 mb-3">
+                  <div className="bg-red-100 p-2 rounded-lg group-hover:scale-110 transition-transform">
+                    <svg className="w-5 h-5 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                  </div>
+                  <p className="text-sm font-semibold text-gray-600">Urgent Deadlines</p>
+                </div>
+                <p className="text-4xl font-bold text-gray-900 mb-1">{signals.filter(s => {
+                  if (s.metadata?.responseDeadline) {
+                    const deadline = new Date(s.metadata.responseDeadline)
+                    const now = new Date()
+                    const daysUntil = Math.floor((deadline.getTime() - now.getTime()) / (1000 * 60 * 60 * 24))
+                    return daysUntil <= 7
+                  }
+                  return false
+                }).length}</p>
+                <p className="text-xs text-gray-500">Due within 7 days</p>
+              </div>
+            </div>
           </div>
         </div>
 
