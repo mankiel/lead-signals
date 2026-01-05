@@ -5,6 +5,7 @@ import { UserButton } from '@clerk/nextjs'
 import OfficeChart from '../components/OfficeChart'
 import SolicitationTimeline from '../components/SolicitationTimeline'
 import DeadlineHistogram from '../components/DeadlineHistogram'
+import AgencyBudgetChart from '../components/AgencyBudgetChart'
 
 interface LeadSignal {
   id: string
@@ -129,6 +130,11 @@ export default function Dashboard() {
         <div className="mb-6 grid grid-cols-1 lg:grid-cols-2 gap-6">
           <OfficeChart />
           <DeadlineHistogram />
+        </div>
+        
+        {/* Agency Budget Chart */}
+        <div className="mb-6">
+          <AgencyBudgetChart />
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
