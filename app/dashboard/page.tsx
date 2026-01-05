@@ -37,6 +37,8 @@ export default function Dashboard() {
   const [signals, setSignals] = useState<LeadSignal[]>([])
   const [subscriptions, setSubscriptions] = useState<Subscription[]>([])
   const [selectedType, setSelectedType] = useState<string>('all')
+  const [selectedSubtier, setSelectedSubtier] = useState<string>('all')
+  const [availableSubtiers, setAvailableSubtiers] = useState<string[]>([])
   const [loading, setLoading] = useState(true)
   const [currentPage, setCurrentPage] = useState(1)
   const [itemsPerPage, setItemsPerPage] = useState(20)
@@ -45,7 +47,7 @@ export default function Dashboard() {
     setCurrentPage(1) // Reset to first page when filter changes
     fetchSignals()
     fetchSubscriptions()
-  }, [selectedType])
+  }, [selectedType, selectedSubtier])
 
   const fetchSignals = async () => {
     try {
@@ -54,7 +56,26 @@ export default function Dashboard() {
         : `/api/signals?type=${selectedType}`
       const res = await fetch(url)
       const data = await res.json()
-      setSignals(data.signals || [])
+      let filteredSignals = data.signals || []
+      
+      // Extract unique subtiers from government contracts
+      const subtiers = new Set<string>()
+      filteredSignals.forEach((signal: LeadSignal) => {
+        if (signal.signalType === 'government_contract' && signal.metadata?.subtier) {
+          subtiers.add(signal.metadata.subtier)
+        }
+      })
+      setAvailableSubtiers(Array.from(subtiers).sort())
+      
+      // Apply subtier filter
+      if (selectedSubtier !== 'all') {
+        filteredSignals = filteredSignals.filter((signal: LeadSignal) => {
+          const metadata = signal.metadata as any
+          return metadata?.subtier === selectedSubtier
+        })
+      }
+      
+      setSignals(filteredSignals)
     } catch (error) {
       console.error('Error fetching signals:', error)
     } finally {
@@ -149,16 +170,33 @@ export default function Dashboard() {
               <div className="p-6 border-b">
                 <div className="flex items-center justify-between mb-4">
                   <h2 className="text-lg font-semibold text-black">Recent Signals</h2>
-                  <select
-                    value={selectedType}
-                    onChange={(e) => setSelectedType(e.target.value)}
-                    className="px-3 py-2 border border-gray-300 rounded-lg text-sm text-black"
-                  >
-                    <option value="all">All Types</option>
-                    {SIGNAL_TYPES.map(({ value, label }) => (
-                      <option key={value} value={value}>{label}</option>
-                    ))}
-                  </select>
+                  <div className="flex gap-2">
+                    <select
+                      value={selectedType}
+                      onChange={(e) => {
+                        setSelectedType(e.target.value)
+                        setSelectedSubtier('all') // Reset subtier when type changes
+                      }}
+                      className="px-3 py-2 border border-gray-300 rounded-lg text-sm text-black"
+                    >
+                      <option value="all">All Types</option>
+                      {SIGNAL_TYPES.map(({ value, label }) => (
+                        <option key={value} value={value}>{label}</option>
+                      ))}
+                    </select>
+                    {(selectedType === 'government_contract' || selectedType === 'all') && availableSubtiers.length > 0 && (
+                      <select
+                        value={selectedSubtier}
+                        onChange={(e) => setSelectedSubtier(e.target.value)}
+                        className="px-3 py-2 border border-gray-300 rounded-lg text-sm text-black"
+                      >
+                        <option value="all">All Subtiers</option>
+                        {availableSubtiers.map((subtier) => (
+                          <option key={subtier} value={subtier}>{subtier}</option>
+                        ))}
+                      </select>
+                    )}
+                  </div>
                 </div>
               </div>
 
