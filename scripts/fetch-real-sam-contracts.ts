@@ -13,8 +13,9 @@ async function main() {
   })
 
   try {
-    // Fetch open solicitations (not awards) from SAM.gov Public API v2
-    const apiUrl = `https://api.sam.gov/opportunities/v2/search?api_key=${SAM_API_KEY}&limit=50&postedFrom=12/01/2025&postedTo=01/02/2026&ptype=o,k`
+    // Fetch open solicitations and white paper requests from SAM.gov Public API v2
+    // ptype: o=Solicitation, k=Combined Synopsis, r=Sources Sought (white papers), s=Special Notice, p=Presolicitation
+    const apiUrl = `https://api.sam.gov/opportunities/v2/search?api_key=${SAM_API_KEY}&limit=50&postedFrom=12/01/2025&postedTo=01/02/2026&ptype=o,k,r,s,p`
     
     console.log('Calling SAM.gov Public API v2...')
     const response = await fetch(apiUrl, {
