@@ -268,10 +268,10 @@ export default function Dashboard() {
 
         {/* Subscriptions Section - Full Width */}
         <div className="mb-6">
-          <div className="bg-white rounded-lg shadow border border-gray-200 overflow-hidden">
-            <div className="bg-gray-800 p-6">
+          <div className="bg-white rounded-xl shadow-md border border-gray-200 overflow-hidden">
+            <div className="bg-gradient-to-r from-blue-600 to-blue-700 p-6">
               <h2 className="text-xl font-bold text-white">Your Subscriptions</h2>
-              <p className="text-sm text-gray-300 mt-1">
+              <p className="text-sm text-blue-100 mt-1">
                 Get notified about new opportunities
               </p>
             </div>
@@ -282,15 +282,19 @@ export default function Dashboard() {
                   <button
                     key={value}
                     onClick={() => toggleSubscription(value)}
-                    className={`p-4 rounded-lg border-2 transition-all ${
+                    className={`p-4 rounded-lg border-2 transition-all hover:shadow-md ${
                       isSubscribed(value)
-                        ? 'border-blue-500 bg-blue-50'
-                        : 'border-gray-200 hover:border-gray-300 bg-white'
+                        ? 'border-blue-500 bg-blue-50 shadow-sm'
+                        : 'border-gray-200 hover:border-blue-300 bg-white'
                     }`}
                   >
-                    <span className="text-sm font-medium text-gray-900">{label}</span>
+                    <span className="text-sm font-medium text-gray-900 block">{label}</span>
                     {isSubscribed(value) && (
-                      <div className="mt-2 text-blue-600 text-sm">✓</div>
+                      <div className="mt-2 flex items-center justify-center">
+                        <svg className="w-5 h-5 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+                          <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                        </svg>
+                      </div>
                     )}
                   </button>
                 ))}
@@ -301,8 +305,8 @@ export default function Dashboard() {
 
         {/* Signals Feed - Full Width */}
         <div>
-            <div className="bg-white rounded-lg shadow border border-gray-200 overflow-hidden">
-              <div className="bg-gray-800 p-6">
+            <div className="bg-white rounded-xl shadow-md border border-gray-200 overflow-hidden">
+              <div className="bg-gradient-to-r from-gray-800 to-gray-900 p-6">
                 <div className="flex items-center justify-between mb-4">
                   <h2 className="text-xl font-bold text-white">Recent Signals</h2>
                   <div className="flex gap-2 flex-wrap">
@@ -312,7 +316,7 @@ export default function Dashboard() {
                         setSortBy(e.target.value)
                         setCurrentPage(1)
                       }}
-                      className="px-4 py-2 border border-gray-600 rounded-lg text-sm text-white bg-gray-700 font-medium focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="px-4 py-2 border border-gray-600 rounded-lg text-sm text-white bg-gray-700/80 font-medium focus:outline-none focus:ring-2 focus:ring-blue-400 hover:bg-gray-700 transition-colors"
                     >
                       <option value="newest">Newest First</option>
                       <option value="most-elapsed">Most Elapsed %</option>
@@ -324,7 +328,7 @@ export default function Dashboard() {
                         setSelectedType(e.target.value)
                         setSelectedSubtier('all') // Reset subtier when type changes
                       }}
-                      className="px-4 py-2 border border-gray-600 rounded-lg text-sm text-white bg-gray-700 font-medium focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="px-4 py-2 border border-gray-600 rounded-lg text-sm text-white bg-gray-700/80 font-medium focus:outline-none focus:ring-2 focus:ring-blue-400 hover:bg-gray-700 transition-colors"
                     >
                       <option value="all">All Types</option>
                       {SIGNAL_TYPES.map(({ value, label }) => (
@@ -335,7 +339,7 @@ export default function Dashboard() {
                       <select
                         value={selectedSubtier}
                         onChange={(e) => setSelectedSubtier(e.target.value)}
-                        className="px-4 py-2 border border-gray-600 rounded-lg text-sm text-white bg-gray-700 font-medium focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="px-4 py-2 border border-gray-600 rounded-lg text-sm text-white bg-gray-700/80 font-medium focus:outline-none focus:ring-2 focus:ring-blue-400 hover:bg-gray-700 transition-colors"
                       >
                         <option value="all">All Subtiers</option>
                         {availableSubtiers.map((subtier) => (

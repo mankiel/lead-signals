@@ -27,8 +27,8 @@ export default function OfficeChart() {
 
   if (loading) {
     return (
-      <div className="bg-white/90 backdrop-blur-sm rounded-2xl shadow-lg border border-gray-200/50 p-6">
-        <h3 className="text-lg font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent mb-4">Active Solicitations by Office</h3>
+      <div className="bg-white rounded-xl shadow-md border border-gray-200 p-6">
+        <h3 className="text-lg font-bold text-gray-800 mb-4">Active Solicitations by Office</h3>
         <div className="h-64 flex items-center justify-center text-gray-500">Loading chart...</div>
       </div>
     )
@@ -36,16 +36,16 @@ export default function OfficeChart() {
 
   if (data.length === 0) {
     return (
-      <div className="bg-white/90 backdrop-blur-sm rounded-2xl shadow-lg border border-gray-200/50 p-6">
-        <h3 className="text-lg font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent mb-4">Active Solicitations by Office</h3>
+      <div className="bg-white rounded-xl shadow-md border border-gray-200 p-6">
+        <h3 className="text-lg font-bold text-gray-800 mb-4">Active Solicitations by Office</h3>
         <div className="h-64 flex items-center justify-center text-gray-500">No data available</div>
       </div>
     )
   }
 
   return (
-    <div className="bg-white rounded-lg shadow-lg border border-gray-200 p-6">
-      <h3 className="text-lg font-bold mb-4 text-gray-800">🏛️ Active Solicitations by Office (Top 10)</h3>
+    <div className="bg-white rounded-xl shadow-md border border-gray-200 p-6 hover:shadow-lg transition-shadow">
+      <h3 className="text-lg font-bold mb-4 text-gray-800">Active Solicitations by Office (Top 10)</h3>
       <ResponsiveContainer width="100%" height={300}>
         <BarChart data={data}>
           <defs>

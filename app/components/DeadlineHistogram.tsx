@@ -27,8 +27,8 @@ export default function DeadlineHistogram() {
 
   if (loading) {
     return (
-      <div className="bg-white/90 backdrop-blur-sm rounded-2xl shadow-lg border border-gray-200/50 p-6">
-        <h3 className="text-lg font-bold bg-gradient-to-r from-orange-600 to-red-600 bg-clip-text text-transparent mb-4">Upcoming Deadlines (Next 30 Days)</h3>
+      <div className="bg-white rounded-xl shadow-md border border-gray-200 p-6">
+        <h3 className="text-lg font-bold text-gray-800 mb-4">Upcoming Deadlines (Next 30 Days)</h3>
         <div className="h-64 flex items-center justify-center text-gray-500">Loading...</div>
       </div>
     )
@@ -38,8 +38,8 @@ export default function DeadlineHistogram() {
 
   if (totalSolicitations === 0) {
     return (
-      <div className="bg-white/90 backdrop-blur-sm rounded-2xl shadow-lg border border-gray-200/50 p-6">
-        <h3 className="text-lg font-bold bg-gradient-to-r from-orange-600 to-red-600 bg-clip-text text-transparent mb-4">Upcoming Deadlines (Next 30 Days)</h3>
+      <div className="bg-white rounded-xl shadow-md border border-gray-200 p-6">
+        <h3 className="text-lg font-bold text-gray-800 mb-4">Upcoming Deadlines (Next 30 Days)</h3>
         <div className="h-64 flex items-center justify-center text-gray-500">No solicitations closing in the next 30 days</div>
       </div>
     )
@@ -49,10 +49,10 @@ export default function DeadlineHistogram() {
   const colors = ['#ef4444', '#f97316', '#eab308', '#22c55e']
 
   return (
-    <div className="bg-white rounded-lg shadow-lg border border-gray-200 p-6">
+    <div className="bg-white rounded-xl shadow-md border border-gray-200 p-6 hover:shadow-lg transition-shadow">
       <div className="flex justify-between items-center mb-4">
-        <h3 className="text-lg font-bold text-gray-800">⏰ Upcoming Deadlines (Next 30 Days)</h3>
-        <span className="text-sm bg-blue-100 text-blue-700 px-3 py-1.5 rounded-full font-semibold">{totalSolicitations} active</span>
+        <h3 className="text-lg font-bold text-gray-800">Upcoming Deadlines (Next 30 Days)</h3>
+        <span className="text-sm bg-blue-50 text-blue-700 px-3 py-1.5 rounded-lg font-semibold border border-blue-200">{totalSolicitations} active</span>
       </div>
       <ResponsiveContainer width="100%" height={300}>
         <BarChart data={data}>
