@@ -6,6 +6,9 @@ import OfficeChart from '../components/OfficeChart'
 import SolicitationTimeline from '../components/SolicitationTimeline'
 import DeadlineHistogram from '../components/DeadlineHistogram'
 import AgencyBudgetChart from '../components/AgencyBudgetChart'
+import Button from '../components/ui/Button'
+import Card, { CardHeader, CardTitle } from '../components/ui/Card'
+import Badge from '../components/ui/Badge'
 
 interface LeadSignal {
   id: string
@@ -116,10 +119,13 @@ export default function Dashboard() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <header className="bg-white shadow-sm border-b">
+      <header className="bg-white border-b border-gray-200 sticky top-0 z-10 backdrop-blur-sm bg-white/95">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex justify-between items-center">
-            <h1 className="text-2xl font-bold text-gray-900">Lead Signals</h1>
+            <div>
+              <h1 className="text-2xl font-bold text-gray-900 tracking-tight">Lead Signals</h1>
+              <p className="text-sm text-gray-500 mt-0.5">Government contract opportunities tracker</p>
+            </div>
             <UserButton />
           </div>
         </div>
@@ -140,42 +146,44 @@ export default function Dashboard() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Subscriptions Sidebar */}
           <div className="lg:col-span-1">
-            <div className="bg-white rounded-lg shadow p-6">
-              <h2 className="text-lg font-semibold mb-4 text-black">Your Subscriptions</h2>
-              <p className="text-sm text-black mb-4">
-                Subscribe to signal types to get notified
-              </p>
+            <Card>
+              <CardHeader>
+                <CardTitle>Your Subscriptions</CardTitle>
+                <p className="text-sm text-gray-500 mt-1">
+                  Subscribe to signal types to get notified
+                </p>
+              </CardHeader>
               
               <div className="space-y-2">
                 {SIGNAL_TYPES.map(({ value, label, icon }) => (
                   <button
                     key={value}
                     onClick={() => toggleSubscription(value)}
-                    className={`w-full flex items-center justify-between p-3 rounded-lg border-2 transition-colors ${
+                    className={`w-full flex items-center justify-between p-3 rounded-lg border transition-all duration-150 ${
                       isSubscribed(value)
-                        ? 'border-blue-500 bg-blue-50'
-                        : 'border-gray-200 hover:border-gray-300'
+                        ? 'border-primary-500 bg-primary-50 shadow-sm'
+                        : 'border-gray-200 hover:border-gray-300 hover:shadow-sm'
                     }`}
                   >
                     <span className="flex items-center gap-2">
-                      <span>{icon}</span>
-                      <span className="text-sm font-medium text-black">{label}</span>
+                      <span className="text-lg">{icon}</span>
+                      <span className="text-sm font-medium text-gray-900">{label}</span>
                     </span>
                     {isSubscribed(value) && (
-                      <span className="text-blue-600">✓</span>
+                      <span className="text-primary-600 font-semibold">✓</span>
                     )}
                   </button>
                 ))}
               </div>
-            </div>
+            </Card>
           </div>
 
           {/* Signals Feed */}
           <div className="lg:col-span-2">
-            <div className="bg-white rounded-lg shadow">
-              <div className="p-6 border-b">
+            <Card padding="none">
+              <div className="p-6 border-b border-gray-100">
                 <div className="flex items-center justify-between mb-4">
-                  <h2 className="text-lg font-semibold text-black">Recent Signals</h2>
+                  <CardTitle>Recent Signals</CardTitle>
                   <div className="flex gap-2">
                     <select
                       value={selectedType}
@@ -236,23 +244,25 @@ export default function Dashboard() {
                         </select>
                       </div>
                       <div className="flex items-center gap-2">
-                        <button
+                        <Button
                           onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
                           disabled={currentPage === 1}
-                          className="px-3 py-1 border border-gray-300 rounded text-sm text-black disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-100"
+                          variant="ghost"
+                          size="sm"
                         >
                           Previous
-                        </button>
-                        <span className="text-sm text-gray-600">
+                        </Button>
+                        <span className="text-sm text-gray-600 px-3">
                           Page {currentPage} of {Math.ceil(signals.length / itemsPerPage)}
                         </span>
-                        <button
+                        <Button
                           onClick={() => setCurrentPage(p => Math.min(Math.ceil(signals.length / itemsPerPage), p + 1))}
                           disabled={currentPage >= Math.ceil(signals.length / itemsPerPage)}
-                          className="px-3 py-1 border border-gray-300 rounded text-sm text-black disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-100"
+                          variant="ghost"
+                          size="sm"
                         >
                           Next
-                        </button>
+                        </Button>
                       </div>
                     </div>
                     {/* Paginated Signals */}
@@ -260,25 +270,24 @@ export default function Dashboard() {
                       (currentPage - 1) * itemsPerPage,
                       currentPage * itemsPerPage
                     ).map((signal) => (
-                      <div key={signal.id} className="p-6 hover:bg-gray-50">
-                      <div className="flex items-start justify-between">
-                        <div className="flex-1">
-                          <div className="flex items-center gap-2 mb-2">
+                      <div key={signal.id} className="p-6 hover:bg-gray-50 transition-colors border-b border-gray-100 last:border-0">
+                        <div className="flex items-start justify-between">
+                          <div className="flex-1">
+                          <div className="flex items-center gap-3 mb-3">
                             <span className="text-2xl">
                               {SIGNAL_TYPES.find(t => t.value === signal.signalType)?.icon}
                             </span>
-                            <h3 className="font-semibold text-lg text-black">{signal.companyName}</h3>
-                            <span className="px-2 py-1 bg-gray-100 text-black text-xs rounded-full">
+                            <h3 className="font-semibold text-lg text-gray-900">{signal.companyName}</h3>
+                            <Badge variant="gray" size="sm">
                               {SIGNAL_TYPES.find(t => t.value === signal.signalType)?.label}
-                            </span>
-                          </div>
+                            </Badge>
                           
                           {/* Show contract type and solicitation number for government contracts */}
                           {signal.signalType === 'government_contract' && signal.metadata?.contractType && (
-                            <div className="mb-2 flex items-center gap-2">
-                              <span className="inline-flex items-center px-3 py-1 bg-blue-100 text-blue-800 text-sm font-medium rounded-full">
+                            <div className="mb-3 flex items-center gap-2">
+                              <Badge variant="primary">
                                 {signal.metadata.contractType}
-                              </span>
+                              </Badge>
                               {signal.metadata.solicitationNumber && (
                                 <span className="text-xs text-gray-600">
                                   #{signal.metadata.solicitationNumber}
@@ -287,7 +296,7 @@ export default function Dashboard() {
                             </div>
                           )}
                           
-                          <p className="text-black mb-2">{signal.description}</p>
+                          <p className="text-gray-700 leading-relaxed mb-3">{signal.description}</p>
                           
                           {/* Timeline for government contracts */}
                           {signal.signalType === 'government_contract' && signal.metadata?.postedDate && signal.metadata?.responseDeadline && (
@@ -348,7 +357,7 @@ export default function Dashboard() {
                   </>
                 )}
               </div>
-            </div>
+            </Card>
           </div>
         </div>
       </div>
