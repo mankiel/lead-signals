@@ -100,19 +100,19 @@ export default function DeadlineHistogram() {
       </ResponsiveContainer>
       <div className="mt-3 flex justify-center gap-4 text-xs">
         <div className="flex items-center gap-1">
-          <div className="w-3 h-3 rounded" style={{ backgroundColor: '#ef4444' }}></div>
+          <div className="w-3 h-3 rounded" style={{ background: 'linear-gradient(to bottom, #ef4444, #dc2626)' }}></div>
           <span className="text-gray-600">Urgent (0-7 days)</span>
         </div>
         <div className="flex items-center gap-1">
-          <div className="w-3 h-3 rounded" style={{ backgroundColor: '#f97316' }}></div>
+          <div className="w-3 h-3 rounded" style={{ background: 'linear-gradient(to bottom, #f97316, #ea580c)' }}></div>
           <span className="text-gray-600">Soon (8-14 days)</span>
         </div>
         <div className="flex items-center gap-1">
-          <div className="w-3 h-3 rounded" style={{ backgroundColor: '#eab308' }}></div>
+          <div className="w-3 h-3 rounded" style={{ background: 'linear-gradient(to bottom, #eab308, #ca8a04)' }}></div>
           <span className="text-gray-600">Moderate (15-21 days)</span>
         </div>
         <div className="flex items-center gap-1">
-          <div className="w-3 h-3 rounded" style={{ backgroundColor: '#22c55e' }}></div>
+          <div className="w-3 h-3 rounded" style={{ background: 'linear-gradient(to bottom, #22c55e, #16a34a)' }}></div>
           <span className="text-gray-600">More Time (22-30 days)</span>
         </div>
       </div>
