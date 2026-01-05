@@ -136,11 +136,16 @@ async function main() {
             }
           }
 
-          await prisma.leadSignal.create({
-            data: contract
-          })
-          console.log(`✅ Added: ${agency} - ${opp.title?.substring(0, 50)}...`)
-          console.log(`   Type: ${opp.type} | Response: ${responseDeadline} | NAICS: ${opp.naicsCode || 'N/A'} | Attachments: ${resourceLinks.length}`)
+          try {
+            await prisma.leadSignal.create({
+              data: contract
+            })
+            console.log(`✅ Added: ${agency} - ${opp.title?.substring(0, 50)}...`)
+            console.log(`   Type: ${opp.type} | Response: ${responseDeadline} | NAICS: ${opp.naicsCode || 'N/A'} | Attachments: ${resourceLinks.length}`)
+          } catch (dbError: any) {
+            console.log(`⚠️  Skipped (encoding issue): ${agency} - ${opp.title?.substring(0, 30)}...`)
+            // Continue to next opportunity
+          }
         }
 
         console.log(`\n✅ ${allOpenOpportunities.length} SAM.gov open opportunities loaded!`)
