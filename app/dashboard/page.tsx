@@ -256,12 +256,11 @@ export default function Dashboard() {
                       </div>
                     </div>
                     {/* Paginated Signals */}
-                    {
-signals.slice(
+                    {signals.slice(
                       (currentPage - 1) * itemsPerPage,
                       currentPage * itemsPerPage
                     ).map((signal) => (
-                    <div key={signal.id} className="p-6 hover:bg-gray-50">
+                      <div key={signal.id} className="p-6 hover:bg-gray-50">
                       <div className="flex items-start justify-between">
                         <div className="flex-1">
                           <div className="flex items-center gap-2 mb-2">
