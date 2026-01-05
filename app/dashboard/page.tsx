@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react'
 import { UserButton } from '@clerk/nextjs'
 import OfficeChart from '../components/OfficeChart'
+import SolicitationTimeline from '../components/SolicitationTimeline'
 
 interface LeadSignal {
   id: string
@@ -193,6 +194,14 @@ export default function Dashboard() {
                           )}
                           
                           <p className="text-black mb-2">{signal.description}</p>
+                          
+                          {/* Timeline for government contracts */}
+                          {signal.signalType === 'government_contract' && signal.metadata?.postedDate && signal.metadata?.responseDeadline && (
+                            <SolicitationTimeline 
+                              postedDate={signal.metadata.postedDate}
+                              responseDeadline={signal.metadata.responseDeadline}
+                            />
+                          )}
                           
                           {/* Show document attachments for government contracts */}
                           {signal.signalType === 'government_contract' && signal.metadata?.resourceLinks && signal.metadata.resourceLinks.length > 0 && (
