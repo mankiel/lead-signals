@@ -154,8 +154,8 @@ export default function Dashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50">
-      <header className="bg-white/80 backdrop-blur-md border-b border-gray-200 sticky top-0 z-10 shadow-md">
+    <div className="min-h-screen bg-gray-50">
+      <header className="bg-white border-b border-gray-200 sticky top-0 z-10 shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-5">
           <div className="flex justify-between items-center">
             <div>
@@ -170,19 +170,17 @@ export default function Dashboard() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Stats Overview */}
         <div className="mb-8 grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="bg-white rounded-2xl shadow-md border-l-4 border-blue-500 p-6 hover:shadow-xl transition-all duration-200">
-            <p className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-3">Active Opportunities</p>
-            <p className="text-5xl font-extrabold text-gray-900 mb-2">{signals.length}</p>
-            <p className="text-sm text-gray-600">Government contracts</p>
+          <div className="bg-white rounded-lg shadow p-6">
+            <p className="text-sm font-medium text-gray-600 mb-2">Active Opportunities</p>
+            <p className="text-3xl font-bold text-gray-900">{signals.length}</p>
           </div>
-          <div className="bg-white rounded-2xl shadow-md border-l-4 border-green-500 p-6 hover:shadow-xl transition-all duration-200">
-            <p className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-3">Subscriptions</p>
-            <p className="text-5xl font-extrabold text-gray-900 mb-2">{subscriptions.length}</p>
-            <p className="text-sm text-gray-600">Active notifications</p>
+          <div className="bg-white rounded-lg shadow p-6">
+            <p className="text-sm font-medium text-gray-600 mb-2">Subscriptions</p>
+            <p className="text-3xl font-bold text-gray-900">{subscriptions.length}</p>
           </div>
-          <div className="bg-white rounded-2xl shadow-md border-l-4 border-red-500 p-6 hover:shadow-xl transition-all duration-200">
-            <p className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-3">Urgent Deadlines</p>
-            <p className="text-5xl font-extrabold text-gray-900 mb-2">{signals.filter(s => {
+          <div className="bg-white rounded-lg shadow p-6">
+            <p className="text-sm font-medium text-gray-600 mb-2">Urgent Deadlines</p>
+            <p className="text-3xl font-bold text-gray-900">{signals.filter(s => {
               if (s.metadata?.responseDeadline) {
                 const deadline = new Date(s.metadata.responseDeadline)
                 const now = new Date()
@@ -191,7 +189,6 @@ export default function Dashboard() {
               }
               return false
             }).length}</p>
-            <p className="text-sm text-gray-600">Within 7 days</p>
           </div>
         </div>
 
@@ -208,10 +205,10 @@ export default function Dashboard() {
 
         {/* Subscriptions Section - Full Width */}
         <div className="mb-6">
-          <div className="bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden">
-            <div className="bg-gradient-to-r from-blue-600 to-indigo-600 p-6">
+          <div className="bg-white rounded-lg shadow border border-gray-200 overflow-hidden">
+            <div className="bg-gray-800 p-6">
               <h2 className="text-xl font-bold text-white">Your Subscriptions</h2>
-              <p className="text-sm text-blue-100 mt-1">
+              <p className="text-sm text-gray-300 mt-1">
                 Get notified about new opportunities
               </p>
             </div>
@@ -222,17 +219,15 @@ export default function Dashboard() {
                   <button
                     key={value}
                     onClick={() => toggleSubscription(value)}
-                    className={`relative flex flex-col items-center justify-center p-4 rounded-xl border-2 transition-all duration-200 hover:shadow-md transform hover:-translate-y-1 ${
+                    className={`p-4 rounded-lg border-2 transition-all ${
                       isSubscribed(value)
-                        ? 'border-blue-500 bg-gradient-to-br from-blue-50 to-blue-100 shadow-md'
-                        : 'border-gray-200 hover:border-blue-300 bg-white hover:bg-gray-50'
+                        ? 'border-blue-500 bg-blue-50'
+                        : 'border-gray-200 hover:border-gray-300 bg-white'
                     }`}
                   >
-                    <span className="text-sm font-semibold text-gray-900 text-center leading-tight">{label}</span>
+                    <span className="text-sm font-medium text-gray-900">{label}</span>
                     {isSubscribed(value) && (
-                      <div className="absolute -top-2 -right-2 w-6 h-6 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center shadow-lg">
-                        <span className="text-white font-bold text-sm">✓</span>
-                      </div>
+                      <div className="mt-2 text-blue-600 text-sm">✓</div>
                     )}
                   </button>
                 ))}
@@ -243,8 +238,8 @@ export default function Dashboard() {
 
         {/* Signals Feed - Full Width */}
         <div>
-            <div className="bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden">
-              <div className="bg-gradient-to-r from-gray-800 to-gray-900 p-6">
+            <div className="bg-white rounded-lg shadow border border-gray-200 overflow-hidden">
+              <div className="bg-gray-800 p-6">
                 <div className="flex items-center justify-between mb-4">
                   <h2 className="text-xl font-bold text-white">Recent Signals</h2>
                   <div className="flex gap-2 flex-wrap">
