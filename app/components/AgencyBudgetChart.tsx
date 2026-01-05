@@ -90,7 +90,7 @@ export default function AgencyBudgetChart() {
             style={{ fontSize: '12px' }}
           />
           <Tooltip 
-            formatter={(value: number) => [`$${value}B`, 'Funding']}
+            formatter={(value: number | undefined) => value !== undefined ? [`$${value}B`, 'Funding'] : ['$0B', 'Funding']}
             contentStyle={{
               backgroundColor: 'white',
               border: '1px solid #e5e7eb',
