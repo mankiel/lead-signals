@@ -281,6 +281,7 @@ export default function Dashboard() {
                             <Badge variant="gray" size="sm">
                               {SIGNAL_TYPES.find(t => t.value === signal.signalType)?.label}
                             </Badge>
+                          </div>
                           
                           {/* Show contract type and solicitation number for government contracts */}
                           {signal.signalType === 'government_contract' && signal.metadata?.contractType && (
