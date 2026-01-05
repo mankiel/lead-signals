@@ -18,7 +18,7 @@ interface TimeSeriesData {
   [key: string]: any
 }
 
-const AGENCY_COLORS = {
+const AGENCY_COLORS: { [key: string]: string } = {
   DOD: '#1e40af',
   HHS: '#059669',
   VA: '#dc2626',
