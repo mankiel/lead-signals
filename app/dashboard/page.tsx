@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { UserButton } from '@clerk/nextjs'
-import OfficeChart from './OfficeChart'
+import OfficeChart from '../components/OfficeChart'
 
 interface LeadSignal {
   id: string
