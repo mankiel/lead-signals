@@ -57,19 +57,19 @@ export default function DeadlineHistogram() {
       <ResponsiveContainer width="100%" height={300}>
         <BarChart data={data}>
           <defs>
-            <linearGradient id="urgentGrad" x1="0" y1="0" x2="0" y2="1">
+            <linearGradient id="deadline-urgent-gradient" x1="0" y1="0" x2="0" y2="1">
               <stop offset="0%" stopColor="#ef4444" stopOpacity={0.9} />
               <stop offset="100%" stopColor="#dc2626" stopOpacity={0.7} />
             </linearGradient>
-            <linearGradient id="soonGrad" x1="0" y1="0" x2="0" y2="1">
+            <linearGradient id="deadline-soon-gradient" x1="0" y1="0" x2="0" y2="1">
               <stop offset="0%" stopColor="#f97316" stopOpacity={0.9} />
               <stop offset="100%" stopColor="#ea580c" stopOpacity={0.7} />
             </linearGradient>
-            <linearGradient id="upcomingGrad" x1="0" y1="0" x2="0" y2="1">
+            <linearGradient id="deadline-upcoming-gradient" x1="0" y1="0" x2="0" y2="1">
               <stop offset="0%" stopColor="#eab308" stopOpacity={0.9} />
               <stop offset="100%" stopColor="#ca8a04" stopOpacity={0.7} />
             </linearGradient>
-            <linearGradient id="laterGrad" x1="0" y1="0" x2="0" y2="1">
+            <linearGradient id="deadline-later-gradient" x1="0" y1="0" x2="0" y2="1">
               <stop offset="0%" stopColor="#22c55e" stopOpacity={0.9} />
               <stop offset="100%" stopColor="#16a34a" stopOpacity={0.7} />
             </linearGradient>
@@ -92,7 +92,7 @@ export default function DeadlineHistogram() {
           />
           <Bar dataKey="count" radius={[8, 8, 0, 0]} animationDuration={800}>
             {data.map((entry, index) => {
-              const gradients = ['url(#urgentGrad)', 'url(#soonGrad)', 'url(#upcomingGrad)', 'url(#laterGrad)']
+              const gradients = ['url(#deadline-urgent-gradient)', 'url(#deadline-soon-gradient)', 'url(#deadline-upcoming-gradient)', 'url(#deadline-later-gradient)']
               return <Cell key={`cell-${index}`} fill={gradients[index] || colors[index]} />
             })}
           </Bar>

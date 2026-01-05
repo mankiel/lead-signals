@@ -123,15 +123,15 @@ export default function AgencyBudgetChart() {
           <ResponsiveContainer width="100%" height={320}>
             <BarChart data={data} layout="vertical">
               <defs>
-                <linearGradient id="blueGradient" x1="0" y1="0" x2="1" y2="0">
+                <linearGradient id="budget-blue-gradient" x1="0" y1="0" x2="1" y2="0">
                   <stop offset="0%" stopColor="#3b82f6" stopOpacity={0.8} />
                   <stop offset="100%" stopColor="#1e40af" stopOpacity={0.9} />
                 </linearGradient>
-                <linearGradient id="greenGradient" x1="0" y1="0" x2="1" y2="0">
+                <linearGradient id="budget-green-gradient" x1="0" y1="0" x2="1" y2="0">
                   <stop offset="0%" stopColor="#10b981" stopOpacity={0.8} />
                   <stop offset="100%" stopColor="#047857" stopOpacity={0.9} />
                 </linearGradient>
-                <linearGradient id="purpleGradient" x1="0" y1="0" x2="1" y2="0">
+                <linearGradient id="budget-purple-gradient" x1="0" y1="0" x2="1" y2="0">
                   <stop offset="0%" stopColor="#8b5cf6" stopOpacity={0.8} />
                   <stop offset="100%" stopColor="#6d28d9" stopOpacity={0.9} />
                 </linearGradient>
@@ -152,7 +152,7 @@ export default function AgencyBudgetChart() {
               <Legend wrapperStyle={{ paddingTop: '10px' }} />
               <Bar 
                 dataKey="budget_authority" 
-                fill="url(#blueGradient)" 
+                fill="url(#budget-blue-gradient)" 
                 name="Budget Authority" 
                 cursor="pointer"
                 onClick={handleBarClick}
@@ -161,7 +161,7 @@ export default function AgencyBudgetChart() {
               />
               <Bar 
                 dataKey="obligated" 
-                fill="url(#greenGradient)" 
+                fill="url(#budget-green-gradient)" 
                 name="Obligated" 
                 cursor="pointer"
                 onClick={handleBarClick}
@@ -170,7 +170,7 @@ export default function AgencyBudgetChart() {
               />
               <Bar 
                 dataKey="outlay" 
-                fill="url(#purpleGradient)" 
+                fill="url(#budget-purple-gradient)" 
                 name="Outlay" 
                 cursor="pointer"
                 onClick={handleBarClick}
@@ -195,7 +195,7 @@ export default function AgencyBudgetChart() {
           <ResponsiveContainer width="100%" height={420}>
             <BarChart data={dodData} layout="vertical">
               <defs>
-                <linearGradient id="redGradient" x1="0" y1="0" x2="1" y2="0">
+                <linearGradient id="dod-red-gradient" x1="0" y1="0" x2="1" y2="0">
                   <stop offset="0%" stopColor="#dc2626" stopOpacity={0.8} />
                   <stop offset="100%" stopColor="#991b1b" stopOpacity={0.9} />
                 </linearGradient>
@@ -219,7 +219,7 @@ export default function AgencyBudgetChart() {
               />
               <Bar 
                 dataKey="total_obligations" 
-                fill="url(#redGradient)" 
+                fill="url(#dod-red-gradient)" 
                 name="Total Obligations" 
                 radius={[0, 6, 6, 0]}
                 animationDuration={800}

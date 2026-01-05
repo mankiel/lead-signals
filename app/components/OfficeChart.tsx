@@ -49,7 +49,7 @@ export default function OfficeChart() {
       <ResponsiveContainer width="100%" height={300}>
         <BarChart data={data}>
           <defs>
-            <linearGradient id="officeGradient" x1="0" y1="0" x2="0" y2="1">
+            <linearGradient id="office-blue-gradient" x1="0" y1="0" x2="0" y2="1">
               <stop offset="0%" stopColor="#3b82f6" stopOpacity={0.9} />
               <stop offset="100%" stopColor="#1e40af" stopOpacity={0.7} />
             </linearGradient>
@@ -74,7 +74,7 @@ export default function OfficeChart() {
           />
           <Bar 
             dataKey="count" 
-            fill="url(#officeGradient)" 
+            fill="url(#office-blue-gradient)" 
             radius={[8, 8, 0, 0]}
             animationDuration={800}
           />
