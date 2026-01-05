@@ -45,7 +45,10 @@ async function main() {
           const detailUrl = opp.uiLink || `https://sam.gov/opp/${noticeId}/view`
           
           // Extract organizational hierarchy
-          const agency = opp.department || opp.fullParentPathName?.split('.')[0] || 'Federal Agency'
+          let agency = opp.department || opp.fullParentPathName?.split('.')[0] || 'Federal Agency'
+          // Clean up agency name - remove "Department of" or "Dept of" prefix
+          agency = agency.replace(/^(Department of|Dept of|DEPARTMENT OF|DEPT OF)\s+/i, '').trim()
+          
           const subtier = opp.subtier || opp.fullParentPathName?.split('.')[1] || ''
           const office = opp.office || opp.fullParentPathName?.split('.')[2] || ''
           
@@ -59,8 +62,9 @@ async function main() {
           const hasAttachments = resourceLinks.length > 0
           
           // Build comprehensive description
+          const cleanTitle = (opp.title || 'Contract Opportunity').replace(/^(Department of|Dept of|DEPARTMENT OF|DEPT OF)\s+/i, '').trim()
           const description = [
-            opp.title || 'Contract Opportunity',
+            cleanTitle,
             `Type: ${opp.type || 'RFP'}`,
             `Agency: ${agency}`,
             subtier ? `Subtier: ${subtier}` : null,
@@ -79,7 +83,7 @@ async function main() {
             sourceUrl: detailUrl,
             metadata: {
               noticeId: noticeId,
-              title: opp.title,
+              title: cleanTitle,
               postedDate: postedDate,
               responseDeadline: responseDeadline,
               agency: agency,
