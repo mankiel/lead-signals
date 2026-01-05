@@ -63,7 +63,7 @@ export default function DeadlineHistogram() {
           />
           <YAxis allowDecimals={false} />
           <Tooltip 
-            formatter={(value: number) => [`${value} solicitation${value !== 1 ? 's' : ''}`, 'Count']}
+            formatter={(value: number | undefined) => value ? [`${value} solicitation${value !== 1 ? 's' : ''}`, 'Count'] : ['0 solicitations', 'Count']}
             labelStyle={{ color: '#000' }}
           />
           <Bar dataKey="count" radius={[8, 8, 0, 0]}>
