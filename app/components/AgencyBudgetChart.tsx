@@ -118,7 +118,7 @@ export default function AgencyBudgetChart() {
       {viewMode === 'agencies' ? (
         <>
           <ResponsiveContainer width="100%" height={320}>
-            <BarChart data={data} layout="vertical" onClick={handleBarClick}>
+            <BarChart data={data} layout="vertical">
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis type="number" tickFormatter={formatBillion} />
               <YAxis type="category" dataKey="name" width={60} tick={{ fontSize: 12 }} />
@@ -129,9 +129,22 @@ export default function AgencyBudgetChart() {
                 fill="#3b82f6" 
                 name="Budget Authority" 
                 cursor="pointer"
+                onClick={handleBarClick}
               />
-              <Bar dataKey="obligated" fill="#10b981" name="Obligated" cursor="pointer" />
-              <Bar dataKey="outlay" fill="#f59e0b" name="Outlay" cursor="pointer" />
+              <Bar 
+                dataKey="obligated" 
+                fill="#10b981" 
+                name="Obligated" 
+                cursor="pointer"
+                onClick={handleBarClick}
+              />
+              <Bar 
+                dataKey="outlay" 
+                fill="#f59e0b" 
+                name="Outlay" 
+                cursor="pointer"
+                onClick={handleBarClick}
+              />
             </BarChart>
           </ResponsiveContainer>
           <div className="mt-4 text-xs text-gray-600">
