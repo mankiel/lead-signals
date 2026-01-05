@@ -160,7 +160,7 @@ export default function Dashboard() {
           <div className="flex justify-between items-center">
             <div>
               <h1 className="text-2xl sm:text-2xl lg:text-3xl font-bold text-gray-900 tracking-tight">Lead Signals</h1>
-              <p className="text-sm text-gray-600 mt-1 font-medium">🏛️ Government Contract Opportunities Intelligence</p>
+              <p className="text-sm text-gray-600 mt-1 font-medium">Government Contract Opportunities Intelligence</p>
             </div>
             <UserButton />
           </div>
@@ -174,9 +174,6 @@ export default function Dashboard() {
             <div className="flex items-start justify-between">
               <div className="flex-1">
                 <div className="flex items-center gap-2 mb-3">
-                  <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center group-hover:bg-blue-200 transition-colors">
-                    <span className="text-xl">📊</span>
-                  </div>
                   <p className="text-xs font-bold text-gray-500 uppercase tracking-wider">Active Opportunities</p>
                 </div>
                 <p className="text-5xl font-extrabold text-gray-900">{signals.length}</p>
@@ -188,9 +185,6 @@ export default function Dashboard() {
             <div className="flex items-start justify-between">
               <div className="flex-1">
                 <div className="flex items-center gap-2 mb-3">
-                  <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center group-hover:bg-green-200 transition-colors">
-                    <span className="text-xl">✅</span>
-                  </div>
                   <p className="text-xs font-bold text-gray-500 uppercase tracking-wider">Subscriptions</p>
                 </div>
                 <p className="text-5xl font-extrabold text-gray-900">{subscriptions.length}</p>
@@ -202,9 +196,6 @@ export default function Dashboard() {
             <div className="flex items-start justify-between">
               <div className="flex-1">
                 <div className="flex items-center gap-2 mb-3">
-                  <div className="w-10 h-10 bg-red-100 rounded-lg flex items-center justify-center group-hover:bg-red-200 transition-colors">
-                    <span className="text-xl">⏰</span>
-                  </div>
                   <p className="text-xs font-bold text-gray-500 uppercase tracking-wider">Urgent Deadlines</p>
                 </div>
                 <p className="text-5xl font-extrabold text-gray-900">{signals.filter(s => {
@@ -239,7 +230,7 @@ export default function Dashboard() {
             <div className="bg-gradient-to-r from-blue-600 to-indigo-600 p-6">
               <h2 className="text-xl font-bold text-white">Your Subscriptions</h2>
               <p className="text-sm text-blue-100 mt-1">
-                🔔 Get notified about new opportunities
+                Get notified about new opportunities
               </p>
             </div>
             
@@ -255,8 +246,7 @@ export default function Dashboard() {
                         : 'border-gray-200 hover:border-blue-300 bg-white hover:bg-gray-50'
                     }`}
                   >
-                    <span className="text-3xl mb-2 drop-shadow-sm">{icon}</span>
-                    <span className="text-xs font-semibold text-gray-900 text-center leading-tight">{label}</span>
+                    <span className="text-sm font-semibold text-gray-900 text-center leading-tight">{label}</span>
                     {isSubscribed(value) && (
                       <div className="absolute -top-2 -right-2 w-6 h-6 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center shadow-lg">
                         <span className="text-white font-bold text-sm">✓</span>

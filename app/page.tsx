@@ -9,11 +9,6 @@ export default function Home() {
       
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 lg:py-16 relative z-10">
         <div className="text-center mb-12 sm:mb-16 lg:mb-20">
-          <div className="mb-4 sm:mb-6 inline-block animate-bounce">
-            <div className="bg-gradient-to-br from-blue-100 to-indigo-200 w-20 h-20 sm:w-24 sm:h-24 rounded-2xl flex items-center justify-center shadow-xl">
-              <span className="text-4xl sm:text-5xl lg:text-6xl">🏛️</span>
-            </div>
-          </div>
           <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 bg-clip-text text-transparent mb-4 sm:mb-6 tracking-tight px-4">
             Lead Signals
           </h1>
@@ -30,7 +25,6 @@ export default function Home() {
 
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8 mb-12 sm:mb-16 lg:mb-20">
           <div className="bg-white p-6 sm:p-8 rounded-2xl shadow-lg border-2 border-yellow-200 hover:border-yellow-400 hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 group">
-            <div className="text-4xl sm:text-5xl mb-4 sm:mb-5 bg-gradient-to-br from-yellow-400 to-orange-400 w-14 h-14 sm:w-16 sm:h-16 rounded-2xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">💰</div>
             <h3 className="text-xl sm:text-2xl font-bold mb-2 sm:mb-3 bg-gradient-to-r from-yellow-600 to-orange-600 bg-clip-text text-transparent">Funding Signals</h3>
             <p className="text-sm sm:text-base text-gray-600 leading-relaxed">
               Track companies that just raised funding and are ready to spend
@@ -38,7 +32,6 @@ export default function Home() {
           </div>
 
           <div className="bg-white p-6 sm:p-8 rounded-2xl shadow-lg border-2 border-blue-200 hover:border-blue-400 hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 group">
-            <div className="text-4xl sm:text-5xl mb-4 sm:mb-5 bg-gradient-to-br from-blue-400 to-indigo-500 w-14 h-14 sm:w-16 sm:h-16 rounded-2xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">💼</div>
             <h3 className="text-xl sm:text-2xl font-bold mb-2 sm:mb-3 bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">Hiring Alerts</h3>
             <p className="text-sm sm:text-base text-gray-600 leading-relaxed">
               Monitor job postings that indicate growing teams and budgets
@@ -46,7 +39,6 @@ export default function Home() {
           </div>
 
           <div className="bg-white p-6 sm:p-8 rounded-2xl shadow-lg border-2 border-purple-200 hover:border-purple-400 hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 sm:col-span-2 lg:col-span-1 group">
-            <div className="text-4xl sm:text-5xl mb-4 sm:mb-5 bg-gradient-to-br from-purple-400 to-pink-500 w-14 h-14 sm:w-16 sm:h-16 rounded-2xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">⚙️</div>
             <h3 className="text-xl sm:text-2xl font-bold mb-2 sm:mb-3 bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">Tech Changes</h3>
             <p className="text-sm sm:text-base text-gray-600 leading-relaxed">
               Detect technology stack changes that create sales opportunities
