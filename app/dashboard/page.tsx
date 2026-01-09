@@ -353,18 +353,39 @@ export default function Dashboard() {
 
               <div className="divide-y">
                 {loading ? (
-                  <div className="p-8 text-center text-gray-700">Loading...</div>
+                  <div className="p-8">
+                    <div className="space-y-4">
+                      {[1, 2, 3].map((i) => (
+                        <div key={i} className="animate-pulse">
+                          <div className="flex items-start gap-4">
+                            <div className="bg-gray-200 rounded-lg w-12 h-12"></div>
+                            <div className="flex-1 space-y-3">
+                              <div className="h-6 bg-gray-200 rounded w-1/3"></div>
+                              <div className="h-4 bg-gray-200 rounded w-2/3"></div>
+                              <div className="h-4 bg-gray-200 rounded w-1/2"></div>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
                 ) : signals.length === 0 ? (
-                  <div className="p-8 text-center text-gray-700">
-                    No signals found. Check back later!
+                  <div className="p-12 text-center">
+                    <div className="inline-flex items-center justify-center w-16 h-16 bg-gray-100 rounded-full mb-4">
+                      <svg className="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" />
+                      </svg>
+                    </div>
+                    <h3 className="text-lg font-bold text-gray-900 mb-2">No signals found</h3>
+                    <p className="text-gray-600">Check back later for new opportunities!</p>
                   </div>
                 ) : (
                   <>
                     {/* Pagination Info & Controls */}
-                    <div className="px-6 py-4 border-b border-gray-200 flex items-center justify-between bg-gray-50">
+                    <div className="px-6 py-4 border-b border-gray-200 flex items-center justify-between bg-gradient-to-r from-gray-50 to-white">
                       <div className="flex items-center gap-4">
-                        <span className="text-sm text-gray-700 font-medium">
-                          Showing {((currentPage - 1) * itemsPerPage) + 1}-{Math.min(currentPage * itemsPerPage, signals.length)} of {signals.length} opportunities
+                        <span className="text-sm text-gray-700 font-semibold">
+                          Showing <span className="text-blue-600">{((currentPage - 1) * itemsPerPage) + 1}-{Math.min(currentPage * itemsPerPage, signals.length)}</span> of <span className="text-blue-600">{signals.length}</span> opportunities
                         </span>
                         <select
                           value={itemsPerPage}
@@ -372,7 +393,7 @@ export default function Dashboard() {
                             setItemsPerPage(Number(e.target.value))
                             setCurrentPage(1)
                           }}
-                          className="px-3 py-1.5 border border-gray-300 rounded-md text-sm text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                          className="px-3 py-2 border border-gray-300 rounded-lg text-sm text-gray-900 bg-white font-medium focus:outline-none focus:ring-2 focus:ring-blue-500 hover:border-blue-400 transition-colors"
                         >
                           <option value={10}>10 per page</option>
                           <option value={20}>20 per page</option>
@@ -380,26 +401,26 @@ export default function Dashboard() {
                           <option value={100}>100 per page</option>
                         </select>
                       </div>
-                      <div className="flex items-center gap-2">
-                        <Button
+                      <div className="flex items-center gap-3">
+                        <button
                           onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
                           disabled={currentPage === 1}
-                          variant="ghost"
-                          size="sm"
+                          className="px-4 py-2 rounded-lg text-sm font-medium transition-all disabled:opacity-50 disabled:cursor-not-allowed bg-white border border-gray-300 text-gray-700 hover:bg-gray-50 hover:border-gray-400 disabled:hover:bg-white disabled:hover:border-gray-300"
                         >
-                          Previous
-                        </Button>
-                        <span className="text-sm text-gray-600 px-3">
-                          Page {currentPage} of {Math.ceil(signals.length / itemsPerPage)}
-                        </span>
-                        <Button
+                          ← Previous
+                        </button>
+                        <div className="px-4 py-2 bg-blue-50 border border-blue-200 rounded-lg">
+                          <span className="text-sm font-bold text-blue-700">
+                            Page {currentPage} of {Math.ceil(signals.length / itemsPerPage)}
+                          </span>
+                        </div>
+                        <button
                           onClick={() => setCurrentPage(p => Math.min(Math.ceil(signals.length / itemsPerPage), p + 1))}
                           disabled={currentPage >= Math.ceil(signals.length / itemsPerPage)}
-                          variant="ghost"
-                          size="sm"
+                          className="px-4 py-2 rounded-lg text-sm font-medium transition-all disabled:opacity-50 disabled:cursor-not-allowed bg-white border border-gray-300 text-gray-700 hover:bg-gray-50 hover:border-gray-400 disabled:hover:bg-white disabled:hover:border-gray-300"
                         >
-                          Next
-                        </Button>
+                          Next →
+                        </button>
                       </div>
                     </div>
                     {/* Paginated Signals */}
@@ -407,17 +428,21 @@ export default function Dashboard() {
                       (currentPage - 1) * itemsPerPage,
                       currentPage * itemsPerPage
                     ).map((signal) => (
-                      <div key={signal.id} className="p-6 hover:bg-gray-50 transition-colors border-b border-gray-100 last:border-0">
-                        <div className="flex items-start justify-between">
+                      <div key={signal.id} className="p-6 hover:bg-blue-50/30 transition-all border-b border-gray-100 last:border-0 group">
+                        <div className="flex items-start justify-between gap-4">
                           <div className="flex-1">
-                          <div className="flex items-center gap-3 mb-3">
-                            <span className="text-2xl">
-                              {SIGNAL_TYPES.find(t => t.value === signal.signalType)?.icon}
-                            </span>
-                            <h3 className="font-semibold text-lg text-gray-900">{signal.companyName}</h3>
-                            <Badge variant="gray" size="sm">
-                              {SIGNAL_TYPES.find(t => t.value === signal.signalType)?.label}
-                            </Badge>
+                          <div className="flex items-center gap-3 mb-4">
+                            <div className="bg-blue-100 p-2.5 rounded-lg group-hover:bg-blue-200 transition-colors">
+                              <span className="text-xl">
+                                {SIGNAL_TYPES.find(t => t.value === signal.signalType)?.icon}
+                              </span>
+                            </div>
+                            <div className="flex-1">
+                              <h3 className="font-bold text-xl text-gray-900 mb-1">{signal.companyName}</h3>
+                              <Badge variant="gray" size="sm">
+                                {SIGNAL_TYPES.find(t => t.value === signal.signalType)?.label}
+                              </Badge>
+                            </div>
                           </div>
                           
                           {/* Show contract type and solicitation number for government contracts */}
@@ -472,23 +497,34 @@ export default function Dashboard() {
                             </div>
                           )}
                           
-                          <div className="flex items-center gap-4 text-sm text-gray-700">
-                            <span>Source: {signal.source}</span>
-                            {signal.sourceUrl && (
-                              <a
-                                href={signal.sourceUrl}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="text-blue-600 hover:underline"
-                              >
-                                View full opportunity →
-                              </a>
-                            )}
+                          <div className="flex items-center justify-between mt-4 pt-4 border-t border-gray-200">
+                            <div className="flex items-center gap-4 text-sm text-gray-600">
+                              <span className="font-medium">Source: <span className="text-gray-900">{signal.source}</span></span>
+                              <span className="text-gray-400">•</span>
+                              <span className="text-gray-500">{new Date(signal.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</span>
+                            </div>
+                            <div className="flex items-center gap-2">
+                              {signal.sourceUrl && (
+                                <a
+                                  href={signal.sourceUrl}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-lg transition-colors shadow-sm hover:shadow-md inline-flex items-center gap-2"
+                                >
+                                  View Opportunity
+                                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                                  </svg>
+                                </a>
+                              )}
+                              <button className="p-2 hover:bg-gray-100 rounded-lg transition-colors" title="Bookmark">
+                                <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" />
+                                </svg>
+                              </button>
+                            </div>
                           </div>
                         </div>
-                        <span className="text-xs text-gray-500">
-                          {new Date(signal.createdAt).toLocaleDateString()}
-                        </span>
                       </div>
                     </div>
                     ))}
