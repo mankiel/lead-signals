@@ -74,9 +74,9 @@ export default function AgencyBudgetChart() {
 
   if (loading) {
     return (
-      <div className="bg-white rounded-lg shadow p-6">
-        <h3 className="text-lg font-semibold mb-4 text-black">
-          {viewMode === 'agencies' ? `Agency Budget Authority (FY ${fiscalYear})` : 'DoD Sub-Agencies (FY 2025)'}
+      <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-6">
+        <h3 className="text-lg font-bold text-gray-800 mb-4">
+          {viewMode === 'agencies' ? `Agency Budget Authority` : 'DoD Sub-Agencies'}
         </h3>
         <div className="h-80 flex items-center justify-center text-gray-500">Loading budget data...</div>
       </div>
@@ -85,9 +85,9 @@ export default function AgencyBudgetChart() {
 
   if ((viewMode === 'agencies' && data.length === 0) || (viewMode === 'dod' && dodData.length === 0)) {
     return (
-      <div className="bg-white rounded-lg shadow p-6">
-        <h3 className="text-lg font-semibold mb-4 text-black">
-          {viewMode === 'agencies' ? `Agency Budget Authority (FY ${fiscalYear})` : 'DoD Sub-Agencies (FY 2025)'}
+      <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-6">
+        <h3 className="text-lg font-bold text-gray-800 mb-4">
+          {viewMode === 'agencies' ? `Agency Budget Authority` : 'DoD Sub-Agencies'}
         </h3>
         <div className="h-80 flex items-center justify-center text-gray-500">No data available</div>
       </div>
@@ -95,23 +95,23 @@ export default function AgencyBudgetChart() {
   }
 
   return (
-    <div className="bg-white rounded-lg shadow p-6">
+    <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-6 hover:shadow-xl transition-shadow">
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-3">
           {viewMode === 'dod' && (
             <button
               onClick={handleBackToAgencies}
-              className="text-sm px-3 py-1 bg-gray-100 hover:bg-gray-200 rounded-md text-gray-700 transition-colors"
+              className="text-sm px-3 py-1.5 bg-gray-100 hover:bg-gray-200 rounded-lg text-gray-700 transition-colors font-medium"
             >
               ← Back
             </button>
           )}
-          <h3 className="text-lg font-semibold text-black">
-            {viewMode === 'agencies' ? `Agency Budget Authority (FY ${fiscalYear})` : 'DoD Sub-Agencies (FY 2025)'}
+          <h3 className="text-lg font-bold text-gray-800">
+            {viewMode === 'agencies' ? 'Agency Budget Authority' : 'DoD Sub-Agencies'}
           </h3>
         </div>
-        <div className="text-xs text-gray-500">
-          Source: USASpending.gov
+        <div className="bg-blue-50 px-3 py-1.5 rounded-lg border border-blue-300">
+          <span className="text-xs text-blue-800 font-semibold">FY {fiscalYear}</span>
         </div>
       </div>
       

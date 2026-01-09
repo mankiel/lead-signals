@@ -27,8 +27,8 @@ export default function DeadlineHistogram() {
 
   if (loading) {
     return (
-      <div className="bg-white rounded-lg shadow p-6">
-        <h3 className="text-lg font-semibold mb-4 text-black">Upcoming Deadlines (Next 30 Days)</h3>
+      <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-6">
+        <h3 className="text-lg font-bold text-gray-800 mb-4">Upcoming Deadlines</h3>
         <div className="h-64 flex items-center justify-center text-gray-500">Loading...</div>
       </div>
     )
@@ -38,21 +38,23 @@ export default function DeadlineHistogram() {
 
   if (totalSolicitations === 0) {
     return (
-      <div className="bg-white rounded-lg shadow p-6">
-        <h3 className="text-lg font-semibold mb-4 text-black">Upcoming Deadlines (Next 30 Days)</h3>
+      <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-6">
+        <h3 className="text-lg font-bold text-gray-800 mb-4">Upcoming Deadlines</h3>
         <div className="h-64 flex items-center justify-center text-gray-500">No solicitations closing in the next 30 days</div>
       </div>
     )
   }
 
-  // Color scheme: red for urgent, orange for soon, yellow for moderate, green for more time
-  const colors = ['#ef4444', '#f97316', '#eab308', '#22c55e']
+  // Corporate blue color scheme
+  const colors = ['#1e3a8a', '#1e40af', '#2563eb', '#3b82f6']
 
   return (
-    <div className="bg-white rounded-lg shadow p-6">
+    <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-6 hover:shadow-xl transition-shadow">
       <div className="flex justify-between items-center mb-4">
-        <h3 className="text-lg font-semibold text-black">Upcoming Deadlines (Next 30 Days)</h3>
-        <span className="text-sm text-gray-600">{totalSolicitations} active solicitation{totalSolicitations !== 1 ? 's' : ''}</span>
+        <h3 className="text-lg font-bold text-gray-800">Upcoming Deadlines</h3>
+        <div className="bg-blue-50 px-3 py-1.5 rounded-lg border border-blue-300">
+          <span className="text-xs text-blue-800 font-semibold">{totalSolicitations} active</span>
+        </div>
       </div>
       <ResponsiveContainer width="100%" height={300}>
         <BarChart data={data}>
@@ -75,19 +77,19 @@ export default function DeadlineHistogram() {
       </ResponsiveContainer>
       <div className="mt-3 flex justify-center gap-4 text-xs">
         <div className="flex items-center gap-1">
-          <div className="w-3 h-3 rounded" style={{ backgroundColor: '#ef4444' }}></div>
+          <div className="w-3 h-3 rounded" style={{ backgroundColor: '#1e3a8a' }}></div>
           <span className="text-gray-600">Urgent (0-7 days)</span>
         </div>
         <div className="flex items-center gap-1">
-          <div className="w-3 h-3 rounded" style={{ backgroundColor: '#f97316' }}></div>
+          <div className="w-3 h-3 rounded" style={{ backgroundColor: '#1e40af' }}></div>
           <span className="text-gray-600">Soon (8-14 days)</span>
         </div>
         <div className="flex items-center gap-1">
-          <div className="w-3 h-3 rounded" style={{ backgroundColor: '#eab308' }}></div>
+          <div className="w-3 h-3 rounded" style={{ backgroundColor: '#2563eb' }}></div>
           <span className="text-gray-600">Moderate (15-21 days)</span>
         </div>
         <div className="flex items-center gap-1">
-          <div className="w-3 h-3 rounded" style={{ backgroundColor: '#22c55e' }}></div>
+          <div className="w-3 h-3 rounded" style={{ backgroundColor: '#3b82f6' }}></div>
           <span className="text-gray-600">More Time (22-30 days)</span>
         </div>
       </div>
