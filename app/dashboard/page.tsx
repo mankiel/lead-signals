@@ -174,14 +174,16 @@ export default function Dashboard() {
             </div>
             <p className="text-sm font-semibold text-gray-600 mb-1">Closing This Week</p>
             <p className="text-4xl font-bold text-blue-900">
-              if (s.metadata?.responseDeadline) {
-                const deadline = new Date(s.metadata.responseDeadline)
-                const now = new Date()
-                const daysUntil = Math.floor((deadline.getTime() - now.getTime()) / (1000 * 60 * 60 * 24))
-                return daysUntil <= 7
-              }
-              return false
-            }).length}</p>
+              {signals.filter(s => {
+                if (s.metadata?.responseDeadline) {
+                  const deadline = new Date(s.metadata.responseDeadline)
+                  const now = new Date()
+                  const daysUntil = Math.floor((deadline.getTime() - now.getTime()) / (1000 * 60 * 60 * 24))
+                  return daysUntil <= 7
+                }
+                return false
+              }).length}
+            </p>
             <p className="text-xs text-gray-500 mt-1">Due within 7 days</p>
           </div>
         </div>
