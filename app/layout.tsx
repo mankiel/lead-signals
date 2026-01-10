@@ -1,23 +1,33 @@
-import type { Metadata } from "next";
-import { ClerkProvider } from "@clerk/nextjs";
-import "./globals.css";
+import type React from "react"
+import type { Metadata, Viewport } from "next"
+import { Geist, Geist_Mono } from "next/font/google"
+import { ClerkProvider } from "@clerk/nextjs"
+import "./globals.css"
+
+const geist = Geist({ subsets: ["latin"], variable: "--font-sans" })
+const geistMono = Geist_Mono({ subsets: ["latin"], variable: "--font-mono" })
 
 export const metadata: Metadata = {
-  title: "Lead Signals - Never Miss a Sales Opportunity",
-  description: "Get notified of lead signals in real-time",
-  viewport: "width=device-width, initial-scale=1, maximum-scale=5",
-};
+  title: "Lead Signals | Real-time Lead Intelligence",
+  description: "Track and analyze lead engagement signals in real-time to close more deals faster.",
+}
+
+export const viewport: Viewport = {
+  themeColor: "#1a1625",
+}
 
 export default function RootLayout({
   children,
 }: Readonly<{
-  children: React.ReactNode;
+  children: React.ReactNode
 }>) {
   return (
     <ClerkProvider>
-      <html lang="en">
-        <body>{children}</body>
+      <html lang="en" className="dark">
+        <body className={`${geist.variable} ${geistMono.variable} font-sans antialiased`}>
+          {children}
+        </body>
       </html>
     </ClerkProvider>
-  );
+  )
 }
