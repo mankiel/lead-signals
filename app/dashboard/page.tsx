@@ -273,97 +273,97 @@ export default function Dashboard() {
           </CardHeader>
           <CardContent className="p-0">
             <div className="divide-y divide-border">
-                {loading ? (
-                  <div className="p-12">
-                    <div className="flex flex-col items-center justify-center space-y-4">
-                      <div className="animate-spin rounded-full h-12 w-12 border-b-4 border-primary"></div>
-                      <p className="text-muted-foreground font-medium">Loading opportunities...</p>
+              {loading ? (
+                <div className="p-12">
+                  <div className="flex flex-col items-center justify-center space-y-4">
+                    <div className="animate-spin rounded-full h-12 w-12 border-b-4 border-primary"></div>
+                    <p className="text-muted-foreground font-medium">Loading opportunities...</p>
+                  </div>
+                </div>
+              ) : signals.length === 0 ? (
+                <div className="p-12 text-center">
+                  <div className="inline-flex items-center justify-center w-16 h-16 bg-primary/10 rounded-full mb-4">
+                    <svg className="w-8 h-8 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                    </svg>
+                  </div>
+                  <h3 className="text-lg font-bold text-foreground mb-2">No signals found</h3>
+                  <p className="text-muted-foreground">Try adjusting your filters or check back later for new opportunities</p>
+                </div>
+              ) : (
+                <>
+                  {/* Pagination Info & Controls */}
+                  <div className="px-6 py-4 border-b border-border flex items-center justify-between bg-muted/30">
+                    <div className="flex items-center gap-4">
+                      <span className="text-sm text-foreground font-medium">
+                        Showing {((currentPage - 1) * itemsPerPage) + 1}-{Math.min(currentPage * itemsPerPage, signals.length)} of {signals.length} opportunities
+                      </span>
+                      <select
+                        value={itemsPerPage}
+                        onChange={(e) => {
+                          setItemsPerPage(Number(e.target.value))
+                          setCurrentPage(1)
+                        }}
+                        className="px-2 py-1 border border-border rounded text-sm text-foreground bg-background"
+                      >
+                        <option value={10}>10 per page</option>
+                        <option value={20}>20 per page</option>
+                        <option value={50}>50 per page</option>
+                        <option value={100}>100 per page</option>
+                      </select>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <button
+                        onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                        disabled={currentPage === 1}
+                        className="px-3 py-1 border border-border rounded text-sm text-foreground disabled:opacity-50 disabled:cursor-not-allowed hover:bg-muted"
+                      >
+                        Previous
+                      </button>
+                      <span className="text-sm text-muted-foreground">
+                        Page {currentPage} of {Math.ceil(signals.length / itemsPerPage)}
+                      </span>
+                      <button
+                        onClick={() => setCurrentPage(p => Math.min(Math.ceil(signals.length / itemsPerPage), p + 1))}
+                        disabled={currentPage >= Math.ceil(signals.length / itemsPerPage)}
+                        className="px-3 py-1 border border-border rounded text-sm text-foreground disabled:opacity-50 disabled:cursor-not-allowed hover:bg-muted"
+                      >
+                        Next
+                      </button>
                     </div>
                   </div>
-                ) : signals.length === 0 ? (
-                  <div className="p-12 text-center">
-                    <div className="inline-flex items-center justify-center w-16 h-16 bg-primary/10 rounded-full mb-4">
-                      <svg className="w-8 h-8 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                      </svg>
-                    </div>
-                    <h3 className="text-lg font-bold text-foreground mb-2">No signals found</h3>
-                    <p className="text-muted-foreground">Try adjusting your filters or check back later for new opportunities</p>
-                  </div>
-                ) : (
-                  <>
-                    {/* Pagination Info & Controls */}
-                    <div className="px-6 py-4 border-b border-border flex items-center justify-between bg-muted/30">
-                      <div className="flex items-center gap-4">
-                        <span className="text-sm text-foreground font-medium">
-                          Showing {((currentPage - 1) * itemsPerPage) + 1}-{Math.min(currentPage * itemsPerPage, signals.length)} of {signals.length} opportunities
-                        </span>
-                        <select
-                          value={itemsPerPage}
-                          onChange={(e) => {
-                            setItemsPerPage(Number(e.target.value))
-                            setCurrentPage(1)
-                          }}
-                          className="px-2 py-1 border border-border rounded text-sm text-foreground bg-background"
-                        >
-                          <option value={10}>10 per page</option>
-                          <option value={20}>20 per page</option>
-                          <option value={50}>50 per page</option>
-                          <option value={100}>100 per page</option>
-                        </select>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <button
-                          onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
-                          disabled={currentPage === 1}
-                          className="px-3 py-1 border border-border rounded text-sm text-foreground disabled:opacity-50 disabled:cursor-not-allowed hover:bg-muted"
-                        >
-                          Previous
-                        </button>
-                        <span className="text-sm text-muted-foreground">
-                          Page {currentPage} of {Math.ceil(signals.length / itemsPerPage)}
-                        </span>
-                        <button
-                          onClick={() => setCurrentPage(p => Math.min(Math.ceil(signals.length / itemsPerPage), p + 1))}
-                          disabled={currentPage >= Math.ceil(signals.length / itemsPerPage)}
-                          className="px-3 py-1 border border-border rounded text-sm text-foreground disabled:opacity-50 disabled:cursor-not-allowed hover:bg-muted"
-                        >
-                          Next
-                        </button>
-                      </div>
-                    </div>
-                    {/* Paginated Signals */}
-                    {signals.slice(
-                      (currentPage - 1) * itemsPerPage,
-                      currentPage * itemsPerPage
-                    ).map((signal) => (
-                      <div key={signal.id} className="p-6 hover:bg-muted/30 transition-colors">
-                        <div className="flex items-start justify-between gap-4">
-                          <div className="flex-1 space-y-3">
-                            <div className="flex items-center gap-3">
-                              <span className="text-2xl">
-                                {SIGNAL_TYPES.find(t => t.value === signal.signalType)?.icon}
-                              </span>
-                              <div className="flex flex-col gap-1">
-                                <h3 className="font-semibold text-lg">{signal.companyName}</h3>
-                                <div className="flex items-center gap-2">
-                                  <Badge variant="secondary">
-                                    {SIGNAL_TYPES.find(t => t.value === signal.signalType)?.label}
-                                  </Badge>
-                                  {signal.signalType === 'government_contract' && signal.metadata?.contractType && (
-                                    <Badge variant="outline">{signal.metadata.contractType}</Badge>
-                                  )}
-                                  {signal.metadata?.solicitationNumber && (
-                                    <span className="text-xs text-muted-foreground">
-                                      #{signal.metadata.solicitationNumber}
-                                    </span>
-                                  )}
-                                </div>
+                  {/* Paginated Signals */}
+                  {signals.slice(
+                    (currentPage - 1) * itemsPerPage,
+                    currentPage * itemsPerPage
+                  ).map((signal) => (
+                    <div key={signal.id} className="p-6 hover:bg-muted/30 transition-colors">
+                      <div className="flex items-start justify-between gap-4">
+                        <div className="flex-1 space-y-3">
+                          <div className="flex items-center gap-3">
+                            <span className="text-2xl">
+                              {SIGNAL_TYPES.find(t => t.value === signal.signalType)?.icon}
+                            </span>
+                            <div className="flex flex-col gap-1">
+                              <h3 className="font-semibold text-lg">{signal.companyName}</h3>
+                              <div className="flex items-center gap-2">
+                                <Badge variant="secondary">
+                                  {SIGNAL_TYPES.find(t => t.value === signal.signalType)?.label}
+                                </Badge>
+                                {signal.signalType === 'government_contract' && signal.metadata?.contractType && (
+                                  <Badge variant="outline">{signal.metadata.contractType}</Badge>
+                                )}
+                                {signal.metadata?.solicitationNumber && (
+                                  <span className="text-xs text-muted-foreground">
+                                    #{signal.metadata.solicitationNumber}
+                                  </span>
+                                )}
                               </div>
                             </div>
-                          
-                            <p className="text-sm text-muted-foreground leading-relaxed">{signal.description}</p>
-                          
+                          </div>
+                        
+                          <p className="text-sm text-muted-foreground leading-relaxed">{signal.description}</p>
+                        
                           {/* Timeline for government contracts */}
                           {signal.signalType === 'government_contract' && signal.metadata?.postedDate && signal.metadata?.responseDeadline && (
                             <SolicitationTimeline 
@@ -414,13 +414,12 @@ export default function Dashboard() {
                         </span>
                       </div>
                     </div>
-                    ))}
-                  </>
-                )}
-              </div>
-            </CardContent>
+                  ))}
+                </>
+              )}
+            </div>
+          </CardContent>
           </Card>
-        </div>
       </div>
     </div>
   );
