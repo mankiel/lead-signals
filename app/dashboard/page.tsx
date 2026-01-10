@@ -2,6 +2,10 @@
 
 import { useEffect, useState } from 'react'
 import { UserButton } from '@clerk/nextjs'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import OfficeChart from '../components/OfficeChart'
 import SolicitationTimeline from '../components/SolicitationTimeline'
 import DeadlineHistogram from '../components/DeadlineHistogram'
@@ -135,142 +139,140 @@ export default function Dashboard() {
         </div>
       </header>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
         {/* Stats Overview */}
-        <div className="mb-8 grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="bg-card rounded-lg shadow-md p-6 border-l-4 border-primary hover:shadow-lg transition-shadow">
-            <div className="flex items-center justify-between mb-3">
-              <div className="bg-primary/10 p-3 rounded-lg">
-                <svg className="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                </svg>
-              </div>
-            </div>
-            <p className="text-sm font-semibold text-muted-foreground mb-1">Active Opportunities</p>
-            <p className="text-4xl font-bold text-foreground">{signals.length}</p>
-            <p className="text-xs text-muted-foreground mt-1">Total contracts available</p>
-          </div>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">Active Opportunities</CardTitle>
+              <svg className="w-4 h-4 text-muted-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+              </svg>
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">{signals.length}</div>
+              <p className="text-xs text-muted-foreground">Total contracts available</p>
+            </CardContent>
+          </Card>
 
-          <div className="bg-card rounded-lg shadow-md p-6 border-l-4 border-primary/80 hover:shadow-lg transition-shadow">
-            <div className="flex items-center justify-between mb-3">
-              <div className="bg-primary/10 p-3 rounded-lg">
-                <svg className="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
-                </svg>
-              </div>
-            </div>
-            <p className="text-sm font-semibold text-muted-foreground mb-1">Active Alerts</p>
-            <p className="text-4xl font-bold text-foreground">{subscriptions.length}</p>
-            <p className="text-xs text-muted-foreground mt-1">Notification subscriptions</p>
-          </div>
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">Active Alerts</CardTitle>
+              <svg className="w-4 h-4 text-muted-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+              </svg>
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">{subscriptions.length}</div>
+              <p className="text-xs text-muted-foreground">Notification subscriptions</p>
+            </CardContent>
+          </Card>
 
-          <div className="bg-card rounded-lg shadow-md p-6 border-l-4 border-primary/60 hover:shadow-lg transition-shadow">
-            <div className="flex items-center justify-between mb-3">
-              <div className="bg-primary/10 p-3 rounded-lg">
-                <svg className="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">Closing This Week</CardTitle>
+              <svg className="w-4 h-4 text-muted-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">
+                {signals.filter(s => {
+                  if (s.metadata?.responseDeadline) {
+                    const deadline = new Date(s.metadata.responseDeadline)
+                    const now = new Date()
+                    const daysUntil = Math.floor((deadline.getTime() - now.getTime()) / (1000 * 60 * 60 * 24))
+                    return daysUntil <= 7
+                  }
+                  return false
+                }).length}
               </div>
-            </div>
-            <p className="text-sm font-semibold text-muted-foreground mb-1">Closing This Week</p>
-            <p className="text-4xl font-bold text-foreground">
-              {signals.filter(s => {
-                if (s.metadata?.responseDeadline) {
-                  const deadline = new Date(s.metadata.responseDeadline)
-                  const now = new Date()
-                  const daysUntil = Math.floor((deadline.getTime() - now.getTime()) / (1000 * 60 * 60 * 24))
-                  return daysUntil <= 7
-                }
-                return false
-              }).length}
-            </p>
-            <p className="text-xs text-muted-foreground mt-1">Due within 7 days</p>
-          </div>
+              <p className="text-xs text-muted-foreground">Due within 7 days</p>
+            </CardContent>
+          </Card>
         </div>
 
-        {/* Chart Section - Full Width */}
-        <div className="mb-6 grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {/* Chart Section */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <OfficeChart />
           <DeadlineHistogram />
         </div>
         
         {/* Agency Budget Chart */}
-        <div className="mb-6">
-          <AgencyBudgetChart />
-        </div>
+        <AgencyBudgetChart />
 
         {/* Subscriptions Section */}
-        <div className="mb-6">
-          <div className="bg-card rounded-lg shadow-md overflow-hidden border border-border">
-            <div className="bg-gradient-to-r from-primary/90 to-primary p-6">
-              <h2 className="text-xl font-bold text-primary-foreground">Your Subscriptions</h2>
-              <p className="text-sm text-primary-foreground/80 mt-1">Get instant alerts for opportunities that match your interests</p>
+        <Card>
+          <CardHeader>
+            <CardTitle>Your Subscriptions</CardTitle>
+            <CardDescription>Get instant alerts for opportunities that match your interests</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+              {SIGNAL_TYPES.map(({ value, label, icon }) => (
+                <button
+                  key={value}
+                  onClick={() => toggleSubscription(value)}
+                  className={`p-4 rounded-lg border-2 transition-all hover:shadow-md ${
+                    isSubscribed(value)
+                      ? 'border-primary bg-primary/10 shadow-sm'
+                      : 'border-border hover:border-primary/50 bg-card'
+                  }`}
+                >
+                  <div className="text-2xl mb-2">{icon}</div>
+                  <span className="text-xs font-semibold text-foreground block text-center">{label}</span>
+                  {isSubscribed(value) && (
+                    <div className="mt-2 flex justify-center">
+                      <svg className="w-5 h-5 text-primary" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                      </svg>
+                    </div>
+                  )}
+                </button>
+              ))}
             </div>
-            <div className="p-6">
-              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-                {SIGNAL_TYPES.map(({ value, label, icon }) => (
-                  <button
-                    key={value}
-                    onClick={() => toggleSubscription(value)}
-                    className={`p-4 rounded-lg border-2 transition-all hover:shadow-md ${
-                      isSubscribed(value)
-                        ? 'border-primary bg-primary/10 shadow-sm'
-                        : 'border-border hover:border-primary/50 bg-card'
-                    }`}
-                  >
-                    <div className="text-2xl mb-2">{icon}</div>
-                    <span className="text-xs font-semibold text-foreground block text-center">{label}</span>
-                    {isSubscribed(value) && (
-                      <div className="mt-2 flex justify-center">
-                        <svg className="w-5 h-5 text-primary" fill="currentColor" viewBox="0 0 20 20">
-                          <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                        </svg>
-                      </div>
-                    )}
-                  </button>
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
+          </CardContent>
+        </Card>
 
         {/* Signals Feed */}
-        <div>
-            <div className="bg-card rounded-lg shadow-md border border-border">
-              <div className="bg-gradient-to-r from-primary/90 to-primary p-6">
-                <div className="flex items-center justify-between mb-4">
-                  <h2 className="text-xl font-bold text-primary-foreground">Recent Signals</h2>
-                  <div className="flex gap-3 flex-wrap">
-                    <select
-                      value={selectedType}
-                      onChange={(e) => {
-                        setSelectedType(e.target.value)
-                        setSelectedSubtier('all') // Reset subtier when type changes
-                      }}
-                      className="px-4 py-2 border border-primary/30 rounded-lg text-sm text-primary-foreground bg-primary/20 font-medium focus:outline-none focus:ring-2 focus:ring-primary/50 hover:bg-primary/30 transition-colors"
-                    >
-                      <option value="all">All Types</option>
-                      {SIGNAL_TYPES.map(({ value, label }) => (
-                        <option key={value} value={value}>{label}</option>
-                      ))}
-                    </select>
-                    {(selectedType === 'government_contract' || selectedType === 'all') && availableSubtiers.length > 0 && (
-                      <select
-                        value={selectedSubtier}
-                        onChange={(e) => setSelectedSubtier(e.target.value)}
-                        className="px-4 py-2 border border-primary/30 rounded-lg text-sm text-primary-foreground bg-primary/20 font-medium focus:outline-none focus:ring-2 focus:ring-primary/50 hover:bg-primary/30 transition-colors"
-                      >
-                        <option value="all">All Subtiers</option>
-                        {availableSubtiers.map((subtier) => (
-                          <option key={subtier} value={subtier}>{subtier}</option>
-                        ))}
-                      </select>
-                    )}
-                  </div>
-                </div>
+        <Card>
+          <CardHeader>
+            <div className="flex items-center justify-between">
+              <div>
+                <CardTitle>Recent Signals</CardTitle>
+                <CardDescription>Latest government contract opportunities</CardDescription>
               </div>
-
-              <div className="divide-y">
+              <div className="flex gap-3 flex-wrap">
+                <select
+                  value={selectedType}
+                  onChange={(e) => {
+                    setSelectedType(e.target.value)
+                    setSelectedSubtier('all')
+                  }}
+                  className="px-4 py-2 border border-input rounded-lg text-sm bg-background font-medium focus:outline-none focus:ring-2 focus:ring-ring"
+                >
+                  <option value="all">All Types</option>
+                  {SIGNAL_TYPES.map(({ value, label }) => (
+                    <option key={value} value={value}>{label}</option>
+                  ))}
+                </select>
+                {(selectedType === 'government_contract' || selectedType === 'all') && availableSubtiers.length > 0 && (
+                  <select
+                    value={selectedSubtier}
+                    onChange={(e) => setSelectedSubtier(e.target.value)}
+                    className="px-4 py-2 border border-input rounded-lg text-sm bg-background font-medium focus:outline-none focus:ring-2 focus:ring-ring"
+                  >
+                    <option value="all">All Subtiers</option>
+                    {availableSubtiers.map((subtier) => (
+                      <option key={subtier} value={subtier}>{subtier}</option>
+                    ))}
+                  </select>
+                )}
+              </div>
+            </div>
+          </CardHeader>
+          <CardContent className="p-0">
+            <div className="divide-y divide-border">
                 {loading ? (
                   <div className="p-12">
                     <div className="flex flex-col items-center justify-center space-y-4">
@@ -335,34 +337,32 @@ export default function Dashboard() {
                       (currentPage - 1) * itemsPerPage,
                       currentPage * itemsPerPage
                     ).map((signal) => (
-                      <div key={signal.id} className="p-6 hover:bg-muted/30 transition-colors border-b border-border last:border-b-0">
-                      <div className="flex items-start justify-between">
-                        <div className="flex-1">
-                          <div className="flex items-center gap-2 mb-2">
-                            <span className="text-2xl">
-                              {SIGNAL_TYPES.find(t => t.value === signal.signalType)?.icon}
-                            </span>
-                            <h3 className="font-semibold text-lg text-foreground">{signal.companyName}</h3>
-                            <span className="px-2 py-1 bg-muted text-foreground text-xs rounded-full">
-                              {SIGNAL_TYPES.find(t => t.value === signal.signalType)?.label}
-                            </span>
-                          </div>
-                          
-                          {/* Show contract type and solicitation number for government contracts */}
-                          {signal.signalType === 'government_contract' && signal.metadata?.contractType && (
-                            <div className="mb-2 flex items-center gap-2">
-                              <span className="inline-flex items-center px-3 py-1 bg-primary/10 text-primary text-sm font-medium rounded-full">
-                                {signal.metadata.contractType}
+                      <div key={signal.id} className="p-6 hover:bg-muted/30 transition-colors">
+                        <div className="flex items-start justify-between gap-4">
+                          <div className="flex-1 space-y-3">
+                            <div className="flex items-center gap-3">
+                              <span className="text-2xl">
+                                {SIGNAL_TYPES.find(t => t.value === signal.signalType)?.icon}
                               </span>
-                              {signal.metadata.solicitationNumber && (
-                                <span className="text-xs text-muted-foreground">
-                                  #{signal.metadata.solicitationNumber}
-                                </span>
-                              )}
+                              <div className="flex flex-col gap-1">
+                                <h3 className="font-semibold text-lg">{signal.companyName}</h3>
+                                <div className="flex items-center gap-2">
+                                  <Badge variant="secondary">
+                                    {SIGNAL_TYPES.find(t => t.value === signal.signalType)?.label}
+                                  </Badge>
+                                  {signal.signalType === 'government_contract' && signal.metadata?.contractType && (
+                                    <Badge variant="outline">{signal.metadata.contractType}</Badge>
+                                  )}
+                                  {signal.metadata?.solicitationNumber && (
+                                    <span className="text-xs text-muted-foreground">
+                                      #{signal.metadata.solicitationNumber}
+                                    </span>
+                                  )}
+                                </div>
+                              </div>
                             </div>
-                          )}
                           
-                          <p className="text-foreground mb-2">{signal.description}</p>
+                            <p className="text-sm text-muted-foreground leading-relaxed">{signal.description}</p>
                           
                           {/* Timeline for government contracts */}
                           {signal.signalType === 'government_contract' && signal.metadata?.postedDate && signal.metadata?.responseDeadline && (
@@ -374,47 +374,42 @@ export default function Dashboard() {
                           
                           {/* Show document attachments for government contracts */}
                           {signal.signalType === 'government_contract' && signal.metadata?.resourceLinks && signal.metadata.resourceLinks.length > 0 && (
-                            <div className="mb-3 p-3 bg-muted/30 rounded-lg border border-border">
-                              <div className="flex items-center gap-2 mb-2">
-                                <span className="text-sm font-medium text-foreground">📎 Contract Documents ({signal.metadata.resourceLinks.length})</span>
-                                <span className="text-xs text-muted-foreground">- Contains detailed contract type (FFP, CPFF, T&M, etc.)</span>
-                              </div>
-                              <div className="flex flex-wrap gap-2">
-                                {signal.metadata.resourceLinks.slice(0, 3).map((link: string, idx: number) => (
-                                  <a
-                                    key={idx}
-                                    href={link}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="inline-flex items-center px-2 py-1 bg-background border border-border rounded text-xs text-primary hover:bg-primary/10 hover:border-primary transition-colors"
-                                  >
-                                    Document {idx + 1} ↗
-                                  </a>
-                                ))}
-                                {signal.metadata.resourceLinks.length > 3 && (
-                                  <span className="inline-flex items-center px-2 py-1 text-xs text-muted-foreground">
-                                    +{signal.metadata.resourceLinks.length - 3} more
-                                  </span>
-                                )}
-                              </div>
-                            </div>
+                            <Card className="bg-muted/30">
+                              <CardContent className="p-4">
+                                <div className="flex items-center gap-2 mb-3">
+                                  <span className="text-sm font-medium">📎 Contract Documents ({signal.metadata.resourceLinks.length})</span>
+                                  <span className="text-xs text-muted-foreground">FFP, CPFF, T&M, etc.</span>
+                                </div>
+                                <div className="flex flex-wrap gap-2">
+                                  {signal.metadata.resourceLinks.slice(0, 3).map((link: string, idx: number) => (
+                                    <Button key={idx} variant="outline" size="sm" asChild>
+                                      <a href={link} target="_blank" rel="noopener noreferrer">
+                                        Document {idx + 1} ↗
+                                      </a>
+                                    </Button>
+                                  ))}
+                                  {signal.metadata.resourceLinks.length > 3 && (
+                                    <Badge variant="secondary">
+                                      +{signal.metadata.resourceLinks.length - 3} more
+                                    </Badge>
+                                  )}
+                                </div>
+                              </CardContent>
+                            </Card>
                           )}
                           
-                          <div className="flex items-center gap-4 text-sm text-foreground">
-                            <span>Source: {signal.source}</span>
+                          <div className="flex items-center gap-4 text-sm">
+                            <span className="text-muted-foreground">Source: {signal.source}</span>
                             {signal.sourceUrl && (
-                              <a
-                                href={signal.sourceUrl}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="text-primary hover:underline"
-                              >
-                                View full opportunity →
-                              </a>
+                              <Button variant="link" size="sm" asChild className="p-0 h-auto">
+                                <a href={signal.sourceUrl} target="_blank" rel="noopener noreferrer">
+                                  View full opportunity →
+                                </a>
+                              </Button>
                             )}
                           </div>
                         </div>
-                        <span className="text-xs text-muted-foreground">
+                        <span className="text-xs text-muted-foreground whitespace-nowrap">
                           {new Date(signal.createdAt).toLocaleDateString()}
                         </span>
                       </div>
@@ -423,7 +418,8 @@ export default function Dashboard() {
                   </>
                 )}
               </div>
-            </div>
+            </CardContent>
+          </Card>
         </div>
       </div>
     </div>
