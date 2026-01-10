@@ -115,19 +115,19 @@ export default function Dashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <header className="bg-gradient-to-r from-blue-900 to-blue-800 shadow-md border-b border-blue-700">
+    <div className="min-h-screen bg-background">
+      <header className="bg-gradient-to-r from-primary/90 to-primary shadow-md border-b border-border">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5">
           <div className="flex justify-between items-center">
             <div className="flex items-center gap-4">
-              <div className="bg-white p-3 rounded-lg shadow-md">
-                <svg className="w-7 h-7 text-blue-900" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <div className="bg-card p-3 rounded-lg shadow-md">
+                <svg className="w-7 h-7 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M13 10V3L4 14h7v7l9-11h-7z" />
                 </svg>
               </div>
               <div>
-                <h1 className="text-2xl font-bold text-white tracking-tight">Lead Signals</h1>
-                <p className="text-xs text-blue-100 font-medium">Government Contract Intelligence Platform</p>
+                <h1 className="text-2xl font-bold text-primary-foreground tracking-tight">Lead Signals</h1>
+                <p className="text-xs text-primary-foreground/80 font-medium">Government Contract Intelligence Platform</p>
               </div>
             </div>
             <UserButton />
@@ -138,42 +138,42 @@ export default function Dashboard() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Stats Overview */}
         <div className="mb-8 grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="bg-white rounded-lg shadow-md p-6 border-l-4 border-blue-600 hover:shadow-lg transition-shadow">
+          <div className="bg-card rounded-lg shadow-md p-6 border-l-4 border-primary hover:shadow-lg transition-shadow">
             <div className="flex items-center justify-between mb-3">
-              <div className="bg-blue-50 p-3 rounded-lg">
-                <svg className="w-6 h-6 text-blue-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <div className="bg-primary/10 p-3 rounded-lg">
+                <svg className="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                 </svg>
               </div>
             </div>
-            <p className="text-sm font-semibold text-gray-600 mb-1">Active Opportunities</p>
-            <p className="text-4xl font-bold text-blue-900">{signals.length}</p>
-            <p className="text-xs text-gray-500 mt-1">Total contracts available</p>
+            <p className="text-sm font-semibold text-muted-foreground mb-1">Active Opportunities</p>
+            <p className="text-4xl font-bold text-foreground">{signals.length}</p>
+            <p className="text-xs text-muted-foreground mt-1">Total contracts available</p>
           </div>
 
-          <div className="bg-white rounded-lg shadow-md p-6 border-l-4 border-blue-700 hover:shadow-lg transition-shadow">
+          <div className="bg-card rounded-lg shadow-md p-6 border-l-4 border-primary/80 hover:shadow-lg transition-shadow">
             <div className="flex items-center justify-between mb-3">
-              <div className="bg-blue-50 p-3 rounded-lg">
-                <svg className="w-6 h-6 text-blue-800" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <div className="bg-primary/10 p-3 rounded-lg">
+                <svg className="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
                 </svg>
               </div>
             </div>
-            <p className="text-sm font-semibold text-gray-600 mb-1">Active Alerts</p>
-            <p className="text-4xl font-bold text-blue-900">{subscriptions.length}</p>
-            <p className="text-xs text-gray-500 mt-1">Notification subscriptions</p>
+            <p className="text-sm font-semibold text-muted-foreground mb-1">Active Alerts</p>
+            <p className="text-4xl font-bold text-foreground">{subscriptions.length}</p>
+            <p className="text-xs text-muted-foreground mt-1">Notification subscriptions</p>
           </div>
 
-          <div className="bg-white rounded-lg shadow-md p-6 border-l-4 border-blue-800 hover:shadow-lg transition-shadow">
+          <div className="bg-card rounded-lg shadow-md p-6 border-l-4 border-primary/60 hover:shadow-lg transition-shadow">
             <div className="flex items-center justify-between mb-3">
-              <div className="bg-blue-50 p-3 rounded-lg">
-                <svg className="w-6 h-6 text-blue-900" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <div className="bg-primary/10 p-3 rounded-lg">
+                <svg className="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
               </div>
             </div>
-            <p className="text-sm font-semibold text-gray-600 mb-1">Closing This Week</p>
-            <p className="text-4xl font-bold text-blue-900">
+            <p className="text-sm font-semibold text-muted-foreground mb-1">Closing This Week</p>
+            <p className="text-4xl font-bold text-foreground">
               {signals.filter(s => {
                 if (s.metadata?.responseDeadline) {
                   const deadline = new Date(s.metadata.responseDeadline)
@@ -184,7 +184,7 @@ export default function Dashboard() {
                 return false
               }).length}
             </p>
-            <p className="text-xs text-gray-500 mt-1">Due within 7 days</p>
+            <p className="text-xs text-muted-foreground mt-1">Due within 7 days</p>
           </div>
         </div>
 
@@ -201,10 +201,10 @@ export default function Dashboard() {
 
         {/* Subscriptions Section */}
         <div className="mb-6">
-          <div className="bg-white rounded-lg shadow-md overflow-hidden">
-            <div className="bg-gradient-to-r from-blue-800 to-blue-900 p-6">
-              <h2 className="text-xl font-bold text-white">Your Subscriptions</h2>
-              <p className="text-sm text-blue-100 mt-1">Get instant alerts for opportunities that match your interests</p>
+          <div className="bg-card rounded-lg shadow-md overflow-hidden border border-border">
+            <div className="bg-gradient-to-r from-primary/90 to-primary p-6">
+              <h2 className="text-xl font-bold text-primary-foreground">Your Subscriptions</h2>
+              <p className="text-sm text-primary-foreground/80 mt-1">Get instant alerts for opportunities that match your interests</p>
             </div>
             <div className="p-6">
               <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
@@ -214,15 +214,15 @@ export default function Dashboard() {
                     onClick={() => toggleSubscription(value)}
                     className={`p-4 rounded-lg border-2 transition-all hover:shadow-md ${
                       isSubscribed(value)
-                        ? 'border-blue-700 bg-blue-50 shadow-sm'
-                        : 'border-gray-200 hover:border-blue-400 bg-white'
+                        ? 'border-primary bg-primary/10 shadow-sm'
+                        : 'border-border hover:border-primary/50 bg-card'
                     }`}
                   >
                     <div className="text-2xl mb-2">{icon}</div>
-                    <span className="text-xs font-semibold text-gray-700 block text-center">{label}</span>
+                    <span className="text-xs font-semibold text-foreground block text-center">{label}</span>
                     {isSubscribed(value) && (
                       <div className="mt-2 flex justify-center">
-                        <svg className="w-5 h-5 text-blue-800" fill="currentColor" viewBox="0 0 20 20">
+                        <svg className="w-5 h-5 text-primary" fill="currentColor" viewBox="0 0 20 20">
                           <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                         </svg>
                       </div>
@@ -236,10 +236,10 @@ export default function Dashboard() {
 
         {/* Signals Feed */}
         <div>
-            <div className="bg-white rounded-lg shadow-md">
-              <div className="bg-gradient-to-r from-blue-800 to-blue-900 p-6">
+            <div className="bg-card rounded-lg shadow-md border border-border">
+              <div className="bg-gradient-to-r from-primary/90 to-primary p-6">
                 <div className="flex items-center justify-between mb-4">
-                  <h2 className="text-xl font-bold text-white">Recent Signals</h2>
+                  <h2 className="text-xl font-bold text-primary-foreground">Recent Signals</h2>
                   <div className="flex gap-3 flex-wrap">
                     <select
                       value={selectedType}
@@ -247,7 +247,7 @@ export default function Dashboard() {
                         setSelectedType(e.target.value)
                         setSelectedSubtier('all') // Reset subtier when type changes
                       }}
-                      className="px-4 py-2 border border-blue-700 rounded-lg text-sm text-white bg-blue-900/80 font-medium focus:outline-none focus:ring-2 focus:ring-blue-400 hover:bg-blue-900 transition-colors"
+                      className="px-4 py-2 border border-primary/30 rounded-lg text-sm text-primary-foreground bg-primary/20 font-medium focus:outline-none focus:ring-2 focus:ring-primary/50 hover:bg-primary/30 transition-colors"
                     >
                       <option value="all">All Types</option>
                       {SIGNAL_TYPES.map(({ value, label }) => (
@@ -258,7 +258,7 @@ export default function Dashboard() {
                       <select
                         value={selectedSubtier}
                         onChange={(e) => setSelectedSubtier(e.target.value)}
-                        className="px-4 py-2 border border-blue-700 rounded-lg text-sm text-white bg-blue-900/80 font-medium focus:outline-none focus:ring-2 focus:ring-blue-400 hover:bg-blue-900 transition-colors"
+                        className="px-4 py-2 border border-primary/30 rounded-lg text-sm text-primary-foreground bg-primary/20 font-medium focus:outline-none focus:ring-2 focus:ring-primary/50 hover:bg-primary/30 transition-colors"
                       >
                         <option value="all">All Subtiers</option>
                         {availableSubtiers.map((subtier) => (
@@ -274,26 +274,26 @@ export default function Dashboard() {
                 {loading ? (
                   <div className="p-12">
                     <div className="flex flex-col items-center justify-center space-y-4">
-                      <div className="animate-spin rounded-full h-12 w-12 border-b-4 border-blue-700"></div>
-                      <p className="text-gray-600 font-medium">Loading opportunities...</p>
+                      <div className="animate-spin rounded-full h-12 w-12 border-b-4 border-primary"></div>
+                      <p className="text-muted-foreground font-medium">Loading opportunities...</p>
                     </div>
                   </div>
                 ) : signals.length === 0 ? (
                   <div className="p-12 text-center">
-                    <div className="inline-flex items-center justify-center w-16 h-16 bg-blue-100 rounded-full mb-4">
-                      <svg className="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <div className="inline-flex items-center justify-center w-16 h-16 bg-primary/10 rounded-full mb-4">
+                      <svg className="w-8 h-8 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                       </svg>
                     </div>
-                    <h3 className="text-lg font-bold text-gray-900 mb-2">No signals found</h3>
-                    <p className="text-gray-600">Try adjusting your filters or check back later for new opportunities</p>
+                    <h3 className="text-lg font-bold text-foreground mb-2">No signals found</h3>
+                    <p className="text-muted-foreground">Try adjusting your filters or check back later for new opportunities</p>
                   </div>
                 ) : (
                   <>
                     {/* Pagination Info & Controls */}
-                    <div className="px-6 py-4 border-b border-gray-200 flex items-center justify-between bg-gray-50">
+                    <div className="px-6 py-4 border-b border-border flex items-center justify-between bg-muted/30">
                       <div className="flex items-center gap-4">
-                        <span className="text-sm text-gray-700 font-medium">
+                        <span className="text-sm text-foreground font-medium">
                           Showing {((currentPage - 1) * itemsPerPage) + 1}-{Math.min(currentPage * itemsPerPage, signals.length)} of {signals.length} opportunities
                         </span>
                         <select
@@ -302,7 +302,7 @@ export default function Dashboard() {
                             setItemsPerPage(Number(e.target.value))
                             setCurrentPage(1)
                           }}
-                          className="px-2 py-1 border border-gray-300 rounded text-sm text-black"
+                          className="px-2 py-1 border border-border rounded text-sm text-foreground bg-background"
                         >
                           <option value={10}>10 per page</option>
                           <option value={20}>20 per page</option>
@@ -314,17 +314,17 @@ export default function Dashboard() {
                         <button
                           onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
                           disabled={currentPage === 1}
-                          className="px-3 py-1 border border-gray-300 rounded text-sm text-black disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-100"
+                          className="px-3 py-1 border border-border rounded text-sm text-foreground disabled:opacity-50 disabled:cursor-not-allowed hover:bg-muted"
                         >
                           Previous
                         </button>
-                        <span className="text-sm text-gray-600">
+                        <span className="text-sm text-muted-foreground">
                           Page {currentPage} of {Math.ceil(signals.length / itemsPerPage)}
                         </span>
                         <button
                           onClick={() => setCurrentPage(p => Math.min(Math.ceil(signals.length / itemsPerPage), p + 1))}
                           disabled={currentPage >= Math.ceil(signals.length / itemsPerPage)}
-                          className="px-3 py-1 border border-gray-300 rounded text-sm text-black disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-100"
+                          className="px-3 py-1 border border-border rounded text-sm text-foreground disabled:opacity-50 disabled:cursor-not-allowed hover:bg-muted"
                         >
                           Next
                         </button>
@@ -335,15 +335,15 @@ export default function Dashboard() {
                       (currentPage - 1) * itemsPerPage,
                       currentPage * itemsPerPage
                     ).map((signal) => (
-                      <div key={signal.id} className="p-6 hover:bg-gray-50">
+                      <div key={signal.id} className="p-6 hover:bg-muted/30 transition-colors border-b border-border last:border-b-0">
                       <div className="flex items-start justify-between">
                         <div className="flex-1">
                           <div className="flex items-center gap-2 mb-2">
                             <span className="text-2xl">
                               {SIGNAL_TYPES.find(t => t.value === signal.signalType)?.icon}
                             </span>
-                            <h3 className="font-semibold text-lg text-black">{signal.companyName}</h3>
-                            <span className="px-2 py-1 bg-gray-100 text-black text-xs rounded-full">
+                            <h3 className="font-semibold text-lg text-foreground">{signal.companyName}</h3>
+                            <span className="px-2 py-1 bg-muted text-foreground text-xs rounded-full">
                               {SIGNAL_TYPES.find(t => t.value === signal.signalType)?.label}
                             </span>
                           </div>
@@ -351,18 +351,18 @@ export default function Dashboard() {
                           {/* Show contract type and solicitation number for government contracts */}
                           {signal.signalType === 'government_contract' && signal.metadata?.contractType && (
                             <div className="mb-2 flex items-center gap-2">
-                              <span className="inline-flex items-center px-3 py-1 bg-blue-100 text-blue-800 text-sm font-medium rounded-full">
+                              <span className="inline-flex items-center px-3 py-1 bg-primary/10 text-primary text-sm font-medium rounded-full">
                                 {signal.metadata.contractType}
                               </span>
                               {signal.metadata.solicitationNumber && (
-                                <span className="text-xs text-gray-600">
+                                <span className="text-xs text-muted-foreground">
                                   #{signal.metadata.solicitationNumber}
                                 </span>
                               )}
                             </div>
                           )}
                           
-                          <p className="text-black mb-2">{signal.description}</p>
+                          <p className="text-foreground mb-2">{signal.description}</p>
                           
                           {/* Timeline for government contracts */}
                           {signal.signalType === 'government_contract' && signal.metadata?.postedDate && signal.metadata?.responseDeadline && (
@@ -374,10 +374,10 @@ export default function Dashboard() {
                           
                           {/* Show document attachments for government contracts */}
                           {signal.signalType === 'government_contract' && signal.metadata?.resourceLinks && signal.metadata.resourceLinks.length > 0 && (
-                            <div className="mb-3 p-3 bg-gray-50 rounded-lg border border-gray-200">
+                            <div className="mb-3 p-3 bg-muted/30 rounded-lg border border-border">
                               <div className="flex items-center gap-2 mb-2">
-                                <span className="text-sm font-medium text-gray-700">📎 Contract Documents ({signal.metadata.resourceLinks.length})</span>
-                                <span className="text-xs text-gray-500">- Contains detailed contract type (FFP, CPFF, T&M, etc.)</span>
+                                <span className="text-sm font-medium text-foreground">📎 Contract Documents ({signal.metadata.resourceLinks.length})</span>
+                                <span className="text-xs text-muted-foreground">- Contains detailed contract type (FFP, CPFF, T&M, etc.)</span>
                               </div>
                               <div className="flex flex-wrap gap-2">
                                 {signal.metadata.resourceLinks.slice(0, 3).map((link: string, idx: number) => (
@@ -386,13 +386,13 @@ export default function Dashboard() {
                                     href={link}
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="inline-flex items-center px-2 py-1 bg-white border border-gray-300 rounded text-xs text-blue-600 hover:bg-blue-50 hover:border-blue-300 transition-colors"
+                                    className="inline-flex items-center px-2 py-1 bg-background border border-border rounded text-xs text-primary hover:bg-primary/10 hover:border-primary transition-colors"
                                   >
                                     Document {idx + 1} ↗
                                   </a>
                                 ))}
                                 {signal.metadata.resourceLinks.length > 3 && (
-                                  <span className="inline-flex items-center px-2 py-1 text-xs text-gray-500">
+                                  <span className="inline-flex items-center px-2 py-1 text-xs text-muted-foreground">
                                     +{signal.metadata.resourceLinks.length - 3} more
                                   </span>
                                 )}
@@ -400,21 +400,21 @@ export default function Dashboard() {
                             </div>
                           )}
                           
-                          <div className="flex items-center gap-4 text-sm text-black">
+                          <div className="flex items-center gap-4 text-sm text-foreground">
                             <span>Source: {signal.source}</span>
                             {signal.sourceUrl && (
                               <a
                                 href={signal.sourceUrl}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="text-blue-600 hover:underline"
+                                className="text-primary hover:underline"
                               >
                                 View full opportunity →
                               </a>
                             )}
                           </div>
                         </div>
-                        <span className="text-xs text-black">
+                        <span className="text-xs text-muted-foreground">
                           {new Date(signal.createdAt).toLocaleDateString()}
                         </span>
                       </div>
