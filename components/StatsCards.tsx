@@ -60,7 +60,7 @@ export function StatsCards() {
                 )}
               </div>
             </div>
-            <div className="mt-4">
+            <div className="mt-4 pl-1">
               <p className="text-4xl font-bold text-foreground tracking-tight">{stat.value}</p>
               <div className="flex items-center justify-between mt-2">
                 <span className="text-sm text-muted-foreground font-normal">{stat.label}</span>
