@@ -33,7 +33,7 @@ const stats = [
 
 export function StatsCards() {
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-5xl">
       {stats.map((stat) => (
         <Card
           key={stat.label}
