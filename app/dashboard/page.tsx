@@ -6,6 +6,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import { Sidebar } from '@/components/Sidebar'
 import OfficeChart from '../components/OfficeChart'
 import SolicitationTimeline from '../components/SolicitationTimeline'
 import DeadlineHistogram from '../components/DeadlineHistogram'
@@ -119,29 +120,25 @@ export default function Dashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-background">
-      <header className="bg-gradient-to-r from-primary/90 to-primary shadow-md border-b border-border">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5">
-          <div className="flex justify-between items-center">
-            <div className="flex items-center gap-4">
-              <div className="bg-card p-3 rounded-lg shadow-md">
-                <svg className="w-7 h-7 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M13 10V3L4 14h7v7l9-11h-7z" />
-                </svg>
-              </div>
+    <div className="flex min-h-screen bg-background">
+      <Sidebar />
+      
+      <main className="flex-1 overflow-auto">
+        <header className="bg-gradient-to-r from-primary/90 to-primary shadow-md border-b border-border">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5">
+            <div className="flex justify-between items-center">
               <div>
-                <h1 className="text-2xl font-bold text-primary-foreground tracking-tight">Lead Signals</h1>
+                <h1 className="text-2xl font-bold text-primary-foreground tracking-tight">Dashboard</h1>
                 <p className="text-xs text-primary-foreground/80 font-medium">Government Contract Intelligence Platform</p>
               </div>
+              <UserButton />
             </div>
-            <UserButton />
           </div>
-        </div>
-      </header>
+        </header>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
-        {/* Stats Overview */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+          {/* Stats Overview */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">Active Opportunities</CardTitle>
@@ -420,7 +417,8 @@ export default function Dashboard() {
             </div>
           </CardContent>
           </Card>
-      </div>
+        </div>
+      </main>
     </div>
   );
 }
