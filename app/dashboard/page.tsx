@@ -17,12 +17,12 @@ export default function DashboardPage() {
       <main className="flex-1 overflow-auto">
         <Header />
         
-        <div className="p-6 space-y-6">
+        <div className="p-6 space-y-4">
           {/* Stats Overview */}
           <StatsCards />
 
           {/* Charts Grid */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
             <SolicitationsChart />
             <DeadlinesChart />
           </div>

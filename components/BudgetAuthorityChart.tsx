@@ -35,8 +35,8 @@ const CustomTooltip = ({ active, payload, label }: any) => {
 
 export function BudgetAuthorityChart() {
   return (
-    <Card className="bg-card border-border">
-      <CardHeader className="pb-2">
+    <Card className="bg-card/50 border-border/50">
+      <CardHeader className="pb-3">
         <div className="flex items-center justify-between">
           <div>
             <CardTitle className="text-sm font-medium text-foreground">Agency Budget Authority</CardTitle>

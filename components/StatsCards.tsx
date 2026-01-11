@@ -37,9 +37,9 @@ export function StatsCards() {
       {stats.map((stat) => (
         <Card
           key={stat.label}
-          className="bg-card border-border hover:border-accent/50 transition-colors group cursor-pointer"
+          className="bg-card/50 border-border/50 hover:border-accent/50 transition-colors group cursor-pointer"
         >
-          <CardContent className="p-5">
+          <CardContent className="p-6">
             <div className="flex items-start justify-between">
               <div className={`p-2.5 rounded-lg ${stat.bgColor}`}>
                 <stat.icon className={`w-5 h-5 ${stat.color}`} />
@@ -61,9 +61,9 @@ export function StatsCards() {
               </div>
             </div>
             <div className="mt-4">
-              <p className="text-3xl font-bold text-foreground tracking-tight">{stat.value}</p>
-              <div className="flex items-center justify-between mt-1">
-                <span className="text-sm text-muted-foreground">{stat.label}</span>
+              <p className="text-4xl font-bold text-foreground tracking-tight">{stat.value}</p>
+              <div className="flex items-center justify-between mt-2">
+                <span className="text-sm text-muted-foreground font-normal">{stat.label}</span>
                 <ArrowRight className="w-4 h-4 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity" />
               </div>
             </div>

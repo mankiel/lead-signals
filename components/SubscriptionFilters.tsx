@@ -22,7 +22,7 @@ export function SubscriptionFilters() {
   }
 
   return (
-    <Card className="bg-card border-border">
+    <Card className="bg-card/50 border-border/50">
       <CardHeader className="pb-3">
         <CardTitle className="text-sm font-medium text-foreground">Your Subscriptions</CardTitle>
       </CardHeader>

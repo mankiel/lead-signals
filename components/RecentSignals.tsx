@@ -84,7 +84,7 @@ const getDepartmentColor = (dept: string) => {
 
 export function RecentSignals() {
   return (
-    <Card className="bg-card border-border">
+    <Card className="bg-card/50 border-border/50">
       <CardHeader className="pb-3">
         <div className="flex items-center justify-between flex-wrap gap-3">
           <CardTitle className="text-sm font-medium text-foreground">Recent Signals</CardTitle>
