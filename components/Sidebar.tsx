@@ -39,7 +39,7 @@ export function Sidebar() {
   return (
     <aside
       className={cn(
-        "relative flex flex-col bg-sidebar border-r border-sidebar-border transition-all duration-300 h-screen sticky top-0",
+        "flex flex-col bg-sidebar border-r border-sidebar-border transition-all duration-300 h-screen sticky top-0",
         collapsed ? "w-16" : "w-60",
       )}
     >
@@ -84,7 +84,7 @@ export function Sidebar() {
                     : "text-muted-foreground hover:bg-sidebar-accent/50 hover:text-sidebar-foreground",
                 )}
               >
-                <item.icon className="w-4 h-4 flex-shrink-0" />
+                <item.icon className="w-4 h-4 shrink-0" />
                 {!collapsed && (
                   <>
                     <span className="flex-1 text-left">{item.label}</span>
@@ -108,7 +108,7 @@ export function Sidebar() {
             <li key={item.label}>
               <button className="w-full flex items-center gap-3 px-3 py-2 rounded-md text-sm text-muted-foreground hover:bg-sidebar-accent/50 hover:text-sidebar-foreground transition-all">
                 <div className="relative">
-                  <item.icon className="w-4 h-4 flex-shrink-0" />
+                  <item.icon className="w-4 h-4 shrink-0" />
                   {item.badge && <span className="absolute -top-1 -right-1 w-2 h-2 rounded-full bg-chart-5" />}
                 </div>
                 {!collapsed && <span className="flex-1 text-left">{item.label}</span>}

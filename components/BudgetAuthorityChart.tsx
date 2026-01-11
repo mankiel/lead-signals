@@ -16,7 +16,7 @@ const data = [
 const CustomTooltip = ({ active, payload, label }: any) => {
   if (active && payload && payload.length) {
     return (
-      <div className="bg-popover border border-border rounded-lg px-3 py-2 shadow-lg min-w-[160px]">
+      <div className="bg-popover border border-border rounded-lg px-3 py-2 shadow-lg min-w-40">
         <p className="text-sm font-medium text-foreground mb-2">{label}</p>
         {payload.map((item: any, index: number) => (
           <div key={index} className="flex items-center justify-between gap-4 text-xs">
@@ -52,7 +52,7 @@ export function BudgetAuthorityChart() {
         </div>
       </CardHeader>
       <CardContent>
-        <div className="h-[240px]">
+        <div className="h-60">
           <ResponsiveContainer width="100%" height="100%">
             <BarChart data={data} layout="vertical" margin={{ top: 0, right: 20, left: 0, bottom: 0 }}>
               <XAxis

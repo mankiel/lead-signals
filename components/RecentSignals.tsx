@@ -90,7 +90,7 @@ export function RecentSignals() {
           <CardTitle className="text-sm font-medium text-foreground">Recent Signals</CardTitle>
           <div className="flex items-center gap-2">
             <Select defaultValue="20">
-              <SelectTrigger className="w-[100px] h-8 text-xs bg-secondary/50 border-border">
+              <SelectTrigger className="w-25 h-8 text-xs bg-secondary/50 border-border">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
@@ -100,7 +100,7 @@ export function RecentSignals() {
               </SelectContent>
             </Select>
             <Select defaultValue="all">
-              <SelectTrigger className="w-[100px] h-8 text-xs bg-secondary/50 border-border">
+              <SelectTrigger className="w-25 h-8 text-xs bg-secondary/50 border-border">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
@@ -129,7 +129,7 @@ export function RecentSignals() {
           >
             <div className="flex items-start gap-4">
               <div
-                className={cn("w-1 rounded-full self-stretch min-h-[80px]", getDepartmentColor(signal.department))}
+                className={cn("w-1 rounded-full self-stretch min-h-20", getDepartmentColor(signal.department))}
               />
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2 flex-wrap mb-2">
@@ -151,7 +151,7 @@ export function RecentSignals() {
                   <span className="text-accent group-hover:underline">View details →</span>
                 </div>
               </div>
-              <div className="flex flex-col items-end gap-2 min-w-[130px]">
+              <div className="flex flex-col items-end gap-2 min-w-32">
                 {signal.status === "expired" ? (
                   <Badge className="bg-chart-5/20 text-chart-5 border-0 text-[10px]">EXPIRED</Badge>
                 ) : signal.status === "urgent" ? (

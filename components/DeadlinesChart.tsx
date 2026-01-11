@@ -43,7 +43,7 @@ export function DeadlinesChart() {
         </div>
       </CardHeader>
       <CardContent>
-        <div className="h-[180px]">
+        <div className="h-45">
           <ResponsiveContainer width="100%" height="100%">
             <BarChart data={data} margin={{ top: 10, right: 10, left: -10, bottom: 0 }}>
               <XAxis

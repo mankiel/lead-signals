@@ -43,7 +43,7 @@ export function SolicitationsChart() {
         </div>
       </CardHeader>
       <CardContent>
-        <div className="h-[220px]">
+        <div className="h-55">
           <ResponsiveContainer width="100%" height="100%">
             <BarChart data={data} layout="vertical" margin={{ top: 0, right: 20, left: 0, bottom: 0 }}>
               <XAxis type="number" hide />
