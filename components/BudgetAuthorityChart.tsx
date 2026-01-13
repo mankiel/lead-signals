@@ -70,7 +70,7 @@ export function BudgetAuthorityChart() {
           }
         })
         .filter((c: ContractData) => c.value > 0) // Only contracts with values
-        .sort((a, b) => b.value - a.value)
+        .sort((a: ContractData, b: ContractData) => b.value - a.value)
         .slice(0, 3) // Top 3
         
         setData(contractsWithValues)
