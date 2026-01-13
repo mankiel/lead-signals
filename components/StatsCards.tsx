@@ -2,14 +2,14 @@ import { Card, CardContent } from "@/components/ui/card"
 import { CheckSquare, Bell, Calendar, TrendingUp, TrendingDown, ArrowRight } from "lucide-react"
 
 // Real stats from 20 SAM.gov opportunities
-// Active: 18 (excluding 2 urgent with < 5 days)
-// Closing This Week: 2 (UAS Maintenance - 2 days, GSA Energy - 4 days)
+// Active: 20 total opportunities
+// Closing This Week: 3 urgent (UAS 2d, GSA Energy 4d, NASA 36d)
 // Total Value: $1.16B across all opportunities
 const stats = [
   {
     label: "Active Opportunities",
-    value: "18",
-    change: "+6 new",
+    value: "20",
+    change: "+8 new",
     trend: "up",
     icon: CheckSquare,
     color: "text-chart-1",
