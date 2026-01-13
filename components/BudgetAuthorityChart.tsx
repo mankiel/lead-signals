@@ -34,14 +34,17 @@ export function BudgetAuthorityChart() {
   const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
+    console.log('BudgetAuthorityChart: Starting fetch...')
     fetch('/api/signals?type=government_contract&limit=500')
       .then(res => {
+        console.log('BudgetAuthorityChart: Response status:', res.status, res.ok)
         if (!res.ok) {
           throw new Error('Failed to fetch data')
         }
         return res.json()
       })
       .then(result => {
+        console.log('BudgetAuthorityChart: Received data, signals count:', result.signals?.length || 0)
         const signals = result.signals || []
         
         // Get all contracts with values and sort by value
@@ -75,6 +78,7 @@ export function BudgetAuthorityChart() {
         .sort((a: ContractData, b: ContractData) => b.value - a.value)
         .slice(0, 3) // Top 3
         
+        console.log('BudgetAuthorityChart: Top 3 contracts:', allContractsWithValues)
         setData(allContractsWithValues)
         
         // Calculate total
@@ -87,7 +91,7 @@ export function BudgetAuthorityChart() {
         setLoading(false)
       })
       .catch(err => {
-        console.error('Failed to fetch contract data:', err)
+        console.error('BudgetAuthorityChart: Error:', err)
         setError(err.message)
         setLoading(false)
       })
