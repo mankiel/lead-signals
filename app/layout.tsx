@@ -23,7 +23,19 @@ export default function RootLayout({
 }>) {
   return (
     <ClerkProvider>
-      <html lang="en" className="dark">
+      <html lang="en" suppressHydrationWarning>
+        <head>
+          <script
+            dangerouslySetInnerHTML={{
+              __html: `
+                try {
+                  const theme = localStorage.getItem('theme') || 'dark';
+                  document.documentElement.classList.toggle('dark', theme === 'dark');
+                } catch (e) {}
+              `,
+            }}
+          />
+        </head>
         <body className={`${geist.variable} ${geistMono.variable} font-sans antialiased`}>
           {children}
         </body>

@@ -9,6 +9,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import { ThemeToggle } from "@/components/ThemeToggle"
 
 export function Header() {
   return (
@@ -22,6 +23,8 @@ export function Header() {
       </div>
 
       <div className="flex items-center gap-3">
+        <ThemeToggle />
+        
         <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-foreground">
           <Search className="w-4 h-4" />
         </Button>
