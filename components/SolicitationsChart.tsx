@@ -4,15 +4,19 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer, Cell, Tooltip } from "recharts"
 import { ArrowUpRight } from "lucide-react"
 
+// Real agency distribution from 20 SAM.gov opportunities
 const data = [
-  { name: "DEFENSE", value: 65, fullName: "Department of Defense" },
-  { name: "VA", value: 52, fullName: "Veterans Affairs" },
-  { name: "GSA", value: 45, fullName: "General Services Administration" },
-  { name: "HHS", value: 38, fullName: "Health and Human Services" },
-  { name: "DHS", value: 32, fullName: "Homeland Security" },
-  { name: "USDA", value: 28, fullName: "Agriculture" },
-  { name: "STATE", value: 22, fullName: "State Department" },
-  { name: "INTERIOR", value: 18, fullName: "Interior Department" },
+  { name: "DEFENSE", value: 2, fullName: "Department of Defense" },
+  { name: "VA", value: 2, fullName: "Department of Veterans Affairs" },
+  { name: "GSA", value: 2, fullName: "General Services Administration" },
+  { name: "DHS", value: 2, fullName: "Department of Homeland Security" },
+  { name: "HHS", value: 1, fullName: "Health and Human Services" },
+  { name: "NASA", value: 1, fullName: "National Aeronautics and Space Administration" },
+  { name: "DOE", value: 1, fullName: "Department of Energy" },
+  { name: "DOT", value: 1, fullName: "Department of Transportation" },
+  { name: "NIH", value: 1, fullName: "National Institutes of Health" },
+  { name: "EPA", value: 1, fullName: "Environmental Protection Agency" },
+  { name: "OTHER", value: 6, fullName: "Other Agencies (Commerce, Interior, Agriculture, SSA, Education, State)" },
 ]
 
 const CustomTooltip = ({ active, payload }: any) => {
@@ -33,8 +37,8 @@ export function SolicitationsChart() {
       <CardHeader className="pb-3">
         <div className="flex items-center justify-between">
           <div>
-            <CardTitle className="text-sm font-medium text-foreground">Active Solicitations by Office</CardTitle>
-            <p className="text-xs text-muted-foreground mt-1">Top 8 agencies by submission volume</p>
+            <CardTitle className="text-sm font-medium text-foreground">Active Solicitations by Agency</CardTitle>
+            <p className="text-xs text-muted-foreground mt-1">Top 11 agencies with active opportunities</p>
           </div>
           <button className="flex items-center gap-1 text-xs text-accent hover:text-accent/80 transition-colors">
             View all
@@ -43,7 +47,7 @@ export function SolicitationsChart() {
         </div>
       </CardHeader>
       <CardContent>
-        <div className="h-55">
+        <div className="h-64">
           <ResponsiveContainer width="100%" height="100%">
             <BarChart data={data} layout="vertical" margin={{ top: 0, right: 20, left: 0, bottom: 0 }}>
               <XAxis type="number" hide />
@@ -53,15 +57,15 @@ export function SolicitationsChart() {
                 axisLine={false}
                 tickLine={false}
                 tick={{ fontSize: 11, fill: "var(--color-muted-foreground)" }}
-                width={65}
+                width={70}
               />
               <Tooltip content={<CustomTooltip />} cursor={{ fill: "var(--color-muted)", opacity: 0.3 }} />
               <Bar dataKey="value" radius={[0, 4, 4, 0]} barSize={14}>
                 {data.map((_, index) => (
                   <Cell
                     key={`cell-${index}`}
-                    fill={index === 0 ? "var(--color-chart-1)" : "var(--color-chart-1)"}
-                    fillOpacity={1 - index * 0.08}
+                    fill="var(--color-chart-1)"
+                    fillOpacity={1 - index * 0.07}
                   />
                 ))}
               </Bar>

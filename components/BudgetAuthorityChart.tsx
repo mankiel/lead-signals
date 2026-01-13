@@ -4,29 +4,37 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer, Tooltip } from "recharts"
 import { ArrowUpRight } from "lucide-react"
 
+// Real contract values from 20 SAM.gov opportunities (in millions)
+// DHS Border: $156M, DoD UAS: $89M, GSA Cloud: $75M, GSA Energy: $67.5M, DOE: $52M, DOC: $46M
+// VA EHR: $35M, SSA: $38.9M, HHS: $31.5M, NIH: $29.6M, DOT: $28M, NASA: $25M, Interior: $23.4M
+// Education: $21.2M, EPA: $19.8M, DoD JAIRIA: $18.5M, Agriculture: $16.7M, VA Eyeglasses: $12.3M
 const data = [
-  { name: "DEFENSE", budget: 280, obligated: 220, outlay: 180 },
-  { name: "HHS", budget: 180, obligated: 150, outlay: 120 },
-  { name: "VA", budget: 150, obligated: 120, outlay: 95 },
-  { name: "TREASURY", budget: 120, obligated: 90, outlay: 70 },
-  { name: "AGRICULTURE", budget: 95, obligated: 75, outlay: 60 },
-  { name: "DHS", budget: 85, obligated: 68, outlay: 52 },
+  { name: "DHS", value: 198, count: 2 }, // Border $156M + CSOC $42M
+  { name: "DoD", value: 107.5, count: 2 }, // UAS $89M + JAIRIA $18.5M
+  { name: "GSA", value: 142.5, count: 2 }, // Cloud $75M + Energy $67.5M
+  { name: "DOE", value: 52, count: 1 },
+  { name: "VA", value: 47.3, count: 2 }, // EHR $35M + Eyeglasses $12.3M
+  { name: "DOC", value: 46, count: 1 },
+  { name: "HHS", value: 31.5, count: 1 },
+  { name: "SSA", value: 38.9, count: 1 },
+  { name: "NIH", value: 29.6, count: 1 },
+  { name: "STATE", value: 94.8, count: 1 },
 ]
 
 const CustomTooltip = ({ active, payload, label }: any) => {
   if (active && payload && payload.length) {
+    const item = payload[0].payload
     return (
       <div className="bg-popover border border-border rounded-lg px-3 py-2 shadow-lg min-w-40">
         <p className="text-sm font-medium text-foreground mb-2">{label}</p>
-        {payload.map((item: any, index: number) => (
-          <div key={index} className="flex items-center justify-between gap-4 text-xs">
-            <div className="flex items-center gap-2">
-              <div className="w-2 h-2 rounded-full" style={{ backgroundColor: item.fill }} />
-              <span className="text-muted-foreground">{item.name}</span>
-            </div>
-            <span className="text-foreground font-medium">${item.value}B</span>
-          </div>
-        ))}
+        <div className="flex items-center justify-between gap-4 text-xs">
+          <span className="text-muted-foreground">Total Value</span>
+          <span className="text-foreground font-medium">${item.value}M</span>
+        </div>
+        <div className="flex items-center justify-between gap-4 text-xs mt-1">
+          <span className="text-muted-foreground">Opportunities</span>
+          <span className="text-foreground font-medium">{item.count}</span>
+        </div>
       </div>
     )
   }
@@ -39,11 +47,11 @@ export function BudgetAuthorityChart() {
       <CardHeader className="pb-3">
         <div className="flex items-center justify-between">
           <div>
-            <CardTitle className="text-sm font-medium text-foreground">Agency Budget Authority</CardTitle>
-            <p className="text-xs text-muted-foreground mt-1">Federal spending by major agencies</p>
+            <CardTitle className="text-sm font-medium text-foreground">Contract Value by Agency</CardTitle>
+            <p className="text-xs text-muted-foreground mt-1">Total opportunity value distribution</p>
           </div>
           <div className="flex items-center gap-2">
-            <span className="px-2 py-1 text-xs font-medium bg-chart-2/10 text-chart-2 rounded-md">FY 2025</span>
+            <span className="px-2 py-1 text-xs font-medium bg-chart-2/10 text-chart-2 rounded-md">$1.16B Total</span>
             <button className="flex items-center gap-1 text-xs text-accent hover:text-accent/80 transition-colors">
               Details
               <ArrowUpRight className="w-3 h-3" />
@@ -60,7 +68,7 @@ export function BudgetAuthorityChart() {
                 axisLine={false}
                 tickLine={false}
                 tick={{ fontSize: 10, fill: "var(--color-muted-foreground)" }}
-                tickFormatter={(value) => `$${value}B`}
+                tickFormatter={(value) => `$${value}M`}
               />
               <YAxis
                 type="category"
@@ -68,28 +76,12 @@ export function BudgetAuthorityChart() {
                 axisLine={false}
                 tickLine={false}
                 tick={{ fontSize: 10, fill: "var(--color-muted-foreground)" }}
-                width={80}
+                width={50}
               />
               <Tooltip content={<CustomTooltip />} cursor={{ fill: "var(--color-muted)", opacity: 0.3 }} />
-              <Bar dataKey="budget" fill="var(--color-chart-1)" radius={[0, 2, 2, 0]} barSize={6} name="Budget" />
-              <Bar dataKey="obligated" fill="var(--color-chart-2)" radius={[0, 2, 2, 0]} barSize={6} name="Obligated" />
-              <Bar dataKey="outlay" fill="var(--color-chart-3)" radius={[0, 2, 2, 0]} barSize={6} name="Outlay" />
+              <Bar dataKey="value" fill="var(--color-chart-2)" radius={[0, 4, 4, 0]} barSize={18} />
             </BarChart>
           </ResponsiveContainer>
-        </div>
-        <div className="flex flex-wrap gap-6 mt-4 pt-4 border-t border-border">
-          <div className="flex items-center gap-2">
-            <div className="w-2.5 h-2.5 rounded-full bg-chart-1" />
-            <span className="text-xs text-muted-foreground">Budget Authority</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <div className="w-2.5 h-2.5 rounded-full bg-chart-2" />
-            <span className="text-xs text-muted-foreground">Obligated</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <div className="w-2.5 h-2.5 rounded-full bg-chart-3" />
-            <span className="text-xs text-muted-foreground">Outlay</span>
-          </div>
         </div>
       </CardContent>
     </Card>

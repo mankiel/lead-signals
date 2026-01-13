@@ -3,18 +3,25 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer, Tooltip } from "recharts"
 
+// Real deadline distribution from 20 SAM.gov opportunities
+// 0-7 days: 3 urgent (2, 4, 4 days)
+// 8-30 days: 3 (36, 39 days - NASA, VA Eyeglasses)
+// 31-60 days: 4 (45, 49, 50, 56 days)
+// 61-90 days: 5 (66, 68, 70, 79, 81, 85 days)
+// 91+ days: 5 (93, 100, 102, 107, 122, 127 days)
 const data = [
-  { name: "0-7 days", urgent: 45, soon: 25, midterm: 15, later: 10 },
-  { name: "8-14 days", urgent: 0, soon: 65, midterm: 20, later: 12 },
-  { name: "15-21 days", urgent: 0, soon: 0, midterm: 55, later: 18 },
-  { name: "21-30 days", urgent: 0, soon: 0, midterm: 0, later: 42 },
+  { name: "0-7 days", urgent: 3, soon: 0, midterm: 0, later: 0 },
+  { name: "8-30 days", urgent: 0, soon: 3, midterm: 0, later: 0 },
+  { name: "31-60 days", urgent: 0, soon: 0, midterm: 4, later: 0 },
+  { name: "61-90 days", urgent: 0, soon: 0, midterm: 5, later: 0 },
+  { name: "91+ days", urgent: 0, soon: 0, midterm: 0, later: 5 },
 ]
 
 const legendItems = [
-  { name: "Urgent", color: "var(--color-chart-5)" },
-  { name: "Soon", color: "var(--color-chart-3)" },
-  { name: "Mid-term", color: "var(--color-chart-1)" },
-  { name: "Later", color: "var(--color-muted-foreground)" },
+  { name: "Urgent (<7d)", color: "var(--color-chart-5)" },
+  { name: "Soon (8-30d)", color: "var(--color-chart-3)" },
+  { name: "Mid-term (31-90d)", color: "var(--color-chart-1)" },
+  { name: "Later (91+d)", color: "var(--color-muted-foreground)" },
 ]
 
 const CustomTooltip = ({ active, payload, label }: any) => {
@@ -23,7 +30,7 @@ const CustomTooltip = ({ active, payload, label }: any) => {
     return (
       <div className="bg-popover border border-border rounded-lg px-3 py-2 shadow-lg">
         <p className="text-sm font-medium text-foreground mb-1">{label}</p>
-        <p className="text-xs text-muted-foreground">{total} total contracts</p>
+        <p className="text-xs text-muted-foreground">{total} opportunities</p>
       </div>
     )
   }
@@ -37,9 +44,9 @@ export function DeadlinesChart() {
         <div className="flex items-center justify-between">
           <div>
             <CardTitle className="text-sm font-medium text-foreground">Upcoming Deadlines</CardTitle>
-            <p className="text-xs text-muted-foreground mt-1">Contract response timeline distribution</p>
+            <p className="text-xs text-muted-foreground mt-1">Response deadline distribution</p>
           </div>
-          <span className="px-2 py-1 text-xs font-medium bg-accent/10 text-accent rounded-md">139 active</span>
+          <span className="px-2 py-1 text-xs font-medium bg-accent/10 text-accent rounded-md">20 active</span>
         </div>
       </CardHeader>
       <CardContent>
