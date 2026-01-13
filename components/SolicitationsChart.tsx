@@ -47,7 +47,7 @@ export function SolicitationsChart() {
             value: value as number
           }))
           .sort((a, b) => b.value - a.value)
-          .slice(0, 11) // Top 11
+          .slice(0, 3) // Top 3
         
         setData(sorted)
       })
@@ -60,7 +60,7 @@ export function SolicitationsChart() {
         <div className="flex items-center justify-between">
           <div>
             <CardTitle className="text-sm font-medium text-foreground">Active Solicitations by Agency</CardTitle>
-            <p className="text-xs text-muted-foreground mt-1">Top 11 agencies with active opportunities</p>
+            <p className="text-xs text-muted-foreground mt-1">Top 3 agencies with active opportunities</p>
           </div>
           <button className="flex items-center gap-1 text-xs text-accent hover:text-accent/80 transition-colors">
             View all
