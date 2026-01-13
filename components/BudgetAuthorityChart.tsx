@@ -76,7 +76,7 @@ export function BudgetAuthorityChart() {
         setData(contractsWithValues)
         
         // Calculate total
-        const total = contractsWithValues.reduce((sum, item) => sum + item.value, 0)
+        const total = contractsWithValues.reduce((sum: number, item: ContractData) => sum + item.value, 0)
         if (total >= 1000) {
           setTotalValue(`$${(total / 1000).toFixed(2)}B`)
         } else {
