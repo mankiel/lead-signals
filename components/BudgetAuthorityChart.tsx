@@ -30,24 +30,25 @@ const CustomTooltip = ({ active, payload, label }: any) => {
 export function BudgetAuthorityChart() {
   const [data, setData] = useState<ContractData[]>([])
   const [totalValue, setTotalValue] = useState("$0")
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
     fetch('/api/signals?type=government_contract&limit=500')
-      .then(res => res.json())
+      .then(res => {
+        if (!res.ok) {
+          throw new Error('Failed to fetch data')
+        }
+        return res.json()
+      })
       .then(result => {
         const signals = result.signals || []
         
-        // Filter GSA contracts only
-        const gsaContracts = signals.filter((s: any) => {
-          const agency = s.metadata?.agency || s.companyName || ''
-          return agency.toUpperCase().includes('GSA') || 
-                 agency.toUpperCase().includes('GENERAL SERVICES')
-        })
-        
-        // Parse and sort by value
-        const contractsWithValues = gsaContracts.map((s: any) => {
+        // Get all contracts with values and sort by value
+        const allContractsWithValues = signals.map((s: any) => {
           const valueStr = s.metadata?.value || '0'
           const title = s.metadata?.title || s.description || 'Untitled'
+          const agency = s.metadata?.agency || s.companyName || 'Unknown'
           
           // Parse value (remove $ , M K etc)
           let value = 0
@@ -64,26 +65,32 @@ export function BudgetAuthorityChart() {
           }
           
           return {
-            name: title.length > 25 ? title.substring(0, 25) + '...' : title,
-            fullTitle: title,
-            value: Math.round(value * 10) / 10 // Round to 1 decimal
+            name: title.length > 30 ? title.substring(0, 30) + '...' : title,
+            fullTitle: `${title} (${agency})`,
+            value: Math.round(value * 10) / 10, // Round to 1 decimal
+            agency
           }
         })
         .filter((c: ContractData) => c.value > 0) // Only contracts with values
         .sort((a: ContractData, b: ContractData) => b.value - a.value)
         .slice(0, 3) // Top 3
         
-        setData(contractsWithValues)
+        setData(allContractsWithValues)
         
         // Calculate total
-        const total = contractsWithValues.reduce((sum: number, item: ContractData) => sum + item.value, 0)
+        const total = allContractsWithValues.reduce((sum: number, item: ContractData) => sum + item.value, 0)
         if (total >= 1000) {
           setTotalValue(`$${(total / 1000).toFixed(2)}B`)
         } else {
           setTotalValue(`$${Math.round(total)}M`)
         }
+        setLoading(false)
       })
-      .catch(err => console.error('Failed to fetch GSA contract data:', err))
+      .catch(err => {
+        console.error('Failed to fetch contract data:', err)
+        setError(err.message)
+        setLoading(false)
+      })
   }, [])
 
   return (
@@ -91,7 +98,7 @@ export function BudgetAuthorityChart() {
       <CardHeader className="pb-3">
         <div className="flex items-center justify-between">
           <div>
-            <CardTitle className="text-sm font-medium text-foreground">Top 3 GSA Contracts by Value</CardTitle>
+            <CardTitle className="text-sm font-medium text-foreground">Top 3 Contracts by Value</CardTitle>
             <p className="text-xs text-muted-foreground mt-1">Highest value contracts with funding allocated</p>
           </div>
           <div className="flex items-center gap-2">
@@ -104,29 +111,43 @@ export function BudgetAuthorityChart() {
         </div>
       </CardHeader>
       <CardContent>
-        <div className="h-60">
-          <ResponsiveContainer width="100%" height="100%">
-            <BarChart data={data} layout="vertical" margin={{ top: 0, right: 20, left: 0, bottom: 0 }}>
-              <XAxis
-                type="number"
-                axisLine={false}
-                tickLine={false}
-                tick={{ fontSize: 10, fill: "var(--color-muted-foreground)" }}
-                tickFormatter={(value) => `$${value}M`}
-              />
-              <YAxis
-                type="category"
-                dataKey="name"
-                axisLine={false}
-                tickLine={false}
-                tick={{ fontSize: 10, fill: "var(--color-muted-foreground)" }}
-                width={100}
-              />
-              <Tooltip content={<CustomTooltip />} cursor={{ fill: "var(--color-muted)", opacity: 0.3 }} />
-              <Bar dataKey="value" fill="var(--color-chart-2)" radius={[0, 4, 4, 0]} barSize={18} />
-            </BarChart>
-          </ResponsiveContainer>
-        </div>
+        {loading ? (
+          <div className="h-60 flex items-center justify-center text-muted-foreground text-sm">
+            Loading...
+          </div>
+        ) : error ? (
+          <div className="h-60 flex items-center justify-center text-muted-foreground text-sm">
+            {error === 'Failed to fetch data' ? 'Please sign in to view data' : 'Error loading data'}
+          </div>
+        ) : data.length === 0 ? (
+          <div className="h-60 flex items-center justify-center text-muted-foreground text-sm">
+            No contract data available
+          </div>
+        ) : (
+          <div className="h-60">
+            <ResponsiveContainer width="100%" height="100%">
+              <BarChart data={data} layout="vertical" margin={{ top: 0, right: 20, left: 0, bottom: 0 }}>
+                <XAxis
+                  type="number"
+                  axisLine={false}
+                  tickLine={false}
+                  tick={{ fontSize: 10, fill: "var(--color-muted-foreground)" }}
+                  tickFormatter={(value) => `$${value}M`}
+                />
+                <YAxis
+                  type="category"
+                  dataKey="name"
+                  axisLine={false}
+                  tickLine={false}
+                  tick={{ fontSize: 10, fill: "var(--color-muted-foreground)" }}
+                  width={120}
+                />
+                <Tooltip content={<CustomTooltip />} cursor={{ fill: "var(--color-muted)", opacity: 0.3 }} />
+                <Bar dataKey="value" fill="var(--color-chart-2)" radius={[0, 4, 4, 0]} barSize={18} />
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
+        )}
       </CardContent>
     </Card>
   )
