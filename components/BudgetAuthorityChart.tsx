@@ -1,25 +1,15 @@
 "use client"
 
+import { useEffect, useState } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer, Tooltip } from "recharts"
 import { ArrowUpRight } from "lucide-react"
 
-// Real contract values from 20 SAM.gov opportunities (in millions)
-// DHS Border: $156M, DoD UAS: $89M, GSA Cloud: $75M, GSA Energy: $67.5M, DOE: $52M, DOC: $46M
-// VA EHR: $35M, SSA: $38.9M, HHS: $31.5M, NIH: $29.6M, DOT: $28M, NASA: $25M, Interior: $23.4M
-// Education: $21.2M, EPA: $19.8M, DoD JAIRIA: $18.5M, Agriculture: $16.7M, VA Eyeglasses: $12.3M
-const data = [
-  { name: "DHS", value: 198, count: 2 }, // Border $156M + CSOC $42M
-  { name: "DoD", value: 107.5, count: 2 }, // UAS $89M + JAIRIA $18.5M
-  { name: "GSA", value: 142.5, count: 2 }, // Cloud $75M + Energy $67.5M
-  { name: "DOE", value: 52, count: 1 },
-  { name: "VA", value: 47.3, count: 2 }, // EHR $35M + Eyeglasses $12.3M
-  { name: "DOC", value: 46, count: 1 },
-  { name: "HHS", value: 31.5, count: 1 },
-  { name: "SSA", value: 38.9, count: 1 },
-  { name: "NIH", value: 29.6, count: 1 },
-  { name: "STATE", value: 94.8, count: 1 },
-]
+interface BudgetData {
+  name: string
+  value: number
+  count: number
+}
 
 const CustomTooltip = ({ active, payload, label }: any) => {
   if (active && payload && payload.length) {
@@ -42,6 +32,66 @@ const CustomTooltip = ({ active, payload, label }: any) => {
 }
 
 export function BudgetAuthorityChart() {
+  const [data, setData] = useState<BudgetData[]>([])
+  const [totalValue, setTotalValue] = useState("$0")
+
+  useEffect(() => {
+    fetch('/api/signals?type=government_contract&limit=500')
+      .then(res => res.json())
+      .then(result => {
+        const signals = result.signals || []
+        
+        // Group by agency and sum values
+        const agencyBudgets: { [key: string]: { value: number; count: number } } = {}
+        
+        signals.forEach((s: any) => {
+          const agency = s.metadata?.agency || s.companyName || 'UNKNOWN'
+          const valueStr = s.metadata?.value || '0'
+          
+          // Parse value (remove $ , M K etc)
+          let value = 0
+          if (valueStr) {
+            const cleaned = valueStr.replace(/[$,]/g, '')
+            const match = cleaned.match(/([\d.]+)\s*([MKB])?/)
+            if (match) {
+              value = parseFloat(match[1])
+              const unit = match[2]
+              if (unit === 'K') value /= 1000 // Convert to millions
+              else if (unit === 'B') value *= 1000
+              // M is already millions
+            }
+          }
+          
+          if (!agencyBudgets[agency]) {
+            agencyBudgets[agency] = { value: 0, count: 0 }
+          }
+          agencyBudgets[agency].value += value
+          agencyBudgets[agency].count += 1
+        })
+        
+        // Convert to array and sort
+        const sorted = Object.entries(agencyBudgets)
+          .map(([name, data]) => ({
+            name: name.length > 15 ? name.substring(0, 15) : name,
+            value: Math.round(data.value * 10) / 10, // Round to 1 decimal
+            count: data.count
+          }))
+          .sort((a, b) => b.value - a.value)
+          .slice(0, 10) // Top 10
+        
+        setData(sorted)
+        
+        // Calculate total
+        const total = sorted.reduce((sum, item) => sum + item.value, 0)
+        if (total >= 1000) {
+          setTotalValue(`$${(total / 1000).toFixed(2)}B`)
+        } else {
+          setTotalValue(`$${Math.round(total)}M`)
+        }
+      })
+      .catch(err => console.error('Failed to fetch budget data:', err))
+  }, [])
+
   return (
     <Card className="bg-card/50 border-border/50">
       <CardHeader className="pb-3">
@@ -51,7 +101,7 @@ export function BudgetAuthorityChart() {
             <p className="text-xs text-muted-foreground mt-1">Total opportunity value distribution</p>
           </div>
           <div className="flex items-center gap-2">
-            <span className="px-2 py-1 text-xs font-medium bg-chart-2/10 text-chart-2 rounded-md">$1.16B Total</span>
+            <span className="px-2 py-1 text-xs font-medium bg-chart-2/10 text-chart-2 rounded-md">{totalValue} Total</span>
             <button className="flex items-center gap-1 text-xs text-accent hover:text-accent/80 transition-colors">
               Details
               <ArrowUpRight className="w-3 h-3" />

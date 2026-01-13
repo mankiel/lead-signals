@@ -1,23 +1,15 @@
 "use client"
 
+import { useEffect, useState } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer, Cell, Tooltip } from "recharts"
 import { ArrowUpRight } from "lucide-react"
 
-// Real agency distribution from 20 SAM.gov opportunities
-const data = [
-  { name: "DEFENSE", value: 2, fullName: "Department of Defense" },
-  { name: "VA", value: 2, fullName: "Department of Veterans Affairs" },
-  { name: "GSA", value: 2, fullName: "General Services Administration" },
-  { name: "DHS", value: 2, fullName: "Department of Homeland Security" },
-  { name: "HHS", value: 1, fullName: "Health and Human Services" },
-  { name: "NASA", value: 1, fullName: "National Aeronautics and Space Administration" },
-  { name: "DOE", value: 1, fullName: "Department of Energy" },
-  { name: "DOT", value: 1, fullName: "Department of Transportation" },
-  { name: "NIH", value: 1, fullName: "National Institutes of Health" },
-  { name: "EPA", value: 1, fullName: "Environmental Protection Agency" },
-  { name: "OTHER", value: 6, fullName: "Other Agencies (Commerce, Interior, Agriculture, SSA, Education, State)" },
-]
+interface AgencyData {
+  name: string
+  value: number
+  fullName: string
+}
 
 const CustomTooltip = ({ active, payload }: any) => {
   if (active && payload && payload.length) {
@@ -32,6 +24,36 @@ const CustomTooltip = ({ active, payload }: any) => {
 }
 
 export function SolicitationsChart() {
+  const [data, setData] = useState<AgencyData[]>([])
+
+  useEffect(() => {
+    fetch('/api/signals?type=government_contract&limit=500')
+      .then(res => res.json())
+      .then(result => {
+        const signals = result.signals || []
+        
+        // Count by agency
+        const agencyCounts: { [key: string]: number } = {}
+        signals.forEach((s: any) => {
+          const agency = s.metadata?.agency || s.companyName || 'UNKNOWN'
+          agencyCounts[agency] = (agencyCounts[agency] || 0) + 1
+        })
+        
+        // Convert to array and sort
+        const sorted = Object.entries(agencyCounts)
+          .map(([name, value]) => ({
+            name: name.length > 15 ? name.substring(0, 15) : name,
+            fullName: name,
+            value: value as number
+          }))
+          .sort((a, b) => b.value - a.value)
+          .slice(0, 11) // Top 11
+        
+        setData(sorted)
+      })
+      .catch(err => console.error('Failed to fetch agency data:', err))
+  }, [])
+
   return (
     <Card className="bg-card/50 border-border/50">
       <CardHeader className="pb-3">

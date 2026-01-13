@@ -1,21 +1,8 @@
 "use client"
 
+import { useEffect, useState } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer, Tooltip } from "recharts"
-
-// Real deadline distribution from 20 SAM.gov opportunities
-// 0-7 days: 3 urgent (2, 4, 4 days)
-// 8-30 days: 3 (36, 39 days - NASA, VA Eyeglasses)
-// 31-60 days: 4 (45, 49, 50, 56 days)
-// 61-90 days: 5 (66, 68, 70, 79, 81, 85 days)
-// 91+ days: 5 (93, 100, 102, 107, 122, 127 days)
-const data = [
-  { name: "0-7 days", urgent: 3, soon: 0, midterm: 0, later: 0 },
-  { name: "8-30 days", urgent: 0, soon: 3, midterm: 0, later: 0 },
-  { name: "31-60 days", urgent: 0, soon: 0, midterm: 4, later: 0 },
-  { name: "61-90 days", urgent: 0, soon: 0, midterm: 5, later: 0 },
-  { name: "91+ days", urgent: 0, soon: 0, midterm: 0, later: 5 },
-]
 
 const legendItems = [
   { name: "Urgent (<7d)", color: "var(--color-chart-5)" },
@@ -38,6 +25,57 @@ const CustomTooltip = ({ active, payload, label }: any) => {
 }
 
 export function DeadlinesChart() {
+  const [data, setData] = useState([
+    { name: "0-7 days", urgent: 0, soon: 0, midterm: 0, later: 0 },
+    { name: "8-30 days", urgent: 0, soon: 0, midterm: 0, later: 0 },
+    { name: "31-60 days", urgent: 0, soon: 0, midterm: 0, later: 0 },
+    { name: "61-90 days", urgent: 0, soon: 0, midterm: 0, later: 0 },
+    { name: "91+ days", urgent: 0, soon: 0, midterm: 0, later: 0 },
+  ])
+  const [totalActive, setTotalActive] = useState(0)
+
+  useEffect(() => {
+    fetch('/api/signals?type=government_contract&limit=500')
+      .then(res => res.json())
+      .then(result => {
+        const signals = result.signals || []
+        const now = new Date()
+        
+        // Initialize buckets
+        const buckets = {
+          urgent: 0,    // 0-7 days
+          soon: 0,      // 8-30 days
+          mid1: 0,      // 31-60 days
+          mid2: 0,      // 61-90 days
+          later: 0,     // 91+ days
+        }
+        
+        signals.forEach((s: any) => {
+          if (!s.metadata?.responseDeadline) return
+          const deadline = new Date(s.metadata.responseDeadline)
+          const daysLeft = Math.ceil((deadline.getTime() - now.getTime()) / (1000 * 60 * 60 * 24))
+          
+          if (daysLeft < 0) return // Skip past deadlines
+          if (daysLeft <= 7) buckets.urgent++
+          else if (daysLeft <= 30) buckets.soon++
+          else if (daysLeft <= 60) buckets.mid1++
+          else if (daysLeft <= 90) buckets.mid2++
+          else buckets.later++
+        })
+        
+        setData([
+          { name: "0-7 days", urgent: buckets.urgent, soon: 0, midterm: 0, later: 0 },
+          { name: "8-30 days", urgent: 0, soon: buckets.soon, midterm: 0, later: 0 },
+          { name: "31-60 days", urgent: 0, soon: 0, midterm: buckets.mid1, later: 0 },
+          { name: "61-90 days", urgent: 0, soon: 0, midterm: buckets.mid2, later: 0 },
+          { name: "91+ days", urgent: 0, soon: 0, midterm: 0, later: buckets.later },
+        ])
+        
+        setTotalActive(Object.values(buckets).reduce((sum, val) => sum + val, 0))
+      })
+      .catch(err => console.error('Failed to fetch deadline data:', err))
+  }, [])
+
   return (
     <Card className="bg-card/50 border-border/50">
       <CardHeader className="pb-3">
@@ -46,7 +84,7 @@ export function DeadlinesChart() {
             <CardTitle className="text-sm font-medium text-foreground">Upcoming Deadlines</CardTitle>
             <p className="text-xs text-muted-foreground mt-1">Response deadline distribution</p>
           </div>
-          <span className="px-2 py-1 text-xs font-medium bg-accent/10 text-accent rounded-md">20 active</span>
+          <span className="px-2 py-1 text-xs font-medium bg-accent/10 text-accent rounded-md">{totalActive} active</span>
         </div>
       </CardHeader>
       <CardContent>
