@@ -5,25 +5,21 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer, Tooltip } from "recharts"
 import { ArrowUpRight } from "lucide-react"
 
-interface BudgetData {
+interface ContractData {
   name: string
   value: number
-  count: number
+  fullTitle: string
 }
 
 const CustomTooltip = ({ active, payload, label }: any) => {
   if (active && payload && payload.length) {
     const item = payload[0].payload
     return (
-      <div className="bg-popover border border-border rounded-lg px-3 py-2 shadow-lg min-w-40">
-        <p className="text-sm font-medium text-foreground mb-2">{label}</p>
+      <div className="bg-popover border border-border rounded-lg px-3 py-2 shadow-lg min-w-60 max-w-xs">
+        <p className="text-sm font-medium text-foreground mb-2">{item.fullTitle}</p>
         <div className="flex items-center justify-between gap-4 text-xs">
-          <span className="text-muted-foreground">Total Value</span>
+          <span className="text-muted-foreground">Funding Allocated</span>
           <span className="text-foreground font-medium">${item.value}M</span>
-        </div>
-        <div className="flex items-center justify-between gap-4 text-xs mt-1">
-          <span className="text-muted-foreground">Opportunities</span>
-          <span className="text-foreground font-medium">{item.count}</span>
         </div>
       </div>
     )
@@ -32,7 +28,7 @@ const CustomTooltip = ({ active, payload, label }: any) => {
 }
 
 export function BudgetAuthorityChart() {
-  const [data, setData] = useState<BudgetData[]>([])
+  const [data, setData] = useState<ContractData[]>([])
   const [totalValue, setTotalValue] = useState("$0")
 
   useEffect(() => {
@@ -41,12 +37,17 @@ export function BudgetAuthorityChart() {
       .then(result => {
         const signals = result.signals || []
         
-        // Group by agency and sum values
-        const agencyBudgets: { [key: string]: { value: number; count: number } } = {}
+        // Filter GSA contracts only
+        const gsaContracts = signals.filter((s: any) => {
+          const agency = s.metadata?.agency || s.companyName || ''
+          return agency.toUpperCase().includes('GSA') || 
+                 agency.toUpperCase().includes('GENERAL SERVICES')
+        })
         
-        signals.forEach((s: any) => {
-          const agency = s.metadata?.agency || s.companyName || 'UNKNOWN'
+        // Parse and sort by value
+        const contractsWithValues = gsaContracts.map((s: any) => {
           const valueStr = s.metadata?.value || '0'
+          const title = s.metadata?.title || s.description || 'Untitled'
           
           // Parse value (remove $ , M K etc)
           let value = 0
@@ -62,34 +63,27 @@ export function BudgetAuthorityChart() {
             }
           }
           
-          if (!agencyBudgets[agency]) {
-            agencyBudgets[agency] = { value: 0, count: 0 }
+          return {
+            name: title.length > 25 ? title.substring(0, 25) + '...' : title,
+            fullTitle: title,
+            value: Math.round(value * 10) / 10 // Round to 1 decimal
           }
-          agencyBudgets[agency].value += value
-          agencyBudgets[agency].count += 1
         })
+        .filter(c => c.value > 0) // Only contracts with values
+        .sort((a, b) => b.value - a.value)
+        .slice(0, 3) // Top 3
         
-        // Convert to array and sort
-        const sorted = Object.entries(agencyBudgets)
-          .map(([name, data]) => ({
-            name: name.length > 15 ? name.substring(0, 15) : name,
-            value: Math.round(data.value * 10) / 10, // Round to 1 decimal
-            count: data.count
-          }))
-          .sort((a, b) => b.value - a.value)
-          .slice(0, 10) // Top 10
-        
-        setData(sorted)
+        setData(contractsWithValues)
         
         // Calculate total
-        const total = sorted.reduce((sum, item) => sum + item.value, 0)
+        const total = contractsWithValues.reduce((sum, item) => sum + item.value, 0)
         if (total >= 1000) {
           setTotalValue(`$${(total / 1000).toFixed(2)}B`)
         } else {
           setTotalValue(`$${Math.round(total)}M`)
         }
       })
-      .catch(err => console.error('Failed to fetch budget data:', err))
+      .catch(err => console.error('Failed to fetch GSA contract data:', err))
   }, [])
 
   return (
@@ -97,8 +91,8 @@ export function BudgetAuthorityChart() {
       <CardHeader className="pb-3">
         <div className="flex items-center justify-between">
           <div>
-            <CardTitle className="text-sm font-medium text-foreground">Contract Value by Agency</CardTitle>
-            <p className="text-xs text-muted-foreground mt-1">Total opportunity value distribution</p>
+            <CardTitle className="text-sm font-medium text-foreground">Top 3 GSA Contracts by Value</CardTitle>
+            <p className="text-xs text-muted-foreground mt-1">Highest value contracts with funding allocated</p>
           </div>
           <div className="flex items-center gap-2">
             <span className="px-2 py-1 text-xs font-medium bg-chart-2/10 text-chart-2 rounded-md">{totalValue} Total</span>
@@ -126,7 +120,7 @@ export function BudgetAuthorityChart() {
                 axisLine={false}
                 tickLine={false}
                 tick={{ fontSize: 10, fill: "var(--color-muted-foreground)" }}
-                width={50}
+                width={100}
               />
               <Tooltip content={<CustomTooltip />} cursor={{ fill: "var(--color-muted)", opacity: 0.3 }} />
               <Bar dataKey="value" fill="var(--color-chart-2)" radius={[0, 4, 4, 0]} barSize={18} />
