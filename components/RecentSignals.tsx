@@ -86,34 +86,36 @@ export function RecentSignals() {
   return (
     <Card className="bg-card/50 border-border/50">
       <CardHeader className="pb-3">
-        <div className="flex items-center justify-between flex-wrap gap-3">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <CardTitle className="text-sm font-medium text-foreground">Recent Signals</CardTitle>
-          <div className="flex items-center gap-2">
-            <Select defaultValue="20">
-              <SelectTrigger className="w-25 h-8 text-xs bg-secondary/50 border-border">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="10">10 per page</SelectItem>
-                <SelectItem value="20">20 per page</SelectItem>
-                <SelectItem value="50">50 per page</SelectItem>
-              </SelectContent>
-            </Select>
-            <Select defaultValue="all">
-              <SelectTrigger className="w-25 h-8 text-xs bg-secondary/50 border-border">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">All Types</SelectItem>
-                <SelectItem value="contracts">Contracts</SelectItem>
-                <SelectItem value="grants">Grants</SelectItem>
-              </SelectContent>
-            </Select>
-            <div className="flex items-center gap-1">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 w-full sm:w-auto">
+            <div className="flex items-center gap-2 w-full sm:w-auto">
+              <Select defaultValue="20">
+                <SelectTrigger className="w-full sm:w-32 h-8 text-xs bg-secondary/50 border-border">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="10">10 per page</SelectItem>
+                  <SelectItem value="20">20 per page</SelectItem>
+                  <SelectItem value="50">50 per page</SelectItem>
+                </SelectContent>
+              </Select>
+              <Select defaultValue="all">
+                <SelectTrigger className="w-full sm:w-32 h-8 text-xs bg-secondary/50 border-border">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All Types</SelectItem>
+                  <SelectItem value="contracts">Contracts</SelectItem>
+                  <SelectItem value="grants">Grants</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="flex items-center gap-1 self-end sm:self-auto">
               <Button variant="ghost" size="icon" className="w-8 h-8">
                 <ChevronLeft className="w-4 h-4" />
               </Button>
-              <span className="text-xs text-muted-foreground px-2">1 of 3</span>
+              <span className="text-xs text-muted-foreground px-2 whitespace-nowrap">1 of 3</span>
               <Button variant="ghost" size="icon" className="w-8 h-8">
                 <ChevronRight className="w-4 h-4" />
               </Button>
@@ -125,21 +127,34 @@ export function RecentSignals() {
         {signals.map((signal) => (
           <div
             key={signal.id}
-            className="group border border-border rounded-lg p-4 hover:bg-secondary/30 hover:border-accent/30 transition-all cursor-pointer"
+            className="group border border-border rounded-lg p-3 sm:p-4 hover:bg-secondary/30 hover:border-accent/30 transition-all cursor-pointer"
           >
-            <div className="flex items-start gap-4">
+            <div className="flex flex-col sm:flex-row items-start gap-3 sm:gap-4">
               <div
-                className={cn("w-1 rounded-full self-stretch min-h-20", getDepartmentColor(signal.department))}
+                className={cn("hidden sm:block w-1 rounded-full self-stretch min-h-20", getDepartmentColor(signal.department))}
               />
-              <div className="flex-1 min-w-0">
-                <div className="flex items-center gap-2 flex-wrap mb-2">
-                  <span className="font-medium text-sm text-foreground">{signal.department}</span>
-                  <Badge variant="secondary" className="text-[10px] bg-secondary text-muted-foreground">
-                    {signal.type}
-                  </Badge>
+              <div className="flex-1 min-w-0 w-full">
+                <div className="flex items-start justify-between gap-2 mb-2">
+                  <div className="flex items-center gap-2 flex-wrap flex-1">
+                    <span className="font-medium text-sm text-foreground line-clamp-1">{signal.department}</span>
+                    <Badge variant="secondary" className="text-[10px] bg-secondary text-muted-foreground shrink-0">
+                      {signal.type}
+                    </Badge>
+                  </div>
+                  <div className="sm:hidden shrink-0">
+                    {signal.status === "expired" ? (
+                      <Badge className="bg-chart-5/20 text-chart-5 border-0 text-[10px]">EXPIRED</Badge>
+                    ) : signal.status === "urgent" ? (
+                      <Badge className="bg-chart-3/20 text-chart-3 border-0 text-[10px]">{signal.daysLeft}d</Badge>
+                    ) : (
+                      <Badge variant="outline" className="text-[10px] border-border text-muted-foreground">
+                        {signal.daysLeft}d
+                      </Badge>
+                    )}
+                  </div>
                 </div>
                 <p className="text-sm text-foreground/80 mb-3 line-clamp-2">{signal.title}</p>
-                <div className="flex items-center gap-4 text-xs text-muted-foreground flex-wrap">
+                <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 text-xs text-muted-foreground">
                   <span className="flex items-center gap-1">
                     <Clock className="w-3 h-3" />
                     Posted: {signal.posted}
@@ -150,8 +165,27 @@ export function RecentSignals() {
                   </a>
                   <span className="text-accent group-hover:underline">View details →</span>
                 </div>
+                <div className="sm:hidden mt-3">
+                  <div className="flex items-center justify-between text-[10px] text-muted-foreground mb-1">
+                    <span>Deadline: {signal.deadline}</span>
+                    <span>{signal.elapsed}% elapsed</span>
+                  </div>
+                  <div className="w-full bg-secondary rounded-full h-1">
+                    <div
+                      className={cn(
+                        "h-1 rounded-full transition-all",
+                        signal.status === "expired"
+                          ? "bg-chart-5"
+                          : signal.status === "urgent"
+                            ? "bg-chart-3"
+                            : "bg-chart-1",
+                      )}
+                      style={{ width: `${signal.elapsed}%` }}
+                    />
+                  </div>
+                </div>
               </div>
-              <div className="flex flex-col items-end gap-2 min-w-32">
+              <div className="hidden sm:flex flex-col items-end gap-2 min-w-32">
                 {signal.status === "expired" ? (
                   <Badge className="bg-chart-5/20 text-chart-5 border-0 text-[10px]">EXPIRED</Badge>
                 ) : signal.status === "urgent" ? (
