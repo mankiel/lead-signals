@@ -69,7 +69,7 @@ export function BudgetAuthorityChart() {
             value: Math.round(value * 10) / 10 // Round to 1 decimal
           }
         })
-        .filter(c => c.value > 0) // Only contracts with values
+        .filter((c: ContractData) => c.value > 0) // Only contracts with values
         .sort((a, b) => b.value - a.value)
         .slice(0, 3) // Top 3
         
