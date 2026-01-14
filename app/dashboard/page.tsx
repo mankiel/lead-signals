@@ -6,7 +6,6 @@ import { StatsCards } from "@/components/StatsCards"
 import { SolicitationsChart } from "@/components/SolicitationsChart"
 import { DeadlinesChart } from "@/components/DeadlinesChart"
 import { BudgetAuthorityChart } from "@/components/BudgetAuthorityChart"
-import { SubscriptionFilters } from "@/components/SubscriptionFilters"
 import { RecentSignals } from "@/components/RecentSignals"
 import { InstallPWA } from "@/components/InstallPWA"
 
@@ -31,8 +30,6 @@ export default function DashboardPage() {
           {/* Budget Chart */}
           <BudgetAuthorityChart />
 
-          {/* Subscription Filters */}
-          <SubscriptionFilters />
 
           {/* Recent Signals Feed */}
           <RecentSignals />
