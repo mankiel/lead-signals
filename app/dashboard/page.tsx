@@ -8,6 +8,7 @@ import { DeadlinesChart } from "@/components/DeadlinesChart"
 import { BudgetAuthorityChart } from "@/components/BudgetAuthorityChart"
 import { SubscriptionFilters } from "@/components/SubscriptionFilters"
 import { RecentSignals } from "@/components/RecentSignals"
+import { InstallPWA } from "@/components/InstallPWA"
 
 export default function DashboardPage() {
   return (
@@ -37,6 +38,9 @@ export default function DashboardPage() {
           <RecentSignals />
         </div>
       </main>
+      
+      {/* PWA Install Prompt */}
+      <InstallPWA />
     </div>
   )
 }
