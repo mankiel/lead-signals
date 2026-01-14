@@ -15,10 +15,10 @@ export function Header() {
   return (
     <header className="flex items-center justify-between px-6 h-14 border-b border-border bg-card/50 backdrop-blur-sm sticky top-0 z-10">
       <div className="flex items-center gap-4">
-        <h1 className="text-lg font-semibold text-foreground">Dashboard</h1>
+        <h1 className="text-lg font-semibold text-foreground">Defense Contracts</h1>
         <div className="hidden md:flex items-center gap-1 text-sm text-muted-foreground">
           <span>/</span>
-          <span>Overview</span>
+          <span>DoD Opportunities</span>
         </div>
       </div>
 

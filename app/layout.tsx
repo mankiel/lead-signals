@@ -8,8 +8,8 @@ const geist = Geist({ subsets: ["latin"], variable: "--font-sans" })
 const geistMono = Geist_Mono({ subsets: ["latin"], variable: "--font-mono" })
 
 export const metadata: Metadata = {
-  title: "Lead Signals | Real-time Lead Intelligence",
-  description: "Track and analyze lead engagement signals in real-time to close more deals faster.",
+  title: "Defense Contract Signals | DoD Opportunities",
+  description: "Track Department of Defense contract opportunities - Sources Sought, Synopsis, Presolicitation, and Combined Solicitations.",
   manifest: "/manifest.json",
   appleWebApp: {
     capable: true,
