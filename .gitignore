@@ -34,3 +34,6 @@ yarn-error.log*
 next-env.d.ts
 public/sw.js
 public/workbox-*.js
+
+# clerk configuration (can include secrets)
+/.clerk/

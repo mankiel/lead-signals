@@ -15,15 +15,20 @@ import {
   Building2,
   Bookmark,
   HelpCircle,
+  Filter,
+  X,
+  ChevronDown,
+  Layers,
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { Checkbox } from "@/components/ui/checkbox"
+import { Input } from "@/components/ui/input"
+import { ScrollArea } from "@/components/ui/scroll-area"
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible"
+import { Badge } from "@/components/ui/badge"
 
 const navItems = [
-  { icon: LayoutDashboard, label: "Overview", active: true },
-  { icon: FileText, label: "Contracts", badge: 50 },
   { icon: Zap, label: "Signals" },
-  { icon: Building2, label: "Agencies" },
-  { icon: BarChart3, label: "Analytics" },
   { icon: Bookmark, label: "Saved" },
 ]
 
@@ -33,20 +38,82 @@ const bottomNavItems = [
   { icon: Settings, label: "Settings" },
 ]
 
-export function Sidebar() {
+const officeData = [
+  { id: "dla", name: "Defense Logistics Agency", shortName: "DLA", subtiers: ["Maritime", "Aviation", "Land", "Troop Support"] },
+  { id: "army", name: "The Army", shortName: "Army", subtiers: ["Contracting Command", "Corps of Engineers", "Medical Command"] },
+  { id: "navy", name: "The Navy", shortName: "Navy", subtiers: ["Naval Sea Systems", "Naval Air Systems", "Fleet Forces"] },
+  { id: "airforce", name: "The Air Force", shortName: "Air Force", subtiers: ["Air Force Materiel", "Space Command", "Global Strike"] },
+  { id: "dodea", name: "Defense Education Activity", shortName: "DoDEA", subtiers: ["Americas", "Europe", "Pacific"] },
+  { id: "nga", name: "National Geospatial-Intelligence Agency", shortName: "NGA", subtiers: ["Analysis", "Source Operations", "Technology"] },
+  { id: "dha", name: "Defense Health Agency", shortName: "DHA", subtiers: ["Healthcare Operations", "Research & Development", "Support Services"] },
+  { id: "disa", name: "Defense Information Systems Agency", shortName: "DISA", subtiers: ["Cloud Services", "Cybersecurity", "Network Services"] },
+]
+
+interface SidebarProps {
+  selectedOffices?: string[]
+  selectedSubtiers?: string[]
+  onOfficeChange?: (offices: string[]) => void
+  onSubtierChange?: (subtiers: string[]) => void
+}
+
+export function Sidebar({ selectedOffices = [], selectedSubtiers = [], onOfficeChange, onSubtierChange }: SidebarProps = {}) {
   const [collapsed, setCollapsed] = useState(false)
-  const [activeItem, setActiveItem] = useState("Overview")
+  const [activeItem, setActiveItem] = useState("Signals")
+  const [officeSearch, setOfficeSearch] = useState("")
+  const [subtierSearch, setSubtierSearch] = useState("")
+  const [officesExpanded, setOfficesExpanded] = useState(false)
+  const [subtiersExpanded, setSubtiersExpanded] = useState(false)
 
   const handleNavClick = (label: string, e: React.MouseEvent) => {
     e.preventDefault()
     setActiveItem(label)
   }
 
+  const showFilters = true
+
+  const availableSubtiers = selectedOffices.length > 0
+    ? officeData.filter((o) => selectedOffices.includes(o.id)).flatMap((o) => o.subtiers)
+    : officeData.flatMap((o) => o.subtiers)
+
+  const uniqueSubtiers = [...new Set(availableSubtiers)]
+
+  const filteredOffices = officeData.filter((o) =>
+    o.name.toLowerCase().includes(officeSearch.toLowerCase()) ||
+    o.shortName.toLowerCase().includes(officeSearch.toLowerCase())
+  )
+
+  const filteredSubtiers = uniqueSubtiers.filter((s) => s.toLowerCase().includes(subtierSearch.toLowerCase()))
+
+  const handleOfficeToggle = (officeId: string) => {
+    if (!onOfficeChange) return
+    if (selectedOffices.includes(officeId)) {
+      onOfficeChange(selectedOffices.filter((id) => id !== officeId))
+    } else {
+      onOfficeChange([...selectedOffices, officeId])
+    }
+  }
+
+  const handleSubtierToggle = (subtier: string) => {
+    if (!onSubtierChange) return
+    if (selectedSubtiers.includes(subtier)) {
+      onSubtierChange(selectedSubtiers.filter((s) => s !== subtier))
+    } else {
+      onSubtierChange([...selectedSubtiers, subtier])
+    }
+  }
+
+  const clearAllFilters = () => {
+    if (onOfficeChange) onOfficeChange([])
+    if (onSubtierChange) onSubtierChange([])
+  }
+
+  const totalFilters = selectedOffices.length + selectedSubtiers.length
+
   return (
     <aside
       className={cn(
         "flex flex-col bg-sidebar border-r border-sidebar-border transition-all duration-300 h-screen sticky top-0",
-        collapsed ? "w-16" : "w-60",
+        collapsed ? "w-16" : "w-80",
       )}
     >
       {/* Logo */}
@@ -106,6 +173,113 @@ export function Sidebar() {
             </li>
           ))}
         </ul>
+
+        {/* Filters Section */}
+        {showFilters && !collapsed && (
+          <div className="mt-4 pt-4 border-t border-sidebar-border">
+            <div className="flex items-center justify-between px-3 mb-3">
+              <div className="flex items-center gap-2">
+                <Filter className="h-3.5 w-3.5 text-muted-foreground" />
+                <span className="text-[10px] uppercase tracking-wider text-muted-foreground font-medium">Filters</span>
+                {totalFilters > 0 && (
+                  <Badge variant="secondary" className="h-4 text-[10px]">{totalFilters}</Badge>
+                )}
+              </div>
+              {totalFilters > 0 && (
+                <button onClick={clearAllFilters} className="text-[10px] text-muted-foreground hover:text-foreground">
+                  Clear all
+                </button>
+              )}
+            </div>
+
+            <ScrollArea className="flex-1">
+              <div className="space-y-3 px-2">
+                <Collapsible open={officesExpanded} onOpenChange={setOfficesExpanded}>
+                  <CollapsibleTrigger className="flex w-full items-center justify-between rounded-md px-2 py-1.5 text-xs font-medium hover:bg-sidebar-accent/50">
+                    <div className="flex items-center gap-2">
+                      <Building2 className="h-3.5 w-3.5 text-muted-foreground" />
+                      <span>Office</span>
+                      {selectedOffices.length > 0 && (
+                        <Badge variant="outline" className="h-4 text-[10px]">{selectedOffices.length}</Badge>
+                      )}
+                    </div>
+                    <ChevronDown className={cn("h-3.5 w-3.5 text-muted-foreground transition-transform", officesExpanded && "rotate-180")} />
+                  </CollapsibleTrigger>
+                  <CollapsibleContent className="mt-2 space-y-2">
+                    <div className="relative px-2">
+                      <Search className="absolute left-3.5 top-1/2 h-3 w-3 -translate-y-1/2 text-muted-foreground" />
+                      <Input
+                        placeholder="Search..."
+                        value={officeSearch}
+                        onChange={(e) => setOfficeSearch(e.target.value)}
+                        className="h-7 pl-7 text-xs"
+                      />
+                      {officeSearch && (
+                        <button onClick={() => setOfficeSearch("")} className="absolute right-3.5 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground">
+                          <X className="h-3 w-3" />
+                        </button>
+                      )}
+                    </div>
+                    <div className="space-y-1 px-2">
+                      {filteredOffices.map((office) => (
+                        <label key={office.id} className="flex cursor-pointer items-center gap-2 rounded-md px-2 py-1.5 hover:bg-sidebar-accent/50 text-xs">
+                          <Checkbox
+                            checked={selectedOffices.includes(office.id)}
+                            onCheckedChange={() => handleOfficeToggle(office.id)}
+                          />
+                          <span className="flex-1">{office.shortName}</span>
+                        </label>
+                      ))}
+                      {filteredOffices.length === 0 && <p className="px-2 py-3 text-center text-[10px] text-muted-foreground">No offices found</p>}
+                    </div>
+                  </CollapsibleContent>
+                </Collapsible>
+
+                <Collapsible open={subtiersExpanded} onOpenChange={setSubtiersExpanded}>
+                  <CollapsibleTrigger className="flex w-full items-center justify-between rounded-md px-2 py-1.5 text-xs font-medium hover:bg-sidebar-accent/50">
+                    <div className="flex items-center gap-2">
+                      <Layers className="h-3.5 w-3.5 text-muted-foreground" />
+                      <span>Subtier</span>
+                      {selectedSubtiers.length > 0 && (
+                        <Badge variant="outline" className="h-4 text-[10px]">{selectedSubtiers.length}</Badge>
+                      )}
+                    </div>
+                    <ChevronDown className={cn("h-3.5 w-3.5 text-muted-foreground transition-transform", subtiersExpanded && "rotate-180")} />
+                  </CollapsibleTrigger>
+                  <CollapsibleContent className="mt-2 space-y-2">
+                    <div className="relative px-2">
+                      <Search className="absolute left-3.5 top-1/2 h-3 w-3 -translate-y-1/2 text-muted-foreground" />
+                      <Input
+                        placeholder="Search..."
+                        value={subtierSearch}
+                        onChange={(e) => setSubtierSearch(e.target.value)}
+                        className="h-7 pl-7 text-xs"
+                      />
+                      {subtierSearch && (
+                        <button onClick={() => setSubtierSearch("")} className="absolute right-3.5 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground">
+                          <X className="h-3 w-3" />
+                        </button>
+                      )}
+                    </div>
+                    <div className="space-y-1 px-2">
+                      {filteredSubtiers.map((subtier) => (
+                        <label key={subtier} className="flex cursor-pointer items-start gap-2 rounded-md px-2 py-1.5 hover:bg-sidebar-accent/50 text-xs">
+                          <Checkbox
+                            checked={selectedSubtiers.includes(subtier)}
+                            onCheckedChange={() => handleSubtierToggle(subtier)}
+                            className="mt-0.5"
+                          />
+                          <span className="flex-1 break-words whitespace-normal leading-tight">{subtier}</span>
+                        </label>
+                      ))}
+                      {filteredSubtiers.length === 0 && <p className="px-2 py-3 text-center text-[10px] text-muted-foreground">No subtiers found</p>}
+                    </div>
+                  </CollapsibleContent>
+                </Collapsible>
+              </div>
+            </ScrollArea>
+          </div>
+        )}
       </nav>
 
       {/* Bottom Navigation */}
