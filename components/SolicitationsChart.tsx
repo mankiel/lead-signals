@@ -1,174 +1,221 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer, Cell, Tooltip } from "recharts"
-import { ArrowUpRight } from "lucide-react"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer, Cell, Tooltip, LabelList } from "recharts"
+import { ExternalLink, ChevronDown, ChevronUp } from "lucide-react"
+import { Button } from "@/components/ui/button"
 
 interface AgencyData {
   name: string
+  shortName: string
   value: number
   fullName: string
+  maritime: number
+  aviation: number
+  other: number
   isHighlighted?: boolean
-  isSubItem?: boolean
-  indent?: number
 }
 
 const CustomTooltip = ({ active, payload }: any) => {
-  if (active && payload && payload.length) {
-    return (
-      <div className="bg-popover border border-border rounded-lg px-3 py-2 shadow-lg">
-        <p className="text-sm font-medium text-foreground">{payload[0].payload.fullName}</p>
-        <p className="text-xs text-muted-foreground">{payload[0].value} solicitations</p>
-      </div>
-    )
-  }
-  return null
-}
+  if (!active || !payload?.length) return null
+  const item = payload[0].payload
 
-const CustomYAxisTick = ({ x, y, payload }: any) => {
-  const entry = payload.value
-  const isSubItem = entry.isSubItem || false
-  
   return (
-    <g transform={`translate(${x},${y})`}>
-      <text
-        x={isSubItem ? 20 : 0}
-        y={0}
-        dy={4}
-        textAnchor="start"
-        fill="var(--color-muted-foreground)"
-        fontSize={isSubItem ? 9 : 10}
-        opacity={isSubItem ? 0.8 : 1}
-      >
-        {isSubItem ? '└ ' : ''}{entry}
-      </text>
-    </g>
+    <div className="rounded-lg border border-border/50 bg-card p-3 shadow-xl">
+      <p className="mb-2 font-medium text-card-foreground">{item.fullName}</p>
+      <div className="space-y-1.5 text-sm">
+        <div className="flex items-center justify-between gap-8">
+          <span className="text-muted-foreground">Total Solicitations</span>
+          <span className="font-mono font-semibold text-card-foreground">{item.value.toLocaleString()}</span>
+        </div>
+        <div className="my-2 h-px bg-border" />
+        <div className="flex items-center justify-between gap-8">
+          <div className="flex items-center gap-2">
+            <div className="h-2.5 w-2.5 rounded-sm bg-[#22d3ee]" />
+            <span className="text-muted-foreground">Maritime</span>
+          </div>
+          <span className="font-mono text-card-foreground">{item.maritime.toLocaleString()}</span>
+        </div>
+        <div className="flex items-center justify-between gap-8">
+          <div className="flex items-center gap-2">
+            <div className="h-2.5 w-2.5 rounded-sm bg-[#a78bfa]" />
+            <span className="text-muted-foreground">Aviation</span>
+          </div>
+          <span className="font-mono text-card-foreground">{item.aviation.toLocaleString()}</span>
+        </div>
+        <div className="flex items-center justify-between gap-8">
+          <div className="flex items-center gap-2">
+            <div className="h-2.5 w-2.5 rounded-sm bg-[#64748b]" />
+            <span className="text-muted-foreground">Other</span>
+          </div>
+          <span className="font-mono text-card-foreground">{item.other.toLocaleString()}</span>
+        </div>
+      </div>
+    </div>
   )
 }
 
 export function SolicitationsChart() {
   const [data, setData] = useState<AgencyData[]>([])
-
+  const [showBreakdown, setShowBreakdown] = useState(false)
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null)
+  
   useEffect(() => {
     fetch('/api/signals?type=government_contract&limit=500')
       .then(res => res.json())
       .then(result => {
         const signals = result.signals || []
         
-        // Count by subtier and track DLA offices
-        const subtierCounts: { [key: string]: number } = {}
-        const dlaOfficeCounts: { [key: string]: number } = {}
+        // Count by subtier and track breakdown by office type
+        const subtierData: { [key: string]: { total: number; maritime: number; aviation: number; other: number } } = {}
         
         signals.forEach((s: any) => {
           const subtier = s.metadata?.subtier || s.metadata?.office || s.metadata?.agency || 'Unknown Subtier'
-          subtierCounts[subtier] = (subtierCounts[subtier] || 0) + 1
+          const office = (s.metadata?.office || '').toLowerCase()
           
-          // Track DLA sub-offices
-          if (subtier === 'Defense Logistics Agency') {
-            const office = s.metadata?.office
-            if (office && office !== 'Defense Logistics Agency') {
-              dlaOfficeCounts[office] = (dlaOfficeCounts[office] || 0) + 1
-            }
+          if (!subtierData[subtier]) {
+            subtierData[subtier] = { total: 0, maritime: 0, aviation: 0, other: 0 }
+          }
+          
+          subtierData[subtier].total += 1
+          
+          // Categorize by office type
+          if (office.includes('maritime') || office.includes('navy')) {
+            subtierData[subtier].maritime += 1
+          } else if (office.includes('aviation') || office.includes('air')) {
+            subtierData[subtier].aviation += 1
+          } else {
+            subtierData[subtier].other += 1
           }
         })
         
-        // Get top subtiers excluding DLA (we'll add it specially)
-        const topSubtiers = Object.entries(subtierCounts)
-          .filter(([name]) => name !== 'Defense Logistics Agency')
-          .sort((a, b) => b[1] - a[1])
-          .slice(0, 8)
-        
-        // Build hierarchical data
-        const hierarchicalData: AgencyData[] = []
-        
-        // Add DLA total first if it exists
-        const dlaTotal = subtierCounts['Defense Logistics Agency']
-        if (dlaTotal) {
-          hierarchicalData.push({
-            name: 'Defense Logistics Agency',
-            fullName: 'Defense Logistics Agency',
-            value: dlaTotal,
-            isHighlighted: true,
-            isSubItem: false,
-            indent: 0
-          })
-          
-          // Add DLA sub-offices
-          const dlaOffices = Object.entries(dlaOfficeCounts)
-            .sort((a, b) => b[1] - a[1])
-            .slice(0, 5)
-          
-          dlaOffices.forEach(([office, count]) => {
-            const displayName = office.replace('Defense Logistics Agency ', '')
-              .replace('DLA ', '')
-            hierarchicalData.push({
-              name: displayName.length > 25 ? displayName.substring(0, 25) + '...' : displayName,
-              fullName: `DLA - ${displayName}`,
-              value: count,
-              isSubItem: true,
-              indent: 20
-            })
-          })
-        }
-        
-        // Add other top agencies
-        topSubtiers.forEach(([name, value]) => {
-          hierarchicalData.push({
+        // Convert to array and sort
+        const formattedData = Object.entries(subtierData)
+          .map(([name, counts]) => ({
             name: name.length > 30 ? name.substring(0, 30) + '...' : name,
+            shortName: name.replace('Defense Logistics Agency', 'DLA')
+              .replace('The Army', 'Army')
+              .replace('The Navy', 'Navy')
+              .replace('The Air Force', 'Air Force')
+              .substring(0, 20),
             fullName: name,
-            value: value as number,
-            isHighlighted: name.toLowerCase().includes('maritime'),
-            isSubItem: false,
-            indent: 0
-          })
-        })
+            value: counts.total,
+            maritime: counts.maritime,
+            aviation: counts.aviation,
+            other: counts.other,
+            isHighlighted: name.toLowerCase().includes('defense logistics')
+          }))
+          .sort((a, b) => b.value - a.value)
+          .slice(0, 10)
         
-        setData(hierarchicalData)
-      })
-      .catch(err => console.error('Failed to fetch agency data:', err))
+        setData(formattedData)
   }, [])
 
+  const maxValue = Math.max(...data.map((d) => d.value), 1)
+
   return (
-    <Card className="bg-card/50 border-border/50">
-      <CardHeader className="pb-3">
-        <div className="flex items-center justify-between">
-          <div>
-            <CardTitle className="text-sm font-medium text-foreground">Active Solicitations by Subtier</CardTitle>
-            <p className="text-xs text-muted-foreground mt-1">Defense Logistics Agency with Maritime, Aviation breakdown</p>
-          </div>
-          <button className="flex items-center gap-1 text-xs text-accent hover:text-accent/80 transition-colors">
-            View all
-            <ArrowUpRight className="w-3 h-3" />
-          </button>
+    <Card className="border-border/50 bg-card/50">
+      <CardHeader className="flex flex-row items-start justify-between pb-2">
+        <div className="space-y-1">
+          <CardTitle className="text-lg font-semibold text-foreground">Active Solicitations by Subtier</CardTitle>
+          <CardDescription className="text-muted-foreground">
+            Defense Logistics Agency with Maritime, Aviation breakdown
+          </CardDescription>
         </div>
+        <Button variant="link" className="h-auto p-0 text-sm text-muted-foreground hover:text-foreground">
+          View all
+          <ExternalLink className="ml-1 h-3.5 w-3.5" />
+        </Button>
       </CardHeader>
       <CardContent>
-        <div className="h-96">
+        <div className="mb-4 flex flex-wrap items-center gap-4 text-xs">
+          <button
+            onClick={() => setShowBreakdown(!showBreakdown)}
+            className="flex items-center gap-1.5 text-muted-foreground transition-colors hover:text-foreground"
+          >
+            {showBreakdown ? <ChevronUp className="h-3.5 w-3.5" /> : <ChevronDown className="h-3.5 w-3.5" />}
+            <span>{showBreakdown ? "Hide" : "Show"} breakdown</span>
+          </button>
+          {showBreakdown && (
+            <div className="flex items-center gap-4">
+              <div className="flex items-center gap-1.5">
+                <div className="h-2.5 w-2.5 rounded-sm bg-[#22d3ee]" />
+                <span className="text-muted-foreground">Maritime</span>
+              </div>
+              <div className="flex items-center gap-1.5">
+                <div className="h-2.5 w-2.5 rounded-sm bg-[#a78bfa]" />
+                <span className="text-muted-foreground">Aviation</span>
+              </div>
+              <div className="flex items-center gap-1.5">
+                <div className="h-2.5 w-2.5 rounded-sm bg-[#64748b]" />
+                <span className="text-muted-foreground">Other</span>
+              </div>
+            </div>
+          )}
+        </div>
+
+        <div className="h-[420px] w-full">
           <ResponsiveContainer width="100%" height="100%">
-            <BarChart data={data} layout="vertical" margin={{ top: 0, right: 20, left: 0, bottom: 0 }}>
-              <XAxis type="number" hide />
+            <BarChart data={data} layout="vertical" margin={{ top: 0, right: 60, bottom: 0, left: 0 }} barCategoryGap="20%">
+              <XAxis type="number" hide domain={[0, maxValue * 1.1]} />
               <YAxis
                 type="category"
                 dataKey="name"
                 axisLine={false}
                 tickLine={false}
-                tick={{ fontSize: 10, fill: "var(--color-muted-foreground)" }}
-                width={150}
+                width={200}
+                tick={({ x, y, payload }) => {
+                  const item = data.find((d) => d.name === payload.value)
+                  const index = data.findIndex((d) => d.name === payload.value)
+                  const isHovered = hoveredIndex === index
+                  return (
+                    <g transform={`translate(${x},${y})`}>
+                      <text
+                        x={-8}
+                        y={0}
+                        dy={4}
+                        textAnchor="end"
+                        className={`text-xs transition-colors ${isHovered ? "fill-foreground" : "fill-muted-foreground"}`}
+                        style={{ fontSize: "11px" }}
+                      >
+                        {item?.shortName || payload.value}
+                      </text>
+                    </g>
+                  )
+                }}
               />
-              <Tooltip content={<CustomTooltip />} cursor={{ fill: "var(--color-muted)", opacity: 0.3 }} />
-              <Bar dataKey="value" radius={[0, 4, 4, 0]}>
-                {data.map((entry, index) => (
-                  <Cell
-                    key={`cell-${index}`}
-                    fill={entry.isHighlighted ? "var(--color-chart-3)" : 
-                          entry.isSubItem ? "var(--color-chart-2)" : "var(--color-chart-1)"}
-                    fillOpacity={entry.isSubItem ? 0.7 : (entry.isHighlighted ? 0.95 : 0.9)}
-                  />
-                ))}
-              </Bar>
+              <Tooltip content={<CustomTooltip />} cursor={{ fill: "rgba(255,255,255,0.05)", radius: 4 }} />
+
+              {showBreakdown ? (
+                <>
+                  <Bar dataKey="maritime" stackId="a" fill="#22d3ee" radius={[4, 0, 0, 4]} onMouseEnter={(_, index) => setHoveredIndex(index)} onMouseLeave={() => setHoveredIndex(null)} />
+                  <Bar dataKey="aviation" stackId="a" fill="#a78bfa" onMouseEnter={(_, index) => setHoveredIndex(index)} onMouseLeave={() => setHoveredIndex(null)} />
+                  <Bar dataKey="other" stackId="a" fill="#64748b" radius={[0, 4, 4, 0]} onMouseEnter={(_, index) => setHoveredIndex(index)} onMouseLeave={() => setHoveredIndex(null)}>
+                    <LabelList dataKey="value" position="right" offset={8} className="fill-muted-foreground text-xs" formatter={(value: number) => value.toLocaleString()} />
+                  </Bar>
+                </>
+              ) : (
+                <Bar dataKey="value" radius={[4, 4, 4, 4]} onMouseEnter={(_, index) => setHoveredIndex(index)} onMouseLeave={() => setHoveredIndex(null)}>
+                  {data.map((entry, index) => {
+                    const opacity = 1 - index * 0.08
+                    const isHovered = hoveredIndex === index
+                    return <Cell key={`cell-${index}`} fill={isHovered ? "#6ba3f8" : "#4f8ff7"} fillOpacity={isHovered ? 1 : opacity} style={{ transition: "all 0.2s ease" }} />
+                  })}
+                  <LabelList dataKey="value" position="right" offset={8} className="fill-muted-foreground text-xs" formatter={(value: number) => value.toLocaleString()} />
+                </Bar>
+              )}
             </BarChart>
           </ResponsiveContainer>
+        </div>
+
+        <div className="mt-4 flex items-center justify-between border-t border-border/50 pt-4 text-xs">
+          <span className="text-muted-foreground">
+            Total: <span className="font-medium text-foreground">{data.reduce((acc, d) => acc + d.value, 0).toLocaleString()}</span> solicitations
+          </span>
+          <span className="text-muted-foreground">
+            Across <span className="font-medium text-foreground">{data.length}</span> subtiers
+          </span>
         </div>
       </CardContent>
     </Card>
