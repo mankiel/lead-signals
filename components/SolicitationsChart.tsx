@@ -32,11 +32,11 @@ export function SolicitationsChart() {
       .then(result => {
         const signals = result.signals || []
         
-        // Count by agency
+        // Count by subtier
         const subtierCounts: { [key: string]: number } = {}
         signals.forEach((s: any) => {
           const subtier = s.metadata?.subtierAgency || s.metadata?.office || s.metadata?.agency || 'Unknown Subtier'
-          subtierCounts[subtier] = (agencyCounts[agency] || 0) + 1
+          subtierCounts[subtier] = (subtierCounts[subtier] || 0) + 1
         })
         
         // Convert to array and sort
