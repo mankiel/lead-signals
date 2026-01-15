@@ -170,7 +170,9 @@ async function main() {
           title: 'DARPA - Next Generation AI Research',
           postedDate: '2025-12-15',
           responseDeadline: '2026-02-28',
-          agency: 'Department of Defense'
+          agency: 'Department of Defense',
+          subtier: 'Defense Advanced Research Projects Agency',
+          office: 'Defense Logistics Agency'
         }
       },
       {
@@ -183,7 +185,9 @@ async function main() {
           title: 'Cloud Infrastructure and DevSecOps',
           postedDate: '2025-12-20',
           responseDeadline: '2026-03-15',
-          agency: 'General Services Administration'
+          agency: 'General Services Administration',
+          subtier: 'Federal Acquisition Service',
+          office: 'Defense Logistics Agency'
         }
       },
       {
@@ -196,7 +200,9 @@ async function main() {
           title: 'Electronic Health Record Modernization',
           postedDate: '2025-12-18',
           responseDeadline: '2026-02-15',
-          agency: 'Department of Veterans Affairs'
+          agency: 'Department of Veterans Affairs',
+          subtier: 'Veterans Health Administration',
+          office: 'The Army'
         }
       }
     ]

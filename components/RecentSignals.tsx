@@ -75,10 +75,16 @@ export function RecentSignals({ selectedOffices = [], selectedSubtiers = [] }: R
         
         // Apply filters
         if (selectedSubtiers.length > 0) {
-          filteredSignals = filteredSignals.filter((s: any) => s.metadata?.subtier && selectedSubtiers.includes(s.metadata.subtier))
+          filteredSignals = filteredSignals.filter((s: any) => 
+            (s.metadata?.subtier && selectedSubtiers.includes(s.metadata.subtier)) ||
+            (s.metadata?.agency && selectedSubtiers.includes(s.metadata.agency))
+          )
         }
         if (selectedOfficeNames.length > 0) {
-          filteredSignals = filteredSignals.filter((s: any) => s.metadata?.office && selectedOfficeNames.includes(s.metadata.office))
+          filteredSignals = filteredSignals.filter((s: any) => 
+            (s.metadata?.office && selectedOfficeNames.includes(s.metadata.office)) ||
+            (s.metadata?.agency && selectedOfficeNames.some(name => s.metadata?.agency?.includes(name)))
+          )
         }
         
         setSignals(filteredSignals)

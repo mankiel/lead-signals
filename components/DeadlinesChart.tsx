@@ -61,10 +61,16 @@ export function DeadlinesChart({ selectedOffices = [], selectedSubtiers = [] }: 
         
         // Apply filters
         if (selectedSubtiers.length > 0) {
-          signals = signals.filter((s: any) => s.metadata?.subtier && selectedSubtiers.includes(s.metadata.subtier))
+          signals = signals.filter((s: any) => 
+            (s.metadata?.subtier && selectedSubtiers.includes(s.metadata.subtier)) ||
+            (s.metadata?.agency && selectedSubtiers.includes(s.metadata.agency))
+          )
         }
         if (selectedOfficeNames.length > 0) {
-          signals = signals.filter((s: any) => s.metadata?.office && selectedOfficeNames.includes(s.metadata.office))
+          signals = signals.filter((s: any) => 
+            (s.metadata?.office && selectedOfficeNames.includes(s.metadata.office)) ||
+            (s.metadata?.agency && selectedOfficeNames.some(name => s.metadata?.agency?.includes(name)))
+          )
         }
         
         const now = new Date()
