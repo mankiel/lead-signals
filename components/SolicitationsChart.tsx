@@ -89,6 +89,9 @@ export function SolicitationsChart({ selectedOffices = [], selectedSubtiers = []
         if (selectedOfficeNames.length > 0) {
           signals = signals.filter((s: any) =>
             s.metadata?.office && selectedOfficeNames.includes(s.metadata.office)
+          )
+        }
+        
         // Count by subtier and track breakdown by office type
         const subtierData: { [key: string]: { 
           total: number; 
