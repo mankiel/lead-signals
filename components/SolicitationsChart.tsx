@@ -115,9 +115,9 @@ export function SolicitationsChart() {
           }))
           .sort((a, b) => b.value - a.value)
         
-        // Take top 7 and combine rest into "Other"
-        const topSubtiers = allSubtiers.slice(0, 7)
-        const remainingSubtiers = allSubtiers.slice(7)
+        // Take top 4 and combine rest into "Other"
+        const topSubtiers = allSubtiers.slice(0, 4)
+        const remainingSubtiers = allSubtiers.slice(4)
         
         const formattedData = [...topSubtiers]
         
