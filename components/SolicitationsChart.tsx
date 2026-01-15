@@ -110,6 +110,8 @@ export function SolicitationsChart() {
           .slice(0, 10)
         
         setData(formattedData)
+      })
+      .catch(err => console.error('Failed to fetch agency data:', err))
   }, [])
 
   const maxValue = Math.max(...data.map((d) => d.value), 1)
