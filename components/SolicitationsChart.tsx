@@ -33,21 +33,21 @@ export function SolicitationsChart() {
         const signals = result.signals || []
         
         // Count by agency
-        const agencyCounts: { [key: string]: number } = {}
+        const subtierCounts: { [key: string]: number } = {}
         signals.forEach((s: any) => {
-          const agency = s.metadata?.agency || s.companyName || 'UNKNOWN'
-          agencyCounts[agency] = (agencyCounts[agency] || 0) + 1
+          const subtier = s.metadata?.subtierAgency || s.metadata?.office || s.metadata?.agency || 'Unknown Subtier'
+          subtierCounts[subtier] = (agencyCounts[agency] || 0) + 1
         })
         
         // Convert to array and sort
-        const sorted = Object.entries(agencyCounts)
+        const sorted = Object.entries(subtierCounts)
           .map(([name, value]) => ({
-            name: name.length > 15 ? name.substring(0, 15) : name,
+            name: name.length > 20 ? name.substring(0, 20) + '...' : name,
             fullName: name,
             value: value as number
           }))
           .sort((a, b) => b.value - a.value)
-          .slice(0, 3) // Top 3
+          .slice(0, 5) // Top 3
         
         setData(sorted)
       })
@@ -59,8 +59,8 @@ export function SolicitationsChart() {
       <CardHeader className="pb-3">
         <div className="flex items-center justify-between">
           <div>
-            <CardTitle className="text-sm font-medium text-foreground">Active Solicitations by Agency</CardTitle>
-            <p className="text-xs text-muted-foreground mt-1">Top 3 agencies with active opportunities</p>
+            <CardTitle className="text-sm font-medium text-foreground">Active Solicitations by Subtier</CardTitle>
+            <p className="text-xs text-muted-foreground mt-1">Top 5 subtier agencies with active opportunities</p>
           </div>
           <button className="flex items-center gap-1 text-xs text-accent hover:text-accent/80 transition-colors">
             View all
@@ -78,16 +78,16 @@ export function SolicitationsChart() {
                 dataKey="name"
                 axisLine={false}
                 tickLine={false}
-                tick={{ fontSize: 11, fill: "var(--color-muted-foreground)" }}
-                width={70}
+                tick={{ fontSize: 10, fill: "var(--color-muted-foreground)" }}
+                width={100}
               />
               <Tooltip content={<CustomTooltip />} cursor={{ fill: "var(--color-muted)", opacity: 0.3 }} />
-              <Bar dataKey="value" radius={[0, 4, 4, 0]} barSize={14}>
+              <Bar dataKey="value" radius={[0, 4, 4, 0]} barSize={12}>
                 {data.map((_, index) => (
                   <Cell
                     key={`cell-${index}`}
                     fill="var(--color-chart-1)"
-                    fillOpacity={1 - index * 0.07}
+                    fillOpacity={1 - index * 0.1}
                   />
                 ))}
               </Bar>
