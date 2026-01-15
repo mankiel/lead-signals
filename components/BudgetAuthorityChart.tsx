@@ -49,8 +49,18 @@ export function BudgetAuthorityChart() {
         
         // Get all contracts with values and sort by value
         const allContractsWithValues = signals.map((s: any) => {
-          const valueStr = s.metadata?.value || '0'
-          const title = s.metadata?.title || s.description || 'Untitled'
+          // Try to get value from metadata.value or extract from description
+          let valueStr = s.metadata?.value || ''
+          if (!valueStr && s.description) {
+            // Extract value from description like "Value: $50M-$100M"
+            const valueMatch = s.description.match(/Value:\s*\$?([\d.]+[MKB]?)(?:-\$?([\d.]+[MKB]?))?/i)
+            if (valueMatch) {
+              // If range, use the higher value
+              valueStr = valueMatch[2] || valueMatch[1]
+            }
+          }
+          
+          const title = s.metadata?.title || s.description?.split('|')[0]?.trim() || 'Untitled'
           const agency = s.metadata?.agency || s.companyName || 'Unknown'
           
           // Parse value (remove $ , M K etc)
