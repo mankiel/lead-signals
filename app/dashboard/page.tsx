@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { Sidebar } from "@/components/Sidebar"
+import { FilterBar } from "@/components/FilterBar"
 import { Header } from "@/components/Header"
 import { StatsCards } from "@/components/StatsCards"
 import { DeadlinesChart } from "@/components/DeadlinesChart"
@@ -13,18 +13,16 @@ import { InstallPWA } from "@/components/InstallPWA"
 export default function DashboardPage() {
   const [selectedOffices, setSelectedOffices] = useState<string[]>([])
   const [selectedSubtiers, setSelectedSubtiers] = useState<string[]>([])
-
+  
   return (
-    <div className="flex min-h-screen bg-background">
-      <Sidebar 
-        selectedOffices={selectedOffices}
-        selectedSubtiers={selectedSubtiers}
-        onOfficeChange={setSelectedOffices}
+    <div className="flex flex-col min-h-screen bg-background">
+      <Header />
+      
+      <FilterBar 
         onSubtierChange={setSelectedSubtiers}
       />
       
       <main className="flex-1 overflow-auto">
-        <Header />
         
         <div className="p-6 space-y-4">
           {/* Stats Overview */}
