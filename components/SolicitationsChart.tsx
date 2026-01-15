@@ -194,7 +194,7 @@ export function SolicitationsChart() {
                   <Bar dataKey="maritime" stackId="a" fill="#22d3ee" radius={[4, 0, 0, 4]} onMouseEnter={(_, index) => setHoveredIndex(index)} onMouseLeave={() => setHoveredIndex(null)} />
                   <Bar dataKey="aviation" stackId="a" fill="#a78bfa" onMouseEnter={(_, index) => setHoveredIndex(index)} onMouseLeave={() => setHoveredIndex(null)} />
                   <Bar dataKey="other" stackId="a" fill="#64748b" radius={[0, 4, 4, 0]} onMouseEnter={(_, index) => setHoveredIndex(index)} onMouseLeave={() => setHoveredIndex(null)}>
-                    <LabelList dataKey="value" position="right" offset={8} className="fill-muted-foreground text-xs" formatter={(value: number) => value.toLocaleString()} />
+                    <LabelList dataKey="value" position="right" offset={8} className="fill-muted-foreground text-xs" formatter={(value) => typeof value === 'number' ? value.toLocaleString() : ''} />
                   </Bar>
                 </>
               ) : (
@@ -204,7 +204,7 @@ export function SolicitationsChart() {
                     const isHovered = hoveredIndex === index
                     return <Cell key={`cell-${index}`} fill={isHovered ? "#6ba3f8" : "#4f8ff7"} fillOpacity={isHovered ? 1 : opacity} style={{ transition: "all 0.2s ease" }} />
                   })}
-                  <LabelList dataKey="value" position="right" offset={8} className="fill-muted-foreground text-xs" formatter={(value: number) => value.toLocaleString()} />
+                  <LabelList dataKey="value" position="right" offset={8} className="fill-muted-foreground text-xs" formatter={(value) => typeof value === 'number' ? value.toLocaleString() : ''} />
                 </Bar>
               )}
             </BarChart>
