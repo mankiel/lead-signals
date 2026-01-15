@@ -15,24 +15,20 @@ export async function GET(req: NextRequest) {
     const signalType = searchParams.get('type')
     const limit = parseInt(searchParams.get('limit') || '50')
     
-    // Filter for Defense only and specific solicitation types
+    // Filter for specific solicitation types
     const allowedTypes = [
+      'Solicitation',
       'Sources Sought',
       'Synopsis',
       'Presolicitation', 
-      'Combined Synopsis/Solicitation'
+      'Combined Synopsis/Solicitation',
+      'Special Notice'
     ]
     
     const signals = await prisma.leadSignal.findMany({
       where: {
         AND: [
           signalType ? { signalType } : {},
-          {
-            OR: [
-              { companyName: { contains: 'DEFENSE', mode: 'insensitive' } },
-              { metadata: { path: ['agency'], string_contains: 'DEFENSE' } }
-            ]
-          },
           {
             OR: allowedTypes.map(type => ({
               metadata: { path: ['contractType'], string_contains: type }
