@@ -95,7 +95,7 @@ export function SolicitationsChart() {
         })
         
         // Convert to array and sort
-        const formattedData = Object.entries(subtierData)
+        const allSubtiers = Object.entries(subtierData)
           .map(([name, counts]) => ({
             name: name.length > 30 ? name.substring(0, 30) + '...' : name,
             shortName: name.replace('Defense Logistics Agency', 'DLA')
@@ -114,7 +114,42 @@ export function SolicitationsChart() {
               .sort((a, b) => b.count - a.count)
           }))
           .sort((a, b) => b.value - a.value)
-          .slice(0, 10)
+        
+        // Take top 7 and combine rest into "Other"
+        const topSubtiers = allSubtiers.slice(0, 7)
+        const remainingSubtiers = allSubtiers.slice(7)
+        
+        const formattedData = [...topSubtiers]
+        
+        // Add "Other" category if there are remaining subtiers
+        if (remainingSubtiers.length > 0) {
+          const otherTotal = remainingSubtiers.reduce((sum, s) => sum + s.value, 0)
+          const otherMaritime = remainingSubtiers.reduce((sum, s) => sum + s.maritime, 0)
+          const otherAviation = remainingSubtiers.reduce((sum, s) => sum + s.aviation, 0)
+          const otherOther = remainingSubtiers.reduce((sum, s) => sum + s.other, 0)
+          
+          // Combine all offices from remaining subtiers
+          const combinedOffices: { [key: string]: number } = {}
+          remainingSubtiers.forEach(s => {
+            s.offices?.forEach(office => {
+              combinedOffices[office.name] = (combinedOffices[office.name] || 0) + office.count
+            })
+          })
+          
+          formattedData.push({
+            name: 'Other',
+            shortName: 'Other',
+            fullName: `Other (${remainingSubtiers.length} subtiers)`,
+            value: otherTotal,
+            maritime: otherMaritime,
+            aviation: otherAviation,
+            other: otherOther,
+            isHighlighted: false,
+            offices: Object.entries(combinedOffices)
+              .map(([name, count]) => ({ name, count }))
+              .sort((a, b) => b.count - a.count)
+          })
+        }
         
         setData(formattedData)
       })
