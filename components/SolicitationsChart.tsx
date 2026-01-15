@@ -15,6 +15,7 @@ interface AgencyData {
   aviation: number
   other: number
   isHighlighted?: boolean
+  offices?: Array<{ name: string; count: number }>
 }
 
 const CustomTooltip = ({ active, payload }: any) => {
@@ -22,13 +23,29 @@ const CustomTooltip = ({ active, payload }: any) => {
   const item = payload[0].payload
 
   return (
-    <div className="rounded-lg border border-border/50 bg-card p-3 shadow-xl">
+    <div className="rounded-lg border border-border/50 bg-card p-3 shadow-xl max-w-sm">
       <p className="mb-2 font-medium text-card-foreground">{item.fullName}</p>
       <div className="space-y-1.5 text-sm">
         <div className="flex items-center justify-between gap-8">
           <span className="text-muted-foreground">Total Solicitations</span>
           <span className="font-mono font-semibold text-card-foreground">{item.value.toLocaleString()}</span>
         </div>
+        
+        {item.offices && item.offices.length > 0 && (
+          <>
+            <div className="my-2 h-px bg-border" />
+            <div className="space-y-1">
+              <p className="text-xs font-medium text-muted-foreground mb-1.5">Top Offices:</p>
+              {item.offices.slice(0, 5).map((office: { name: string; count: number }, idx: number) => (
+                <div key={idx} className="flex items-center justify-between gap-4 text-xs">
+                  <span className="text-muted-foreground truncate">{office.name}</span>
+                  <span className="font-mono text-card-foreground whitespace-nowrap">{office.count}</span>
+                </div>
+              ))}
+            </div>
+          </>
+        )}
+        
         <div className="my-2 h-px bg-border" />
         <div className="flex items-center justify-between gap-8">
           <div className="flex items-center gap-2">
@@ -68,22 +85,32 @@ export function SolicitationsChart() {
         const signals = result.signals || []
         
         // Count by subtier and track breakdown by office type
-        const subtierData: { [key: string]: { total: number; maritime: number; aviation: number; other: number } } = {}
+        const subtierData: { [key: string]: { 
+          total: number; 
+          maritime: number; 
+          aviation: number; 
+          other: number;
+          offices: { [key: string]: number }
+        } } = {}
         
         signals.forEach((s: any) => {
           const subtier = s.metadata?.subtier || s.metadata?.office || s.metadata?.agency || 'Unknown Subtier'
-          const office = (s.metadata?.office || '').toLowerCase()
+          const office = s.metadata?.office || 'Unknown Office'
+          const officeLower = office.toLowerCase()
           
           if (!subtierData[subtier]) {
-            subtierData[subtier] = { total: 0, maritime: 0, aviation: 0, other: 0 }
+            subtierData[subtier] = { total: 0, maritime: 0, aviation: 0, other: 0, offices: {} }
           }
           
           subtierData[subtier].total += 1
           
+          // Track office counts
+          subtierData[subtier].offices[office] = (subtierData[subtier].offices[office] || 0) + 1
+          
           // Categorize by office type
-          if (office.includes('maritime') || office.includes('navy')) {
+          if (officeLower.includes('maritime') || officeLower.includes('navy')) {
             subtierData[subtier].maritime += 1
-          } else if (office.includes('aviation') || office.includes('air')) {
+          } else if (officeLower.includes('aviation') || officeLower.includes('air')) {
             subtierData[subtier].aviation += 1
           } else {
             subtierData[subtier].other += 1
@@ -104,7 +131,10 @@ export function SolicitationsChart() {
             maritime: counts.maritime,
             aviation: counts.aviation,
             other: counts.other,
-            isHighlighted: name.toLowerCase().includes('defense logistics')
+            isHighlighted: name.toLowerCase().includes('defense logistics'),
+            offices: Object.entries(counts.offices)
+              .map(([officeName, count]) => ({ name: officeName, count: count as number }))
+              .sort((a, b) => b.count - a.count)
           }))
           .sort((a, b) => b.value - a.value)
           .slice(0, 10)
