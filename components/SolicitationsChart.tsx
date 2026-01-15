@@ -66,18 +66,29 @@ export function SolicitationsChart({ selectedOffices = [], selectedSubtiers = []
       .then(result => {
         let signals = result.signals || []
         
+        // Map office IDs to full names
+        const officeMap: Record<string, string> = {
+          "dla": "Defense Logistics Agency",
+          "army": "The Army",
+          "navy": "The Navy",
+          "airforce": "The Air Force",
+          "dodea": "Defense Education Activity",
+          "nga": "National Geospatial-Intelligence Agency",
+          "dha": "Defense Health Agency",
+          "disa": "Defense Information Systems Agency"
+        }
+        
+        const selectedOfficeNames = selectedOffices.map(id => officeMap[id] || id)
+        
         // Apply filters
         if (selectedSubtiers.length > 0) {
-          signals = signals.filter((s: any) => 
+          signals = signals.filter((s: any) =>
             s.metadata?.subtier && selectedSubtiers.includes(s.metadata.subtier)
           )
         }
-        if (selectedOffices.length > 0) {
-          signals = signals.filter((s: any) => 
-            s.metadata?.office && selectedOffices.includes(s.metadata.office)
-          )
-        }
-        
+        if (selectedOfficeNames.length > 0) {
+          signals = signals.filter((s: any) =>
+            s.metadata?.office && selectedOfficeNames.includes(s.metadata.office)
         // Count by subtier and track breakdown by office type
         const subtierData: { [key: string]: { 
           total: number; 
