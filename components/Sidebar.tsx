@@ -159,16 +159,7 @@ export function Sidebar({ selectedOffices = [], selectedSubtiers = [], onOfficeC
                 )}
               >
                 <item.icon className="w-4 h-4 shrink-0" />
-                {!collapsed && (
-                  <>
-                    <span className="flex-1 text-left">{item.label}</span>
-                    {item.badge && (
-                      <span className="px-1.5 py-0.5 rounded bg-accent/20 text-accent text-[10px] font-medium">
-                        {item.badge}
-                      </span>
-                    )}
-                  </>
-                )}
+                {!collapsed && <span className="flex-1 text-left">{item.label}</span>}
               </button>
             </li>
           ))}
