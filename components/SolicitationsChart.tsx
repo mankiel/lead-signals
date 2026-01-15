@@ -35,7 +35,7 @@ export function SolicitationsChart() {
         // Count by subtier
         const subtierCounts: { [key: string]: number } = {}
         signals.forEach((s: any) => {
-          const subtier = s.metadata?.subtierAgency || s.metadata?.office || s.metadata?.agency || 'Unknown Subtier'
+          const subtier = s.metadata?.subtier || s.metadata?.office || s.metadata?.agency || 'Unknown Subtier'
           subtierCounts[subtier] = (subtierCounts[subtier] || 0) + 1
         })
         
