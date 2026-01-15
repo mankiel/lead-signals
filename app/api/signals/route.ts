@@ -61,7 +61,12 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ signals })
   } catch (error) {
     console.error('Error fetching signals:', error)
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error'
+    return NextResponse.json({ 
+      error: 'Internal server error', 
+      details: errorMessage,
+      stack: process.env.NODE_ENV === 'development' ? (error instanceof Error ? error.stack : '') : undefined
+    }, { status: 500 })
   }
 }
 
