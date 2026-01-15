@@ -44,7 +44,12 @@ const calculateDaysLeft = (deadline: string) => {
   }
 }
 
-export function RecentSignals() {
+interface RecentSignalsProps {
+  selectedOffices?: string[]
+  selectedSubtiers?: string[]
+}
+
+export function RecentSignals({ selectedOffices = [], selectedSubtiers = [] }: RecentSignalsProps) {
   const [signals, setSignals] = useState<Signal[]>([])
   const [loading, setLoading] = useState(true)
 
@@ -52,14 +57,24 @@ export function RecentSignals() {
     fetch('/api/signals?type=government_contract&limit=20')
       .then(res => res.json())
       .then(data => {
-        setSignals(data.signals || [])
+        let filteredSignals = data.signals || []
+        
+        // Apply filters
+        if (selectedSubtiers.length > 0) {
+          filteredSignals = filteredSignals.filter((s: any) => s.metadata?.subtier && selectedSubtiers.includes(s.metadata.subtier))
+        }
+        if (selectedOffices.length > 0) {
+          filteredSignals = filteredSignals.filter((s: any) => s.metadata?.office && selectedOffices.includes(s.metadata.office))
+        }
+        
+        setSignals(filteredSignals)
         setLoading(false)
       })
       .catch(err => {
         console.error('Failed to fetch signals:', err)
         setLoading(false)
       })
-  }, [])
+  }, [selectedOffices, selectedSubtiers])
 
   if (loading) {
     return (

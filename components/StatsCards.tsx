@@ -4,7 +4,12 @@ import { useEffect, useState } from "react"
 import { Card, CardContent } from "@/components/ui/card"
 import { CheckSquare, Bell, Calendar, TrendingUp, ArrowRight } from "lucide-react"
 
-export function StatsCards() {
+interface StatsCardsProps {
+  selectedOffices?: string[]
+  selectedSubtiers?: string[]
+}
+
+export function StatsCards({ selectedOffices = [], selectedSubtiers = [] }: StatsCardsProps) {
   const [stats, setStats] = useState({
     total: 0,
     totalValue: "$0",
@@ -15,7 +20,16 @@ export function StatsCards() {
     fetch('/api/signals?type=government_contract&limit=500')
       .then(res => res.json())
       .then(data => {
-        const signals = data.signals || []
+        let signals = data.signals || []
+        
+        // Apply filters
+        if (selectedSubtiers.length > 0) {
+          signals = signals.filter((s: any) => s.metadata?.subtier && selectedSubtiers.includes(s.metadata.subtier))
+        }
+        if (selectedOffices.length > 0) {
+          signals = signals.filter((s: any) => s.metadata?.office && selectedOffices.includes(s.metadata.office))
+        }
+        
         const total = signals.length
         
         // Calculate urgent (< 7 days)
@@ -34,7 +48,7 @@ export function StatsCards() {
         })
       })
       .catch(err => console.error('Failed to fetch stats:', err))
-  }, [])
+  }, [selectedOffices, selectedSubtiers])
 
   const statsData = [
     {

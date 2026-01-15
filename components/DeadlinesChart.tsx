@@ -24,7 +24,12 @@ const CustomTooltip = ({ active, payload, label }: any) => {
   return null
 }
 
-export function DeadlinesChart() {
+interface DeadlinesChartProps {
+  selectedOffices?: string[]
+  selectedSubtiers?: string[]
+}
+
+export function DeadlinesChart({ selectedOffices = [], selectedSubtiers = [] }: DeadlinesChartProps) {
   const [data, setData] = useState([
     { name: "0-7 days", urgent: 0, soon: 0, midterm: 0, later: 0 },
     { name: "8-30 days", urgent: 0, soon: 0, midterm: 0, later: 0 },
@@ -38,7 +43,16 @@ export function DeadlinesChart() {
     fetch('/api/signals?type=government_contract&limit=500')
       .then(res => res.json())
       .then(result => {
-        const signals = result.signals || []
+        let signals = result.signals || []
+        
+        // Apply filters
+        if (selectedSubtiers.length > 0) {
+          signals = signals.filter((s: any) => s.metadata?.subtier && selectedSubtiers.includes(s.metadata.subtier))
+        }
+        if (selectedOffices.length > 0) {
+          signals = signals.filter((s: any) => s.metadata?.office && selectedOffices.includes(s.metadata.office))
+        }
+        
         const now = new Date()
         
         // Initialize buckets
@@ -74,7 +88,7 @@ export function DeadlinesChart() {
         setTotalActive(Object.values(buckets).reduce((sum, val) => sum + val, 0))
       })
       .catch(err => console.error('Failed to fetch deadline data:', err))
-  }, [])
+  }, [selectedOffices, selectedSubtiers])
 
   return (
     <Card className="bg-card/50 border-border/50">

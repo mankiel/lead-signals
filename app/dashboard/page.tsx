@@ -28,12 +28,21 @@ export default function DashboardPage() {
         
         <div className="p-6 space-y-4">
           {/* Stats Overview */}
-          <StatsCards />
+          <StatsCards 
+            selectedOffices={selectedOffices}
+            selectedSubtiers={selectedSubtiers}
+          />
 
           {/* Deadlines & Budget Grid */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-            <DeadlinesChart />
-            <BudgetAuthorityChart />
+            <DeadlinesChart 
+              selectedOffices={selectedOffices}
+              selectedSubtiers={selectedSubtiers}
+            />
+            <BudgetAuthorityChart 
+              selectedOffices={selectedOffices}
+              selectedSubtiers={selectedSubtiers}
+            />
           </div>
 
           {/* Agency & Office Breakdown */}
@@ -43,7 +52,10 @@ export default function DashboardPage() {
           />
 
           {/* Recent Signals Feed */}
-          <RecentSignals />
+          <RecentSignals 
+            selectedOffices={selectedOffices}
+            selectedSubtiers={selectedSubtiers}
+          />
         </div>
       </main>
       

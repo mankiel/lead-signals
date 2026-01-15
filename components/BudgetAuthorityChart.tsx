@@ -27,7 +27,12 @@ const CustomTooltip = ({ active, payload, label }: any) => {
   return null
 }
 
-export function BudgetAuthorityChart() {
+interface BudgetAuthorityChartProps {
+  selectedOffices?: string[]
+  selectedSubtiers?: string[]
+}
+
+export function BudgetAuthorityChart({ selectedOffices = [], selectedSubtiers = [] }: BudgetAuthorityChartProps) {
   const [data, setData] = useState<ContractData[]>([])
   const [totalValue, setTotalValue] = useState("$0")
   const [loading, setLoading] = useState(true)
@@ -45,7 +50,15 @@ export function BudgetAuthorityChart() {
       })
       .then(result => {
         console.log('BudgetAuthorityChart: Received data, signals count:', result.signals?.length || 0)
-        const signals = result.signals || []
+        let signals = result.signals || []
+        
+        // Apply filters
+        if (selectedSubtiers.length > 0) {
+          signals = signals.filter((s: any) => s.metadata?.subtier && selectedSubtiers.includes(s.metadata.subtier))
+        }
+        if (selectedOffices.length > 0) {
+          signals = signals.filter((s: any) => s.metadata?.office && selectedOffices.includes(s.metadata.office))
+        }
         
         // Get all contracts with values and sort by value
         const allContractsWithValues = signals.map((s: any) => {
@@ -105,7 +118,7 @@ export function BudgetAuthorityChart() {
         setError(err.message)
         setLoading(false)
       })
-  }, [])
+  }, [selectedOffices, selectedSubtiers])
 
   return (
     <Card className="bg-card/50 border-border/50">
