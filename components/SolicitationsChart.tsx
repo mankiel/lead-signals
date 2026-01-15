@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer, Cell, Tooltip, LabelList } from "recharts"
-import { ExternalLink, ChevronDown, ChevronUp } from "lucide-react"
+import { ExternalLink, ChevronDown, ChevronUp, Filter, X } from "lucide-react"
 import { Button } from "@/components/ui/button"
 
 interface AgencyData {
@@ -54,12 +54,42 @@ export function SolicitationsChart() {
   const [data, setData] = useState<AgencyData[]>([])
   const [showBreakdown, setShowBreakdown] = useState(false)
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null)
+  const [showFilters, setShowFilters] = useState(false)
+  const [selectedSubtier, setSelectedSubtier] = useState<string>('')
+  const [selectedOffice, setSelectedOffice] = useState<string>('')
+  const [allSubtiers, setAllSubtiers] = useState<string[]>([])
+  const [allOffices, setAllOffices] = useState<string[]>([])
   
   useEffect(() => {
     fetch('/api/signals?type=government_contract&limit=500')
       .then(res => res.json())
       .then(result => {
         const signals = result.signals || []
+        
+        // Collect all unique subtiers and offices for filters
+        const uniqueSubtiers = new Set<string>()
+        const uniqueOffices = new Set<string>()
+        
+        signals.forEach((s: any) => {
+          const subtier = s.metadata?.subtier || s.metadata?.office || s.metadata?.agency || 'Unknown Subtier'
+          const office = s.metadata?.office || 'Unknown Office'
+          uniqueSubtiers.add(subtier)
+          uniqueOffices.add(office)
+        })
+        
+        setAllSubtiers(Array.from(uniqueSubtiers).sort())
+        setAllOffices(Array.from(uniqueOffices).sort())
+        
+        // Apply filters
+        const filteredSignals = signals.filter((s: any) => {
+          const subtier = s.metadata?.subtier || s.metadata?.office || s.metadata?.agency || 'Unknown Subtier'
+          const office = s.metadata?.office || 'Unknown Office'
+          
+          if (selectedSubtier && subtier !== selectedSubtier) return false
+          if (selectedOffice && office !== selectedOffice) return false
+          
+          return true
+        })
         
         // Count by subtier and track breakdown by office type
         const subtierData: { [key: string]: { 
@@ -70,7 +100,7 @@ export function SolicitationsChart() {
           offices: { [key: string]: number }
         } } = {}
         
-        signals.forEach((s: any) => {
+        filteredSignals.forEach((s: any) => {
           const subtier = s.metadata?.subtier || s.metadata?.office || s.metadata?.agency || 'Unknown Subtier'
           const office = s.metadata?.office || 'Unknown Office'
           const officeLower = office.toLowerCase()
@@ -154,7 +184,7 @@ export function SolicitationsChart() {
         setData(formattedData)
       })
       .catch(err => console.error('Failed to fetch agency data:', err))
-  }, [])
+  }, [selectedSubtier, selectedOffice])
 
   const maxValue = Math.max(...data.map((d) => d.value), 1)
 
@@ -181,6 +211,20 @@ export function SolicitationsChart() {
             {showBreakdown ? <ChevronUp className="h-3.5 w-3.5" /> : <ChevronDown className="h-3.5 w-3.5" />}
             <span>{showBreakdown ? "Hide" : "Show"} breakdown</span>
           </button>
+          
+          <button
+            onClick={() => setShowFilters(!showFilters)}
+            className="flex items-center gap-1.5 text-muted-foreground transition-colors hover:text-foreground"
+          >
+            <Filter className="h-3.5 w-3.5" />
+            <span>Filters</span>
+            {(selectedSubtier || selectedOffice) && (
+              <span className="ml-1 flex h-4 w-4 items-center justify-center rounded-full bg-accent text-[10px] text-accent-foreground">
+                {(selectedSubtier ? 1 : 0) + (selectedOffice ? 1 : 0)}
+              </span>
+            )}
+          </button>
+          
           {showBreakdown && (
             <div className="flex items-center gap-4">
               <div className="flex items-center gap-1.5">
@@ -198,6 +242,104 @@ export function SolicitationsChart() {
             </div>
           )}
         </div>
+
+        {showFilters && (
+          <div className="mb-4 space-y-3 rounded-lg border border-border/50 bg-muted/30 p-4">
+            <div className="flex items-center justify-between">
+              <h4 className="text-sm font-medium text-foreground">Filter Signals</h4>
+              {(selectedSubtier || selectedOffice) && (
+                <button
+                  onClick={() => {
+                    setSelectedSubtier('')
+                    setSelectedOffice('')
+                  }}
+                  className="text-xs text-muted-foreground hover:text-foreground"
+                >
+                  Clear all
+                </button>
+              )}
+            </div>
+            
+            <div className="grid gap-3 sm:grid-cols-2">
+              <div className="space-y-2">
+                <label className="text-xs font-medium text-muted-foreground">Subtier Agency</label>
+                <div className="relative">
+                  <select
+                    value={selectedSubtier}
+                    onChange={(e) => setSelectedSubtier(e.target.value)}
+                    className="w-full rounded-md border border-border bg-background px-3 py-2 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-accent"
+                  >
+                    <option value="">All Subtiers</option>
+                    {allSubtiers.map(subtier => (
+                      <option key={subtier} value={subtier}>{subtier}</option>
+                    ))}
+                  </select>
+                  {selectedSubtier && (
+                    <button
+                      onClick={() => setSelectedSubtier('')}
+                      className="absolute right-8 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                    >
+                      <X className="h-3.5 w-3.5" />
+                    </button>
+                  )}
+                </div>
+              </div>
+              
+              <div className="space-y-2">
+                <label className="text-xs font-medium text-muted-foreground">Office</label>
+                <div className="relative">
+                  <select
+                    value={selectedOffice}
+                    onChange={(e) => setSelectedOffice(e.target.value)}
+                    className="w-full rounded-md border border-border bg-background px-3 py-2 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-accent"
+                  >
+                    <option value="">All Offices</option>
+                    {allOffices.map(office => (
+                      <option key={office} value={office}>{office}</option>
+                    ))}
+                  </select>
+                  {selectedOffice && (
+                    <button
+                      onClick={() => setSelectedOffice('')}
+                      className="absolute right-8 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                    >
+                      <X className="h-3.5 w-3.5" />
+                    </button>
+                  )}
+                </div>
+              </div>
+            </div>
+            
+            {(selectedSubtier || selectedOffice) && (
+              <div className="flex flex-wrap gap-2 pt-2">
+                {selectedSubtier && (
+                  <div className="flex items-center gap-1 rounded-md bg-accent/10 px-2 py-1 text-xs">
+                    <span className="text-muted-foreground">Subtier:</span>
+                    <span className="font-medium text-foreground">{selectedSubtier}</span>
+                    <button
+                      onClick={() => setSelectedSubtier('')}
+                      className="ml-1 text-muted-foreground hover:text-foreground"
+                    >
+                      <X className="h-3 w-3" />
+                    </button>
+                  </div>
+                )}
+                {selectedOffice && (
+                  <div className="flex items-center gap-1 rounded-md bg-accent/10 px-2 py-1 text-xs">
+                    <span className="text-muted-foreground">Office:</span>
+                    <span className="font-medium text-foreground">{selectedOffice}</span>
+                    <button
+                      onClick={() => setSelectedOffice('')}
+                      className="ml-1 text-muted-foreground hover:text-foreground"
+                    >
+                      <X className="h-3 w-3" />
+                    </button>
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
+        )}
 
         <div className="h-[420px] w-full">
           <ResponsiveContainer width="100%" height="100%">
