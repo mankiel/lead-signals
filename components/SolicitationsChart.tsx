@@ -9,6 +9,7 @@ interface AgencyData {
   name: string
   value: number
   fullName: string
+  isHighlighted?: boolean
 }
 
 const CustomTooltip = ({ active, payload }: any) => {
@@ -42,12 +43,14 @@ export function SolicitationsChart() {
         // Convert to array and sort
         const sorted = Object.entries(subtierCounts)
           .map(([name, value]) => ({
-            name: name.length > 20 ? name.substring(0, 20) + '...' : name,
+            name: name.length > 30 ? name.substring(0, 30) + '...' : name,
             fullName: name,
-            value: value as number
+            value: value as number,
+            isHighlighted: name.toLowerCase().includes('defense logistics') || 
+                          name.toLowerCase().includes('maritime')
           }))
           .sort((a, b) => b.value - a.value)
-          .slice(0, 5) // Top 3
+          .slice(0, 10) // Top 10 to show Defense Logistics Agency and Maritime
         
         setData(sorted)
       })
@@ -60,7 +63,7 @@ export function SolicitationsChart() {
         <div className="flex items-center justify-between">
           <div>
             <CardTitle className="text-sm font-medium text-foreground">Active Solicitations by Subtier</CardTitle>
-            <p className="text-xs text-muted-foreground mt-1">Top 5 subtier agencies with active opportunities</p>
+            <p className="text-xs text-muted-foreground mt-1">Top 10 subtier agencies including Defense Logistics & Maritime</p>
           </div>
           <button className="flex items-center gap-1 text-xs text-accent hover:text-accent/80 transition-colors">
             View all
@@ -69,7 +72,7 @@ export function SolicitationsChart() {
         </div>
       </CardHeader>
       <CardContent>
-        <div className="h-64">
+        <div className="h-96">
           <ResponsiveContainer width="100%" height="100%">
             <BarChart data={data} layout="vertical" margin={{ top: 0, right: 20, left: 0, bottom: 0 }}>
               <XAxis type="number" hide />
@@ -83,11 +86,11 @@ export function SolicitationsChart() {
               />
               <Tooltip content={<CustomTooltip />} cursor={{ fill: "var(--color-muted)", opacity: 0.3 }} />
               <Bar dataKey="value" radius={[0, 4, 4, 0]} barSize={12}>
-                {data.map((_, index) => (
+                {data.map((entry, index) => (
                   <Cell
                     key={`cell-${index}`}
-                    fill="var(--color-chart-1)"
-                    fillOpacity={1 - index * 0.1}
+                    fill={entry.isHighlighted ? "var(--color-chart-3)" : "var(--color-chart-1)"}
+                    fillOpacity={entry.isHighlighted ? 0.95 : (1 - index * 0.08)}
                   />
                 ))}
               </Bar>
