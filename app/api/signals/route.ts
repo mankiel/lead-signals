@@ -26,21 +26,23 @@ export async function GET(req: NextRequest) {
       'Special Notice'
     ]
     
-    // Build where clause
-    const whereClause: any = {
-      AND: [
-        signalType ? { signalType } : {},
-        {
-          OR: allowedTypes.map(type => ({
-            metadata: { path: ['contractType'], string_contains: type }
-          }))
-        }
-      ]
+    // Build where clause with filters
+    const andConditions: any[] = [
+      {
+        OR: allowedTypes.map(type => ({
+          metadata: { path: ['contractType'], string_contains: type }
+        }))
+      }
+    ]
+    
+    // Add signal type filter if specified
+    if (signalType) {
+      andConditions.push({ signalType })
     }
     
     // Add agency filter if specified
     if (agency === 'defense') {
-      whereClause.AND.push({
+      andConditions.push({
         OR: [
           { companyName: { contains: 'DEFENSE', mode: 'insensitive' } },
           { metadata: { path: ['agency'], string_contains: 'DEFENSE' } }
@@ -49,7 +51,9 @@ export async function GET(req: NextRequest) {
     }
     
     const signals = await prisma.leadSignal.findMany({
-      where: whereClause,
+      where: {
+        AND: andConditions
+      },
       orderBy: { createdAt: 'desc' },
       take: limit
     })
