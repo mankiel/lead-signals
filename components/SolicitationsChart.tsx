@@ -61,7 +61,7 @@ export function SolicitationsChart({ selectedOffices = [], selectedSubtiers = []
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null)
   
   useEffect(() => {
-    fetch('/api/signals?type=government_contract&limit=500')
+    fetch('/api/signals?type=government_contract&limit=500&agency=defense')
       .then(res => res.json())
       .then(result => {
         let signals = result.signals || []

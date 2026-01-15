@@ -40,7 +40,7 @@ export function DeadlinesChart({ selectedOffices = [], selectedSubtiers = [] }: 
   const [totalActive, setTotalActive] = useState(0)
 
   useEffect(() => {
-    fetch('/api/signals?type=government_contract&limit=500')
+    fetch('/api/signals?type=government_contract&limit=500&agency=defense')
       .then(res => res.json())
       .then(result => {
         let signals = result.signals || []

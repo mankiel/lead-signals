@@ -54,7 +54,7 @@ export function RecentSignals({ selectedOffices = [], selectedSubtiers = [] }: R
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    fetch('/api/signals?type=government_contract&limit=20')
+    fetch('/api/signals?type=government_contract&limit=20&agency=defense')
       .then(res => res.json())
       .then(data => {
         let filteredSignals = data.signals || []

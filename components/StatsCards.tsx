@@ -17,7 +17,7 @@ export function StatsCards({ selectedOffices = [], selectedSubtiers = [] }: Stat
   })
 
   useEffect(() => {
-    fetch('/api/signals?type=government_contract&limit=500')
+    fetch('/api/signals?type=government_contract&limit=500&agency=defense')
       .then(res => res.json())
       .then(data => {
         let signals = data.signals || []

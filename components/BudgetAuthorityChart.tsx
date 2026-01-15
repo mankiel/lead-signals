@@ -40,7 +40,7 @@ export function BudgetAuthorityChart({ selectedOffices = [], selectedSubtiers = 
 
   useEffect(() => {
     console.log('BudgetAuthorityChart: Starting fetch...')
-    fetch('/api/signals?type=government_contract&limit=500')
+    fetch('/api/signals?type=government_contract&limit=500&agency=defense')
       .then(res => {
         console.log('BudgetAuthorityChart: Response status:', res.status, res.ok)
         if (!res.ok) {

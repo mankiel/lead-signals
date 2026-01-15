@@ -13,6 +13,7 @@ export async function GET(req: NextRequest) {
 
     const { searchParams } = new URL(req.url)
     const signalType = searchParams.get('type')
+    const agency = searchParams.get('agency') // 'defense', 'all', or null
     const limit = parseInt(searchParams.get('limit') || '50')
     
     // Filter for specific solicitation types
@@ -25,17 +26,30 @@ export async function GET(req: NextRequest) {
       'Special Notice'
     ]
     
-    const signals = await prisma.leadSignal.findMany({
-      where: {
-        AND: [
-          signalType ? { signalType } : {},
-          {
-            OR: allowedTypes.map(type => ({
-              metadata: { path: ['contractType'], string_contains: type }
-            }))
-          }
+    // Build where clause
+    const whereClause: any = {
+      AND: [
+        signalType ? { signalType } : {},
+        {
+          OR: allowedTypes.map(type => ({
+            metadata: { path: ['contractType'], string_contains: type }
+          }))
+        }
+      ]
+    }
+    
+    // Add agency filter if specified
+    if (agency === 'defense') {
+      whereClause.AND.push({
+        OR: [
+          { companyName: { contains: 'DEFENSE', mode: 'insensitive' } },
+          { metadata: { path: ['agency'], string_contains: 'DEFENSE' } }
         ]
-      },
+      })
+    }
+    
+    const signals = await prisma.leadSignal.findMany({
+      where: whereClause,
       orderBy: { createdAt: 'desc' },
       take: limit
     })
