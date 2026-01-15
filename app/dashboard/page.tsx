@@ -19,6 +19,9 @@ export default function DashboardPage() {
       <Header />
       
       <FilterBar 
+        selectedOffices={selectedOffices}
+        selectedSubtiers={selectedSubtiers}
+        onOfficeChange={setSelectedOffices}
         onSubtierChange={setSelectedSubtiers}
       />
       
