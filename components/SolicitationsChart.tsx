@@ -213,7 +213,10 @@ export function SolicitationsChart() {
           </button>
           
           <button
-            onClick={() => setShowFilters(!showFilters)}
+            onClick={() => {
+              console.log('Filter button clicked, current state:', showFilters)
+              setShowFilters(!showFilters)
+            }}
             className="flex items-center gap-1.5 text-muted-foreground transition-colors hover:text-foreground"
           >
             <Filter className="h-3.5 w-3.5" />
