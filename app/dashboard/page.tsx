@@ -3,7 +3,9 @@
 import { Sidebar } from "@/components/Sidebar"
 import { Header } from "@/components/Header"
 import { StatsCards } from "@/components/StatsCards"
-import { SolicitationsChart } from "@/components/SolicitationsChart"
+import { FundingBreakdown } from "@/components/FundingBreakdown"
+import { TimelineAnalysis } from "@/components/TimelineAnalysis"
+import { OpportunityInsights } from "@/components/OpportunityInsights"
 import { DeadlinesChart } from "@/components/DeadlinesChart"
 import { BudgetAuthorityChart } from "@/components/BudgetAuthorityChart"
 import { RecentSignals } from "@/components/RecentSignals"
@@ -21,15 +23,20 @@ export default function DashboardPage() {
           {/* Stats Overview */}
           <StatsCards />
 
-          {/* Charts Grid */}
+          {/* Opportunity Insights */}
+          <OpportunityInsights />
+
+          {/* Funding & Timeline Grid */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-            <SolicitationsChart />
-            <DeadlinesChart />
+            <FundingBreakdown />
+            <TimelineAnalysis />
           </div>
 
-          {/* Budget Chart */}
-          <BudgetAuthorityChart />
-
+          {/* Deadlines & Budget Grid */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+            <DeadlinesChart />
+            <BudgetAuthorityChart />
+          </div>
 
           {/* Recent Signals Feed */}
           <RecentSignals />
