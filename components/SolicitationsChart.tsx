@@ -203,10 +203,10 @@ export function SolicitationsChart() {
         </Button>
       </CardHeader>
       <CardContent>
-        <div className="mb-4 flex flex-wrap items-center gap-4 text-xs">
+        <div className="mb-4 flex flex-wrap items-center gap-3 text-xs border-b border-border/30 pb-3">
           <button
             onClick={() => setShowBreakdown(!showBreakdown)}
-            className="flex items-center gap-1.5 text-muted-foreground transition-colors hover:text-foreground"
+            className="flex items-center gap-1.5 rounded-md px-3 py-2 text-foreground bg-muted/50 hover:bg-muted transition-colors border border-border/50"
           >
             {showBreakdown ? <ChevronUp className="h-3.5 w-3.5" /> : <ChevronDown className="h-3.5 w-3.5" />}
             <span>{showBreakdown ? "Hide" : "Show"} breakdown</span>
@@ -217,12 +217,12 @@ export function SolicitationsChart() {
               console.log('Filter button clicked, current state:', showFilters)
               setShowFilters(!showFilters)
             }}
-            className="flex items-center gap-1.5 text-muted-foreground transition-colors hover:text-foreground"
+            className="flex items-center gap-1.5 rounded-md px-3 py-2 text-foreground bg-muted/50 hover:bg-muted transition-colors border border-border/50"
           >
             <Filter className="h-3.5 w-3.5" />
             <span>Filters</span>
             {(selectedSubtier || selectedOffice) && (
-              <span className="ml-1 flex h-4 w-4 items-center justify-center rounded-full bg-accent text-[10px] text-accent-foreground">
+              <span className="ml-1 flex h-5 w-5 items-center justify-center rounded-full bg-accent text-[10px] font-semibold text-accent-foreground">
                 {(selectedSubtier ? 1 : 0) + (selectedOffice ? 1 : 0)}
               </span>
             )}
