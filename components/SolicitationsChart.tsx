@@ -45,29 +45,6 @@ const CustomTooltip = ({ active, payload }: any) => {
             </div>
           </>
         )}
-        
-        <div className="my-2 h-px bg-border" />
-        <div className="flex items-center justify-between gap-8">
-          <div className="flex items-center gap-2">
-            <div className="h-2.5 w-2.5 rounded-sm bg-[#22d3ee]" />
-            <span className="text-muted-foreground">Maritime</span>
-          </div>
-          <span className="font-mono text-card-foreground">{item.maritime.toLocaleString()}</span>
-        </div>
-        <div className="flex items-center justify-between gap-8">
-          <div className="flex items-center gap-2">
-            <div className="h-2.5 w-2.5 rounded-sm bg-[#a78bfa]" />
-            <span className="text-muted-foreground">Aviation</span>
-          </div>
-          <span className="font-mono text-card-foreground">{item.aviation.toLocaleString()}</span>
-        </div>
-        <div className="flex items-center justify-between gap-8">
-          <div className="flex items-center gap-2">
-            <div className="h-2.5 w-2.5 rounded-sm bg-[#64748b]" />
-            <span className="text-muted-foreground">Other</span>
-          </div>
-          <span className="font-mono text-card-foreground">{item.other.toLocaleString()}</span>
-        </div>
       </div>
     </div>
   )
