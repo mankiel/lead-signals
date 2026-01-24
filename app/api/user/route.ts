@@ -11,11 +11,7 @@ export async function GET(req: NextRequest) {
     }
 
     let user = await prisma.user.findUnique({
-      where: { clerkId: userId },
-      include: {
-        subscriptions: true,
-        notificationPrefs: true
-      }
+      where: { clerkId: userId }
     })
 
     if (!user) {
