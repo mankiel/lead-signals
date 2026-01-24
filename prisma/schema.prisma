@@ -7,69 +7,69 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User {
-  id                    String                 @id @default(cuid())
-  clerkId               String                 @unique
-  email                 String                 @unique
-  name                  String?
-  subscriptionTier      String                 @default("free")
-  notificationsUsed     Int                    @default(0)
-  notificationsLimit    Int                    @default(10)
-  createdAt             DateTime               @default(now())
-  updatedAt             DateTime               @updatedAt
-  subscriptions         SignalSubscription[]
-  notificationPrefs     NotificationPreference?
-}
-
 model LeadSignal {
-  id              String   @id @default(cuid())
-  companyName     String
-  signalType      String
-  description     String   @db.Text
-  source          String
-  sourceUrl       String?
-  metadata        Json?
-  createdAt       DateTime @default(now())
-  
-  @@index([signalType])
+  id          String   @id
+  companyName String
+  signalType  String
+  description String
+  source      String
+  sourceUrl   String?
+  metadata    Json?
+  createdAt   DateTime @default(now())
+
   @@index([companyName])
   @@index([createdAt])
-}
-
-model SignalSubscription {
-  id          String   @id @default(cuid())
-  userId      String
-  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  signalType  String
-  keywords    String[]
-  isActive    Boolean  @default(true)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  
-  @@index([userId])
   @@index([signalType])
-}
-
-model NotificationPreference {
-  id                String   @id @default(cuid())
-  userId            String   @unique
-  user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  emailEnabled      Boolean  @default(true)
-  inAppEnabled      Boolean  @default(true)
-  frequency         String   @default("realtime")
-  createdAt         DateTime @default(now())
-  updatedAt         DateTime @updatedAt
 }
 
 model Notification {
-  id            String   @id @default(cuid())
-  userId        String
-  signalId      String
-  type          String
-  status        String
-  sentAt        DateTime?
-  createdAt     DateTime @default(now())
-  
-  @@index([userId])
+  id        String    @id
+  userId    String
+  signalId  String
+  type      String
+  status    String
+  sentAt    DateTime?
+  createdAt DateTime  @default(now())
+
   @@index([status])
+  @@index([userId])
+}
+
+model NotificationPreference {
+  id           String   @id
+  userId       String   @unique
+  emailEnabled Boolean  @default(true)
+  inAppEnabled Boolean  @default(true)
+  frequency    String   @default("realtime")
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime
+  User         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model SignalSubscription {
+  id         String   @id
+  userId     String
+  signalType String
+  keywords   String[]
+  isActive   Boolean  @default(true)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime
+  User       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([signalType])
+  @@index([userId])
+}
+
+model User {
+  id                     String                  @id
+  clerkId                String                  @unique
+  email                  String                  @unique
+  name                   String?
+  subscriptionTier       String                  @default("free")
+  notificationsUsed      Int                     @default(0)
+  notificationsLimit     Int                     @default(10)
+  createdAt              DateTime                @default(now())
+  updatedAt              DateTime
+  NotificationPreference NotificationPreference?
+  SignalSubscription     SignalSubscription[]
 }
