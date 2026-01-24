@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { auth } from '@clerk/nextjs/server'
 import { prisma } from '@/lib/prisma'
+import { randomUUID } from 'crypto'
 
 export async function GET(req: NextRequest) {
   try {
@@ -88,6 +89,7 @@ export async function POST(req: NextRequest) {
     
     const signal = await prisma.leadSignal.create({
       data: {
+        id: randomUUID(),
         companyName,
         signalType,
         description,
