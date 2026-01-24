@@ -54,7 +54,8 @@ export async function POST(req: NextRequest) {
         id: randomUUID(),
         userId: user.id,
         signalType,
-        keywords
+        keywords,
+        updatedAt: new Date()
       }
     })
     
