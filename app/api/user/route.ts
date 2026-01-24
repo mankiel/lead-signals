@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getAuth, clerkClient } from '@clerk/nextjs/server'
-import { prisma } from '@/lib/prisma'
-
+import { prisma } from '@/lib/prisma'import { randomUUID } from 'crypto'
 export async function GET(req: NextRequest) {
   try {
     const { userId } = await getAuth(req)
