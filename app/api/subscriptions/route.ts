@@ -11,8 +11,7 @@ export async function GET(req: NextRequest) {
     }
 
     const user = await prisma.user.findUnique({
-      where: { clerkId: userId },
-      include: { subscriptions: true }
+      where: { clerkId: userId }
     })
 
     if (!user) {
