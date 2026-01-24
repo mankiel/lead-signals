@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { auth } from '@clerk/nextjs/server'
 import { prisma } from '@/lib/prisma'
+import { randomUUID } from 'crypto'
 
 export async function GET(req: NextRequest) {
   try {
@@ -50,6 +51,7 @@ export async function POST(req: NextRequest) {
 
     const subscription = await prisma.signalSubscription.create({
       data: {
+        id: randomUUID(),
         userId: user.id,
         signalType,
         keywords
