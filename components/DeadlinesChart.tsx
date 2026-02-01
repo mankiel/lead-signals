@@ -12,12 +12,13 @@ const legendItems = [
   { name: "Extended (91+d)", color: "var(--color-muted-foreground)" },
 ]
 
-const CustomTooltip = ({ active, payload, label }: any) => {
+const CustomTooltip = ({ active, payload }: any) => {
   if (active && payload && payload.length) {
     const total = payload.reduce((sum: number, item: any) => sum + item.value, 0)
+    const fullName = payload[0]?.payload?.fullName || payload[0]?.payload?.name
     return (
       <div className="bg-popover border border-border rounded-lg px-3 py-2 shadow-lg">
-        <p className="text-sm font-medium text-foreground mb-1">{label}</p>
+        <p className="text-sm font-medium text-foreground mb-1">{fullName}</p>
         <p className="text-xs text-muted-foreground">{total} opportunities</p>
       </div>
     )
@@ -32,11 +33,11 @@ interface DeadlinesChartProps {
 
 export function DeadlinesChart({ selectedOffices = [], selectedSubtiers = [] }: DeadlinesChartProps) {
   const [data, setData] = useState([
-    { name: "0-7 days", urgent: 0, soon: 0, midterm: 0, later: 0, extended: 0 },
-    { name: "8-30 days", urgent: 0, soon: 0, midterm: 0, later: 0, extended: 0 },
-    { name: "31-60 days", urgent: 0, soon: 0, midterm: 0, later: 0, extended: 0 },
-    { name: "61-90 days", urgent: 0, soon: 0, midterm: 0, later: 0, extended: 0 },
-    { name: "91+ days", urgent: 0, soon: 0, midterm: 0, later: 0, extended: 0 },
+    { name: "0-7d", fullName: "0-7 days", urgent: 0, soon: 0, midterm: 0, later: 0, extended: 0 },
+    { name: "8-30d", fullName: "8-30 days", urgent: 0, soon: 0, midterm: 0, later: 0, extended: 0 },
+    { name: "31-60d", fullName: "31-60 days", urgent: 0, soon: 0, midterm: 0, later: 0, extended: 0 },
+    { name: "61-90d", fullName: "61-90 days", urgent: 0, soon: 0, midterm: 0, later: 0, extended: 0 },
+    { name: "91+d", fullName: "91+ days", urgent: 0, soon: 0, midterm: 0, later: 0, extended: 0 },
   ])
   const [totalActive, setTotalActive] = useState(0)
 
@@ -99,11 +100,11 @@ export function DeadlinesChart({ selectedOffices = [], selectedSubtiers = [] }: 
         })
         
         setData([
-          { name: "0-7 days", urgent: buckets.urgent, soon: 0, midterm: 0, later: 0, extended: 0 },
-          { name: "8-30 days", urgent: 0, soon: buckets.soon, midterm: 0, later: 0, extended: 0 },
-          { name: "31-60 days", urgent: 0, soon: 0, midterm: buckets.mid1, later: 0, extended: 0 },
-          { name: "61-90 days", urgent: 0, soon: 0, midterm: 0, later: buckets.mid2, extended: 0 },
-          { name: "91+ days", urgent: 0, soon: 0, midterm: 0, later: 0, extended: buckets.later },
+          { name: "0-7d", fullName: "0-7 days", urgent: buckets.urgent, soon: 0, midterm: 0, later: 0, extended: 0 },
+          { name: "8-30d", fullName: "8-30 days", urgent: 0, soon: buckets.soon, midterm: 0, later: 0, extended: 0 },
+          { name: "31-60d", fullName: "31-60 days", urgent: 0, soon: 0, midterm: buckets.mid1, later: 0, extended: 0 },
+          { name: "61-90d", fullName: "61-90 days", urgent: 0, soon: 0, midterm: 0, later: buckets.mid2, extended: 0 },
+          { name: "91+d", fullName: "91+ days", urgent: 0, soon: 0, midterm: 0, later: 0, extended: buckets.later },
         ])
         
         setTotalActive(Object.values(buckets).reduce((sum, val) => sum + val, 0))
