@@ -1,6 +1,6 @@
 "use client"
 
-import useSWR from 'swr'
+import { useState, useEffect, useCallback } from 'react'
 
 interface SavedSignal {
   id: string
@@ -14,17 +14,40 @@ interface SavedSignal {
   createdAt: string
 }
 
-const fetcher = (url: string) => fetch(url).then(res => res.json())
+const STORAGE_KEY = 'lead-signals-saved'
+
+function getStoredSignals(): SavedSignal[] {
+  if (typeof window === 'undefined') return []
+  try {
+    const stored = localStorage.getItem(STORAGE_KEY)
+    return stored ? JSON.parse(stored) : []
+  } catch {
+    return []
+  }
+}
+
+function setStoredSignals(signals: SavedSignal[]) {
+  if (typeof window === 'undefined') return
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(signals))
+  } catch {
+    // Storage might be full or unavailable
+  }
+}
 
 export function useSavedSignals() {
-  const { data, error, isLoading, mutate } = useSWR<{ savedSignals: SavedSignal[] }>(
-    '/api/saved-signals',
-    fetcher
-  )
+  const [savedSignals, setSavedSignals] = useState<SavedSignal[]>([])
+  const [isLoading, setIsLoading] = useState(true)
 
-  const savedSignalIds = new Set(data?.savedSignals?.map(s => s.signalId) || [])
+  // Load from localStorage on mount
+  useEffect(() => {
+    setSavedSignals(getStoredSignals())
+    setIsLoading(false)
+  }, [])
 
-  const saveSignal = async (signal: {
+  const savedSignalIds = new Set(savedSignals.map(s => s.signalId))
+
+  const saveSignal = useCallback(async (signal: {
     signalId: string
     companyName: string
     title?: string
@@ -33,54 +56,43 @@ export function useSavedSignals() {
     sourceUrl?: string
     notes?: string
   }) => {
-    try {
-      const res = await fetch('/api/saved-signals', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(signal)
-      })
-      
-      if (!res.ok) {
-        const data = await res.json()
-        throw new Error(data.error || 'Failed to save signal')
-      }
-      
-      mutate()
-      return true
-    } catch (error) {
-      console.error('Error saving signal:', error)
-      return false
+    const newSignal: SavedSignal = {
+      id: crypto.randomUUID(),
+      signalId: signal.signalId,
+      companyName: signal.companyName,
+      title: signal.title,
+      description: signal.description,
+      metadata: signal.metadata,
+      sourceUrl: signal.sourceUrl,
+      notes: signal.notes,
+      createdAt: new Date().toISOString()
     }
-  }
 
-  const unsaveSignal = async (signalId: string) => {
-    try {
-      const res = await fetch(`/api/saved-signals?signalId=${signalId}`, {
-        method: 'DELETE'
-      })
-      
-      if (!res.ok) {
-        throw new Error('Failed to unsave signal')
-      }
-      
-      mutate()
-      return true
-    } catch (error) {
-      console.error('Error unsaving signal:', error)
-      return false
-    }
-  }
+    const updated = [...savedSignals, newSignal]
+    setSavedSignals(updated)
+    setStoredSignals(updated)
+    return true
+  }, [savedSignals])
 
-  const isSignalSaved = (signalId: string) => savedSignalIds.has(signalId)
+  const unsaveSignal = useCallback(async (signalId: string) => {
+    const updated = savedSignals.filter(s => s.signalId !== signalId)
+    setSavedSignals(updated)
+    setStoredSignals(updated)
+    return true
+  }, [savedSignals])
+
+  const isSignalSaved = useCallback((signalId: string) => {
+    return savedSignalIds.has(signalId)
+  }, [savedSignalIds])
 
   return {
-    savedSignals: data?.savedSignals || [],
+    savedSignals,
     savedSignalIds,
     isLoading,
-    error,
+    error: null,
     saveSignal,
     unsaveSignal,
     isSignalSaved,
-    refresh: mutate
+    refresh: () => setSavedSignals(getStoredSignals())
   }
 }
