@@ -1,7 +1,5 @@
 "use client"
 
-import { useState } from "react"
-import { FilterBar } from "@/components/FilterBar"
 import { Header } from "@/components/Header"
 import { StatsCards } from "@/components/StatsCards"
 import { DeadlinesChart } from "@/components/DeadlinesChart"
@@ -11,52 +9,27 @@ import { RecentSignals } from "@/components/RecentSignals"
 import { InstallPWA } from "@/components/InstallPWA"
 
 export default function DashboardPage() {
-  const [selectedOffices, setSelectedOffices] = useState<string[]>([])
-  const [selectedSubtiers, setSelectedSubtiers] = useState<string[]>([])
-  
   return (
     <div className="flex flex-col min-h-screen bg-background">
       <Header />
-      
-      <FilterBar 
-        selectedOffices={selectedOffices}
-        selectedSubtiers={selectedSubtiers}
-        onOfficeChange={setSelectedOffices}
-        onSubtierChange={setSelectedSubtiers}
-      />
       
       <main className="flex-1 overflow-auto">
         
         <div className="p-6 space-y-4">
           {/* Stats Overview */}
-          <StatsCards 
-            selectedOffices={selectedOffices}
-            selectedSubtiers={selectedSubtiers}
-          />
+          <StatsCards />
 
           {/* Deadlines & Budget Grid */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-            <DeadlinesChart 
-              selectedOffices={selectedOffices}
-              selectedSubtiers={selectedSubtiers}
-            />
-            <BudgetAuthorityChart 
-              selectedOffices={selectedOffices}
-              selectedSubtiers={selectedSubtiers}
-            />
+            <DeadlinesChart />
+            <BudgetAuthorityChart />
           </div>
 
           {/* Agency & Office Breakdown */}
-          <SolicitationsChart 
-            selectedOffices={selectedOffices}
-            selectedSubtiers={selectedSubtiers}
-          />
+          <SolicitationsChart />
 
           {/* Recent Signals Feed */}
-          <RecentSignals 
-            selectedOffices={selectedOffices}
-            selectedSubtiers={selectedSubtiers}
-          />
+          <RecentSignals />
         </div>
       </main>
       
