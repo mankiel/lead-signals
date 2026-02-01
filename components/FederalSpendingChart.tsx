@@ -15,12 +15,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import {
-  Tooltip as TooltipUI,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip"
 
 interface AgencySpending {
   name: string
@@ -198,19 +192,12 @@ export function FederalSpendingChart() {
               <CardTitle className="text-sm font-semibold text-foreground">
                 Federal Spending Analysis
               </CardTitle>
-              <TooltipProvider>
-                <TooltipUI>
-                  <TooltipTrigger asChild>
-                    <Info className="w-3.5 h-3.5 text-muted-foreground cursor-help" />
-                  </TooltipTrigger>
-                  <TooltipContent className="max-w-xs">
-                    <p className="text-xs">
-                      Data sourced from USAspending.gov. Shows budgetary resources and obligations 
-                      to help identify agencies with the highest contract award potential.
-                    </p>
-                  </TooltipContent>
-                </TooltipUI>
-              </TooltipProvider>
+              <span className="group relative">
+                <Info className="w-3.5 h-3.5 text-muted-foreground cursor-help" />
+                <span className="absolute left-1/2 -translate-x-1/2 bottom-full mb-2 px-2 py-1 bg-popover text-popover-foreground text-[10px] rounded border border-border shadow-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none z-50">
+                  Data from USAspending.gov
+                </span>
+              </span>
             </div>
             <CardDescription className="text-[11px] text-muted-foreground">
               Budgetary resources and obligations by fiscal year
