@@ -1,4 +1,12 @@
 // Sample defense contract opportunities data
+// Deadlines are spread across different timeframes for chart visualization
+const today = new Date('2026-01-31');
+const addDays = (date: Date, days: number) => {
+  const result = new Date(date);
+  result.setDate(result.getDate() + days);
+  return result.toISOString();
+};
+
 export const sampleSignals = [
   {
     id: '1',
@@ -15,6 +23,7 @@ export const sampleSignals = [
       subtier: 'Army Contracting Command',
       value: 45000000,
       deadline: '2026-02-15',
+      responseDeadline: addDays(today, 15), // 15 days - Soon
       naicsCode: '334220',
       setAside: 'None',
       placeOfPerformance: 'Fort Bragg, NC'
@@ -35,6 +44,7 @@ export const sampleSignals = [
       subtier: 'Naval Sea Systems Command',
       value: 12000000,
       deadline: '2026-02-10',
+      responseDeadline: addDays(today, 10), // 10 days - Soon
       naicsCode: '336611',
       setAside: 'Small Business',
       placeOfPerformance: 'Norfolk, VA'
@@ -55,6 +65,7 @@ export const sampleSignals = [
       subtier: 'Air Force Materiel Command',
       value: 78000000,
       deadline: '2026-03-01',
+      responseDeadline: addDays(today, 29), // 29 days - Soon
       naicsCode: '541512',
       setAside: 'None',
       placeOfPerformance: 'Scott AFB, IL'
@@ -75,6 +86,7 @@ export const sampleSignals = [
       subtier: 'Defense Logistics Agency Energy',
       value: 234000000,
       deadline: '2026-02-20',
+      responseDeadline: addDays(today, 45), // 45 days - Mid-term (31-60)
       naicsCode: '424710',
       setAside: 'None',
       placeOfPerformance: 'Multiple Locations'
@@ -95,6 +107,7 @@ export const sampleSignals = [
       subtier: 'Army Medical Command',
       value: 8500000,
       deadline: '2026-02-08',
+      responseDeadline: addDays(today, 8), // 8 days - Soon
       naicsCode: '339112',
       setAside: 'SDVOSB',
       placeOfPerformance: 'Fort Sam Houston, TX'
@@ -115,6 +128,7 @@ export const sampleSignals = [
       subtier: 'Defense Information Systems Agency',
       value: 156000000,
       deadline: '2026-03-15',
+      responseDeadline: addDays(today, 55), // 55 days - Mid-term (31-60)
       naicsCode: '518210',
       setAside: 'None',
       placeOfPerformance: 'Fort Meade, MD'
@@ -135,6 +149,7 @@ export const sampleSignals = [
       subtier: 'Naval Undersea Warfare Center',
       value: 98000000,
       deadline: '2026-02-25',
+      responseDeadline: addDays(today, 25), // 25 days - Soon
       naicsCode: '336611',
       setAside: 'None',
       placeOfPerformance: 'Groton, CT'
@@ -155,6 +170,7 @@ export const sampleSignals = [
       subtier: 'National Geospatial-Intelligence Agency',
       value: 67000000,
       deadline: '2026-03-10',
+      responseDeadline: addDays(today, 70), // 70 days - Mid-term (61-90)
       naicsCode: '541370',
       setAside: 'Small Business',
       placeOfPerformance: 'Springfield, VA'
@@ -175,6 +191,7 @@ export const sampleSignals = [
       subtier: 'Defense Health Agency',
       value: 34000000,
       deadline: '2026-02-28',
+      responseDeadline: addDays(today, 28), // 28 days - Soon
       naicsCode: '424210',
       setAside: 'None',
       placeOfPerformance: 'Multiple MTFs'
@@ -195,6 +212,7 @@ export const sampleSignals = [
       subtier: 'Air Combat Command',
       value: 123000000,
       deadline: '2026-03-05',
+      responseDeadline: addDays(today, 5), // 5 days - Urgent
       naicsCode: '336411',
       setAside: 'None',
       placeOfPerformance: 'Creech AFB, NV'
@@ -215,6 +233,7 @@ export const sampleSignals = [
       subtier: 'Tank-automotive and Armaments Command',
       value: 89000000,
       deadline: '2026-02-18',
+      responseDeadline: addDays(today, 18), // 18 days - Soon
       naicsCode: '336992',
       setAside: 'None',
       placeOfPerformance: 'Detroit Arsenal, MI'
@@ -235,6 +254,7 @@ export const sampleSignals = [
       subtier: 'Defense Logistics Agency Troop Support',
       value: 56000000,
       deadline: '2026-02-22',
+      responseDeadline: addDays(today, 95), // 95 days - Later (91+)
       naicsCode: '315220',
       setAside: 'Small Business',
       placeOfPerformance: 'Philadelphia, PA'
@@ -255,6 +275,7 @@ export const sampleSignals = [
       subtier: 'Naval Air Systems Command',
       value: 42000000,
       deadline: '2026-02-14',
+      responseDeadline: addDays(today, 3), // 3 days - Urgent
       naicsCode: '541512',
       setAside: 'None',
       placeOfPerformance: 'San Diego, CA'
@@ -275,6 +296,7 @@ export const sampleSignals = [
       subtier: 'Army Corps of Engineers',
       value: 65000000,
       deadline: '2026-03-01',
+      responseDeadline: addDays(today, 62), // 62 days - Mid-term (61-90)
       naicsCode: '237990',
       setAside: 'None',
       placeOfPerformance: 'Multiple CONUS'
@@ -295,6 +317,7 @@ export const sampleSignals = [
       subtier: 'Space Force',
       value: 189000000,
       deadline: '2026-03-20',
+      responseDeadline: addDays(today, 100), // 100 days - Later (91+)
       naicsCode: '517410',
       setAside: 'None',
       placeOfPerformance: 'Colorado Springs, CO'
@@ -315,6 +338,7 @@ export const sampleSignals = [
       subtier: 'Defense Logistics Agency Aviation',
       value: 145000000,
       deadline: '2026-02-28',
+      responseDeadline: addDays(today, 38), // 38 days - Mid-term (31-60)
       naicsCode: '336413',
       setAside: 'None',
       placeOfPerformance: 'Richmond, VA'
@@ -335,6 +359,7 @@ export const sampleSignals = [
       subtier: 'Marine Corps Systems Command',
       value: 71000000,
       deadline: '2026-02-25',
+      responseDeadline: addDays(today, 12), // 12 days - Soon
       naicsCode: '541519',
       setAside: 'Small Business',
       placeOfPerformance: 'Twentynine Palms, CA'
@@ -355,6 +380,7 @@ export const sampleSignals = [
       subtier: 'Army Intelligence and Security Command',
       value: 92000000,
       deadline: '2026-03-05',
+      responseDeadline: addDays(today, 75), // 75 days - Mid-term (61-90)
       naicsCode: '541513',
       setAside: 'None',
       placeOfPerformance: 'Fort Belvoir, VA'
@@ -375,6 +401,7 @@ export const sampleSignals = [
       subtier: 'Air Force Life Cycle Management Center',
       value: 156000000,
       deadline: '2026-03-10',
+      responseDeadline: addDays(today, 21), // 21 days - Soon
       naicsCode: '336412',
       setAside: 'None',
       placeOfPerformance: 'Hill AFB, UT'
@@ -395,6 +422,7 @@ export const sampleSignals = [
       subtier: 'Defense Logistics Agency Land and Maritime',
       value: 87000000,
       deadline: '2026-02-26',
+      responseDeadline: addDays(today, 6), // 6 days - Urgent
       naicsCode: '336399',
       setAside: 'Small Business',
       placeOfPerformance: 'Columbus, OH'
@@ -415,6 +443,7 @@ export const sampleSignals = [
       subtier: 'Naval Supply Systems Command',
       value: 134000000,
       deadline: '2026-03-15',
+      responseDeadline: addDays(today, 48), // 48 days - Mid-term (31-60)
       naicsCode: '334511',
       setAside: 'None',
       placeOfPerformance: 'Mechanicsburg, PA'
@@ -435,6 +464,7 @@ export const sampleSignals = [
       subtier: 'Joint Munitions Command',
       value: 198000000,
       deadline: '2026-02-29',
+      responseDeadline: addDays(today, 110), // 110 days - Later (91+)
       naicsCode: '332993',
       setAside: 'None',
       placeOfPerformance: 'Lake City, MO'
@@ -455,6 +485,7 @@ export const sampleSignals = [
       subtier: 'Air Force Installation Contracting Agency',
       value: 54000000,
       deadline: '2026-02-21',
+      responseDeadline: addDays(today, 20), // 20 days - Soon
       naicsCode: '561210',
       setAside: 'Small Business',
       placeOfPerformance: 'Joint Base San Antonio, TX'
@@ -475,6 +506,7 @@ export const sampleSignals = [
       subtier: 'Defense Logistics Agency Disposition Services',
       value: 76000000,
       deadline: '2026-03-01',
+      responseDeadline: addDays(today, 85), // 85 days - Mid-term (61-90)
       naicsCode: '424210',
       setAside: 'None',
       placeOfPerformance: 'Battle Creek, MI'
@@ -495,6 +527,7 @@ export const sampleSignals = [
       subtier: 'Missile Defense Agency',
       value: 267000000,
       deadline: '2026-03-25',
+      responseDeadline: addDays(today, 2), // 2 days - Urgent
       naicsCode: '334511',
       setAside: 'None',
       placeOfPerformance: 'Huntsville, AL'
@@ -515,6 +548,7 @@ export const sampleSignals = [
       subtier: 'Defense Contract Management Agency',
       value: 38000000,
       deadline: '2026-02-18',
+      responseDeadline: addDays(today, 52), // 52 days - Mid-term (31-60)
       naicsCode: '541614',
       setAside: 'Small Business',
       placeOfPerformance: 'Multiple Locations'
@@ -535,6 +569,7 @@ export const sampleSignals = [
       subtier: 'Defense Advanced Research Projects Agency',
       value: 125000000,
       deadline: '2026-03-30',
+      responseDeadline: addDays(today, 120), // 120 days - Later (91+)
       naicsCode: '541715',
       setAside: 'None',
       placeOfPerformance: 'Arlington, VA'
@@ -555,6 +590,7 @@ export const sampleSignals = [
       subtier: 'Army Reserve Command',
       value: 31000000,
       deadline: '2026-02-17',
+      responseDeadline: addDays(today, 16), // 16 days - Soon
       naicsCode: '334220',
       setAside: 'SDVOSB',
       placeOfPerformance: 'Fort Bragg, NC'
@@ -575,6 +611,7 @@ export const sampleSignals = [
       subtier: 'Naval Facilities Engineering Systems Command',
       value: 95000000,
       deadline: '2026-03-08',
+      responseDeadline: addDays(today, 68), // 68 days - Mid-term (61-90)
       naicsCode: '336612',
       setAside: 'None',
       placeOfPerformance: 'Port Hueneme, CA'
@@ -595,6 +632,7 @@ export const sampleSignals = [
       subtier: 'Air National Guard',
       value: 112000000,
       deadline: '2026-03-12',
+      responseDeadline: addDays(today, 4), // 4 days - Urgent
       naicsCode: '336413',
       setAside: 'Small Business',
       placeOfPerformance: 'Multiple ANG Bases'
