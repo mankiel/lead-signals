@@ -111,40 +111,40 @@ export function DeadlinesChart({ selectedOffices = [], selectedSubtiers = [] }: 
   }, [selectedOffices, selectedSubtiers])
 
   return (
-    <Card className="bg-card border-border">
-      <CardHeader className="pb-4">
+    <Card className="bg-card/50 border-border/60">
+      <CardHeader className="pb-3">
         <div className="flex items-center justify-between">
           <div>
-            <CardTitle className="text-base font-semibold text-foreground">Upcoming Deadlines</CardTitle>
-            <p className="text-xs text-muted-foreground mt-1">Response deadline distribution</p>
+            <CardTitle className="text-sm font-semibold text-foreground">Upcoming Deadlines</CardTitle>
+            <p className="text-[11px] text-muted-foreground mt-0.5">Response deadline distribution</p>
           </div>
-          <span className="px-2.5 py-1 text-xs font-medium bg-chart-1/10 text-chart-1 rounded-lg">{totalActive} active</span>
+          <span className="px-2 py-0.5 text-[10px] font-medium bg-primary/10 text-primary rounded-md">{totalActive} active</span>
         </div>
       </CardHeader>
-      <CardContent>
-        <div className="h-52">
+      <CardContent className="pt-0">
+        <div className="h-48">
           <ResponsiveContainer width="100%" height="100%">
-            <BarChart data={data} margin={{ top: 10, right: 10, left: -10, bottom: 0 }}>
+            <BarChart data={data} margin={{ top: 8, right: 8, left: -15, bottom: 0 }}>
               <XAxis
                 dataKey="name"
                 axisLine={false}
                 tickLine={false}
-                tick={{ fontSize: 11, fill: "var(--color-muted-foreground)" }}
+                tick={{ fontSize: 10, fill: "var(--color-muted-foreground)" }}
               />
-              <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 11, fill: "var(--color-muted-foreground)" }} />
-              <Tooltip content={<CustomTooltip />} cursor={{ fill: "var(--color-muted)", opacity: 0.2 }} />
+              <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: "var(--color-muted-foreground)" }} />
+              <Tooltip content={<CustomTooltip />} cursor={{ fill: "var(--color-muted)", opacity: 0.15 }} />
               <Bar dataKey="urgent" stackId="a" fill="var(--color-chart-5)" radius={[0, 0, 0, 0]} />
               <Bar dataKey="soon" stackId="a" fill="var(--color-chart-3)" radius={[0, 0, 0, 0]} />
               <Bar dataKey="midterm" stackId="a" fill="var(--color-chart-1)" radius={[0, 0, 0, 0]} />
-              <Bar dataKey="later" stackId="a" fill="var(--color-muted-foreground)" radius={[4, 4, 0, 0]} />
+              <Bar dataKey="later" stackId="a" fill="var(--color-muted-foreground)" radius={[3, 3, 0, 0]} />
             </BarChart>
           </ResponsiveContainer>
         </div>
-        <div className="flex flex-wrap gap-4 mt-4 pt-4 border-t border-border">
+        <div className="flex flex-wrap gap-3 mt-3 pt-3 border-t border-border/50">
           {legendItems.map((item) => (
-            <div key={item.name} className="flex items-center gap-2">
-              <div className="w-2.5 h-2.5 rounded-sm" style={{ backgroundColor: item.color }} />
-              <span className="text-xs text-muted-foreground">{item.name}</span>
+            <div key={item.name} className="flex items-center gap-1.5">
+              <div className="w-2 h-2 rounded-sm" style={{ backgroundColor: item.color }} />
+              <span className="text-[10px] text-muted-foreground">{item.name}</span>
             </div>
           ))}
         </div>

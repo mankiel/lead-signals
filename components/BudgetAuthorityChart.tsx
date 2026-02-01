@@ -145,44 +145,44 @@ export function BudgetAuthorityChart({ selectedOffices = [], selectedSubtiers = 
   }, [selectedOffices, selectedSubtiers])
 
   return (
-    <Card className="bg-card border-border">
-      <CardHeader className="pb-4">
+    <Card className="bg-card/50 border-border/60">
+      <CardHeader className="pb-3">
         <div className="flex items-center justify-between">
           <div>
-            <CardTitle className="text-base font-semibold text-foreground">Top Contracts by Value</CardTitle>
-            <p className="text-xs text-muted-foreground mt-1">Highest value contracts</p>
+            <CardTitle className="text-sm font-semibold text-foreground">Top Contracts by Value</CardTitle>
+            <p className="text-[11px] text-muted-foreground mt-0.5">Highest value contracts</p>
           </div>
-          <div className="flex items-center gap-3">
-            <span className="px-2.5 py-1 text-xs font-medium bg-chart-2/10 text-chart-2 rounded-lg">{totalValue}</span>
-            <button className="flex items-center gap-1 text-xs text-chart-1 hover:text-chart-1/80 transition-colors font-medium">
+          <div className="flex items-center gap-2">
+            <span className="px-2 py-0.5 text-[10px] font-medium bg-chart-2/10 text-chart-2 rounded-md">{totalValue}</span>
+            <button className="flex items-center gap-0.5 text-[10px] text-primary hover:text-primary/80 transition-colors font-medium">
               Details
               <ArrowUpRight className="w-3 h-3" />
             </button>
           </div>
         </div>
       </CardHeader>
-      <CardContent>
+      <CardContent className="pt-0">
         {loading ? (
-          <div className="h-52 flex items-center justify-center text-muted-foreground text-sm">
+          <div className="h-48 flex items-center justify-center text-muted-foreground text-xs">
             Loading...
           </div>
         ) : error ? (
-          <div className="h-52 flex items-center justify-center text-muted-foreground text-sm">
+          <div className="h-48 flex items-center justify-center text-muted-foreground text-xs">
             {error === 'Failed to fetch data' ? 'Please sign in to view data' : 'Error loading data'}
           </div>
         ) : data.length === 0 ? (
-          <div className="h-52 flex items-center justify-center text-muted-foreground text-sm">
+          <div className="h-48 flex items-center justify-center text-muted-foreground text-xs">
             No contract data available
           </div>
         ) : (
-          <div className="h-52">
+          <div className="h-48">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={data} layout="vertical" margin={{ top: 0, right: 30, left: 0, bottom: 0 }}>
                 <XAxis
                   type="number"
                   axisLine={false}
                   tickLine={false}
-                  tick={{ fontSize: 11, fill: "var(--color-muted-foreground)" }}
+                  tick={{ fontSize: 10, fill: "var(--color-muted-foreground)" }}
                   tickFormatter={(value) => `$${value}M`}
                 />
                 <YAxis
@@ -190,11 +190,11 @@ export function BudgetAuthorityChart({ selectedOffices = [], selectedSubtiers = 
                   dataKey="name"
                   axisLine={false}
                   tickLine={false}
-                  tick={{ fontSize: 11, fill: "var(--color-muted-foreground)" }}
-                  width={120}
+                  tick={{ fontSize: 10, fill: "var(--color-muted-foreground)" }}
+                  width={110}
                 />
-                <Tooltip content={<CustomTooltip />} cursor={{ fill: "var(--color-muted)", opacity: 0.2 }} />
-                <Bar dataKey="value" fill="var(--color-chart-2)" radius={[0, 6, 6, 0]} barSize={20} />
+                <Tooltip content={<CustomTooltip />} cursor={{ fill: "var(--color-muted)", opacity: 0.15 }} />
+                <Bar dataKey="value" fill="var(--color-chart-2)" radius={[0, 4, 4, 0]} barSize={18} />
               </BarChart>
             </ResponsiveContainer>
           </div>

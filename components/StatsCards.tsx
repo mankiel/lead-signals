@@ -100,19 +100,19 @@ export function StatsCards({ selectedOffices = [], selectedSubtiers = [] }: Stat
       {statsData.map((stat) => (
         <Card
           key={stat.label}
-          className="group bg-card border-border hover:border-border/80 hover:shadow-md transition-all cursor-pointer overflow-hidden"
+          className="group bg-card/50 border-border/60 hover:bg-card hover:border-border transition-all cursor-pointer"
         >
-          <CardContent className="p-5">
-            <div className="flex items-start justify-between mb-4">
-              <div className={`p-2.5 rounded-xl ${stat.iconBg}`}>
-                <stat.icon className={`w-5 h-5 ${stat.iconColor}`} />
+          <CardContent className="p-4">
+            <div className="flex items-center justify-between mb-3">
+              <div className={`p-2 rounded-lg ${stat.iconBg}`}>
+                <stat.icon className={`w-4 h-4 ${stat.iconColor}`} />
               </div>
-              <ArrowUpRight className="w-4 h-4 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity" />
+              <ArrowUpRight className="w-3.5 h-3.5 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity" />
             </div>
             <div>
-              <p className="text-3xl font-bold text-foreground tracking-tight">{stat.value}</p>
-              <p className="text-sm font-medium text-foreground mt-1">{stat.label}</p>
-              <p className={`text-xs mt-1 ${stat.urgent ? 'text-chart-5' : 'text-muted-foreground'}`}>
+              <p className="text-2xl font-semibold text-foreground tracking-tight">{stat.value}</p>
+              <p className="text-xs font-medium text-muted-foreground mt-0.5">{stat.label}</p>
+              <p className={`text-[11px] mt-1.5 ${stat.urgent ? 'text-chart-5 font-medium' : 'text-muted-foreground/80'}`}>
                 {stat.description}
               </p>
             </div>

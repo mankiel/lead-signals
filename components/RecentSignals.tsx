@@ -119,46 +119,46 @@ export function RecentSignals({ selectedOffices = [], selectedSubtiers = [] }: R
   }
 
   return (
-    <Card className="bg-card border-border">
-      <CardHeader className="pb-4">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <CardTitle className="text-base font-semibold text-foreground">Recent Opportunities</CardTitle>
-          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 w-full sm:w-auto">
-            <div className="flex items-center gap-2 w-full sm:w-auto">
+    <Card className="bg-card/50 border-border/60">
+      <CardHeader className="pb-3">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <CardTitle className="text-sm font-semibold text-foreground">Recent Opportunities</CardTitle>
+          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 w-full sm:w-auto">
+            <div className="flex items-center gap-1.5 w-full sm:w-auto">
               <Select defaultValue="20">
-                <SelectTrigger className="w-full sm:w-28 h-9 text-xs bg-secondary/50 border-border rounded-lg">
+                <SelectTrigger className="w-full sm:w-24 h-7 text-[11px] bg-muted/50 border-border/60 rounded-md">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="10">10 per page</SelectItem>
-                  <SelectItem value="20">20 per page</SelectItem>
-                  <SelectItem value="50">50 per page</SelectItem>
+                  <SelectItem value="10" className="text-xs">10 per page</SelectItem>
+                  <SelectItem value="20" className="text-xs">20 per page</SelectItem>
+                  <SelectItem value="50" className="text-xs">50 per page</SelectItem>
                 </SelectContent>
               </Select>
               <Select defaultValue="all">
-                <SelectTrigger className="w-full sm:w-28 h-9 text-xs bg-secondary/50 border-border rounded-lg">
+                <SelectTrigger className="w-full sm:w-24 h-7 text-[11px] bg-muted/50 border-border/60 rounded-md">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="all">All Types</SelectItem>
-                  <SelectItem value="contracts">Contracts</SelectItem>
-                  <SelectItem value="grants">Grants</SelectItem>
+                  <SelectItem value="all" className="text-xs">All Types</SelectItem>
+                  <SelectItem value="contracts" className="text-xs">Contracts</SelectItem>
+                  <SelectItem value="grants" className="text-xs">Grants</SelectItem>
                 </SelectContent>
               </Select>
             </div>
-            <div className="flex items-center gap-1 self-end sm:self-auto">
-              <Button variant="outline" size="icon" className="w-9 h-9 rounded-lg">
-                <ChevronLeft className="w-4 h-4" />
+            <div className="flex items-center gap-0.5 self-end sm:self-auto">
+              <Button variant="outline" size="icon" className="w-7 h-7 rounded-md border-border/60">
+                <ChevronLeft className="w-3.5 h-3.5" />
               </Button>
-              <span className="text-xs text-muted-foreground px-3 whitespace-nowrap">1 of 1</span>
-              <Button variant="outline" size="icon" className="w-9 h-9 rounded-lg">
-                <ChevronRight className="w-4 h-4" />
+              <span className="text-[10px] text-muted-foreground px-2 whitespace-nowrap">1 of 1</span>
+              <Button variant="outline" size="icon" className="w-7 h-7 rounded-md border-border/60">
+                <ChevronRight className="w-3.5 h-3.5" />
               </Button>
             </div>
           </div>
         </div>
       </CardHeader>
-      <CardContent className="space-y-3">
+      <CardContent className="space-y-2">
         {signals.map((signal) => {
           const meta = signal.metadata || {}
           const daysLeft = calculateDaysLeft(meta.responseDeadline)
@@ -169,24 +169,24 @@ export function RecentSignals({ selectedOffices = [], selectedSubtiers = [] }: R
           return (
             <div
               key={signal.id}
-              className="group border border-border rounded-xl p-4 hover:bg-secondary/30 hover:border-border/80 transition-all cursor-pointer"
+              className="group border border-border/50 rounded-lg p-3 hover:bg-muted/30 hover:border-border transition-all cursor-pointer"
             >
-              <div className="flex flex-col sm:flex-row items-start gap-4">
+              <div className="flex flex-col sm:flex-row items-start gap-3">
                 <div
-                  className={cn("hidden sm:block w-1 rounded-full self-stretch min-h-24", getDepartmentColor(signal.companyName))}
+                  className={cn("hidden sm:block w-0.5 rounded-full self-stretch min-h-20", getDepartmentColor(signal.companyName))}
                 />
                 <div className="flex-1 min-w-0 w-full">
-                  <div className="flex items-start justify-between gap-3 mb-2">
-                    <div className="flex items-center gap-2 flex-wrap flex-1">
-                      <div className="flex items-center gap-1.5">
-                        <Building2 className="w-3.5 h-3.5 text-muted-foreground" />
-                        <span className="font-medium text-sm text-foreground">{signal.companyName}</span>
+                  <div className="flex items-start justify-between gap-2 mb-1.5">
+                    <div className="flex items-center gap-1.5 flex-wrap flex-1">
+                      <div className="flex items-center gap-1">
+                        <Building2 className="w-3 h-3 text-muted-foreground" />
+                        <span className="font-medium text-xs text-foreground">{signal.companyName}</span>
                       </div>
-                      <Badge variant="secondary" className="text-[10px] font-medium rounded-md">
+                      <Badge variant="secondary" className="text-[9px] font-medium rounded px-1.5 py-0">
                         {meta.contractType || 'Contract'}
                       </Badge>
                       {meta.value && (
-                        <Badge variant="outline" className="text-[10px] font-medium border-chart-2/30 text-chart-2 rounded-md">
+                        <Badge variant="outline" className="text-[9px] font-medium border-chart-2/30 text-chart-2 rounded px-1.5 py-0">
                           {meta.value}
                         </Badge>
                       )}
@@ -195,10 +195,10 @@ export function RecentSignals({ selectedOffices = [], selectedSubtiers = [] }: R
                       {daysLeft !== null && (
                         <Badge 
                           className={cn(
-                            "text-[10px] font-semibold rounded-md",
+                            "text-[9px] font-semibold rounded px-1.5 py-0",
                             isUrgent 
                               ? "bg-chart-5/10 text-chart-5 border-chart-5/20" 
-                              : "bg-secondary text-muted-foreground"
+                              : "bg-muted text-muted-foreground"
                           )} 
                           variant="outline"
                         >
@@ -207,11 +207,11 @@ export function RecentSignals({ selectedOffices = [], selectedSubtiers = [] }: R
                       )}
                     </div>
                   </div>
-                  <p className="text-sm font-medium text-foreground mb-1.5 line-clamp-1">{meta.title || 'Contract Opportunity'}</p>
-                  <p className="text-xs text-muted-foreground mb-3 line-clamp-2 leading-relaxed">{signal.description}</p>
-                  <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 text-xs text-muted-foreground">
-                    <span className="flex items-center gap-1.5">
-                      <Clock className="w-3.5 h-3.5" />
+                  <p className="text-xs font-medium text-foreground mb-1 line-clamp-1">{meta.title || 'Contract Opportunity'}</p>
+                  <p className="text-[11px] text-muted-foreground mb-2 line-clamp-2 leading-relaxed">{signal.description}</p>
+                  <div className="flex flex-col sm:flex-row sm:items-center gap-1.5 sm:gap-3 text-[10px] text-muted-foreground">
+                    <span className="flex items-center gap-1">
+                      <Clock className="w-3 h-3" />
                       Posted: {posted}
                     </span>
                     {meta.naicsCode && (
@@ -220,7 +220,7 @@ export function RecentSignals({ selectedOffices = [], selectedSubtiers = [] }: R
                       </span>
                     )}
                     {meta.solicitationNumber && (
-                      <span className="hidden sm:inline-flex items-center gap-1 font-mono text-[10px]">
+                      <span className="hidden sm:inline-flex items-center gap-1 font-mono text-[9px]">
                         {meta.solicitationNumber}
                       </span>
                     )}
@@ -228,28 +228,28 @@ export function RecentSignals({ selectedOffices = [], selectedSubtiers = [] }: R
                       href={meta.detailUrl || signal.sourceUrl || '#'} 
                       target="_blank" 
                       rel="noopener noreferrer" 
-                      className="text-chart-1 hover:underline flex items-center gap-1 font-medium"
+                      className="text-primary hover:underline flex items-center gap-0.5 font-medium"
                       onClick={(e) => e.stopPropagation()}
                     >
                       View on SAM.gov
-                      <ExternalLink className="w-3 h-3" />
+                      <ExternalLink className="w-2.5 h-2.5" />
                     </a>
                   </div>
                 </div>
                 {daysLeft !== null && (
-                  <div className="hidden sm:flex flex-col items-end gap-2 min-w-36">
+                  <div className="hidden sm:flex flex-col items-end gap-1 min-w-28">
                     <Badge 
                       className={cn(
-                        "text-xs font-semibold rounded-md px-2.5 py-1",
+                        "text-[10px] font-semibold rounded px-2 py-0.5",
                         isUrgent 
                           ? "bg-chart-5/10 text-chart-5 border-chart-5/20" 
-                          : "bg-secondary text-muted-foreground border-border"
+                          : "bg-muted text-muted-foreground border-border/50"
                       )} 
                       variant="outline"
                     >
                       {daysLeft} days left
                     </Badge>
-                    <span className="text-[11px] text-muted-foreground">Due: {deadline}</span>
+                    <span className="text-[10px] text-muted-foreground">Due: {deadline}</span>
                   </div>
                 )}
               </div>
