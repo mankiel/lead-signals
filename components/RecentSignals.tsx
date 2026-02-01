@@ -44,6 +44,31 @@ const calculateDaysLeft = (deadline: string) => {
   }
 }
 
+const formatDollarValue = (value: string | number | undefined) => {
+  if (!value) return null
+  
+  // If already formatted with $ or contains letters like "M" or "K", return as-is
+  if (typeof value === 'string' && (value.includes('$') || /[a-zA-Z]/.test(value))) {
+    return value
+  }
+  
+  // Convert to number
+  const numValue = typeof value === 'string' ? parseFloat(value.replace(/,/g, '')) : value
+  
+  if (isNaN(numValue)) return value?.toString() || null
+  
+  // Format based on magnitude
+  if (numValue >= 1_000_000_000) {
+    return `$${(numValue / 1_000_000_000).toFixed(1)}B`
+  } else if (numValue >= 1_000_000) {
+    return `$${(numValue / 1_000_000).toFixed(1)}M`
+  } else if (numValue >= 1_000) {
+    return `$${(numValue / 1_000).toFixed(0)}K`
+  } else {
+    return `$${numValue.toLocaleString()}`
+  }
+}
+
 interface RecentSignalsProps {
   selectedOffices?: string[]
   selectedSubtiers?: string[]
@@ -187,7 +212,7 @@ export function RecentSignals({ selectedOffices = [], selectedSubtiers = [] }: R
                       </Badge>
                       {meta.value && (
                         <Badge variant="outline" className="text-[9px] font-medium border-chart-2/30 text-chart-2 rounded px-1.5 py-0">
-                          {meta.value}
+                          {formatDollarValue(meta.value)}
                         </Badge>
                       )}
                     </div>
