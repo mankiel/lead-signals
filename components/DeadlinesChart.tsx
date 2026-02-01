@@ -7,8 +7,9 @@ import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer, Tooltip } from "recha
 const legendItems = [
   { name: "Urgent (<7d)", color: "var(--color-chart-5)" },
   { name: "Soon (8-30d)", color: "var(--color-chart-3)" },
-  { name: "Mid-term (31-90d)", color: "var(--color-chart-1)" },
-  { name: "Later (91+d)", color: "var(--color-muted-foreground)" },
+  { name: "Mid (31-60d)", color: "var(--color-chart-1)" },
+  { name: "Later (61-90d)", color: "var(--color-chart-4)" },
+  { name: "Extended (91+d)", color: "var(--color-muted-foreground)" },
 ]
 
 const CustomTooltip = ({ active, payload, label }: any) => {
@@ -31,11 +32,11 @@ interface DeadlinesChartProps {
 
 export function DeadlinesChart({ selectedOffices = [], selectedSubtiers = [] }: DeadlinesChartProps) {
   const [data, setData] = useState([
-    { name: "0-7 days", urgent: 0, soon: 0, midterm: 0, later: 0 },
-    { name: "8-30 days", urgent: 0, soon: 0, midterm: 0, later: 0 },
-    { name: "31-60 days", urgent: 0, soon: 0, midterm: 0, later: 0 },
-    { name: "61-90 days", urgent: 0, soon: 0, midterm: 0, later: 0 },
-    { name: "91+ days", urgent: 0, soon: 0, midterm: 0, later: 0 },
+    { name: "0-7 days", urgent: 0, soon: 0, midterm: 0, later: 0, extended: 0 },
+    { name: "8-30 days", urgent: 0, soon: 0, midterm: 0, later: 0, extended: 0 },
+    { name: "31-60 days", urgent: 0, soon: 0, midterm: 0, later: 0, extended: 0 },
+    { name: "61-90 days", urgent: 0, soon: 0, midterm: 0, later: 0, extended: 0 },
+    { name: "91+ days", urgent: 0, soon: 0, midterm: 0, later: 0, extended: 0 },
   ])
   const [totalActive, setTotalActive] = useState(0)
 
@@ -98,11 +99,11 @@ export function DeadlinesChart({ selectedOffices = [], selectedSubtiers = [] }: 
         })
         
         setData([
-          { name: "0-7 days", urgent: buckets.urgent, soon: 0, midterm: 0, later: 0 },
-          { name: "8-30 days", urgent: 0, soon: buckets.soon, midterm: 0, later: 0 },
-          { name: "31-60 days", urgent: 0, soon: 0, midterm: buckets.mid1, later: 0 },
-          { name: "61-90 days", urgent: 0, soon: 0, midterm: buckets.mid2, later: 0 },
-          { name: "91+ days", urgent: 0, soon: 0, midterm: 0, later: buckets.later },
+          { name: "0-7 days", urgent: buckets.urgent, soon: 0, midterm: 0, later: 0, extended: 0 },
+          { name: "8-30 days", urgent: 0, soon: buckets.soon, midterm: 0, later: 0, extended: 0 },
+          { name: "31-60 days", urgent: 0, soon: 0, midterm: buckets.mid1, later: 0, extended: 0 },
+          { name: "61-90 days", urgent: 0, soon: 0, midterm: 0, later: buckets.mid2, extended: 0 },
+          { name: "91+ days", urgent: 0, soon: 0, midterm: 0, later: 0, extended: buckets.later },
         ])
         
         setTotalActive(Object.values(buckets).reduce((sum, val) => sum + val, 0))
@@ -136,7 +137,8 @@ export function DeadlinesChart({ selectedOffices = [], selectedSubtiers = [] }: 
               <Bar dataKey="urgent" stackId="a" fill="var(--color-chart-5)" radius={[0, 0, 0, 0]} />
               <Bar dataKey="soon" stackId="a" fill="var(--color-chart-3)" radius={[0, 0, 0, 0]} />
               <Bar dataKey="midterm" stackId="a" fill="var(--color-chart-1)" radius={[0, 0, 0, 0]} />
-              <Bar dataKey="later" stackId="a" fill="var(--color-muted-foreground)" radius={[3, 3, 0, 0]} />
+              <Bar dataKey="later" stackId="a" fill="var(--color-chart-4)" radius={[0, 0, 0, 0]} />
+              <Bar dataKey="extended" stackId="a" fill="var(--color-muted-foreground)" radius={[3, 3, 0, 0]} />
             </BarChart>
           </ResponsiveContainer>
         </div>
