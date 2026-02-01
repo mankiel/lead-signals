@@ -1,3 +1,6 @@
+"use client"
+
+import { useState } from "react"
 import Link from "next/link"
 import {
   ArrowRight,
@@ -7,12 +10,53 @@ import {
   Shield,
   Clock,
   BarChart3,
-  Check,
   Sparkles,
   ChevronRight,
+  Mail,
+  Loader2,
+  CheckCircle2,
 } from "lucide-react"
 
 export default function Home() {
+  const [email, setEmail] = useState("")
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [isSubmitted, setIsSubmitted] = useState(false)
+  const [error, setError] = useState("")
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setIsSubmitting(true)
+    setError("")
+
+    try {
+      const response = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          access_key: process.env.NEXT_PUBLIC_WEB3FORMS_KEY || "YOUR_ACCESS_KEY",
+          email: email,
+          subject: "New Lead Signals Demo Request",
+          from_name: "Lead Signals Landing Page",
+        }),
+      })
+
+      const data = await response.json()
+
+      if (data.success) {
+        setIsSubmitted(true)
+        setEmail("")
+      } else {
+        setError("Something went wrong. Please try again.")
+      }
+    } catch {
+      setError("Failed to submit. Please try again.")
+    } finally {
+      setIsSubmitting(false)
+    }
+  }
+
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
@@ -35,24 +79,18 @@ export default function Home() {
                 Features
               </a>
               <a
-                href="#pricing"
+                href="#demo"
                 className="text-sm text-muted-foreground hover:text-foreground transition-colors"
               >
-                Pricing
+                Request Demo
               </a>
             </nav>
             <div className="flex items-center gap-3">
               <Link
                 href="/dashboard"
-                className="text-sm text-muted-foreground hover:text-foreground transition-colors hidden sm:block px-3 py-2"
-              >
-                Log in
-              </Link>
-              <Link
-                href="/dashboard"
                 className="inline-flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground rounded-lg text-sm font-medium hover:bg-primary/90 transition-colors"
               >
-                Get Started
+                Try Demo
                 <ArrowRight className="w-4 h-4" />
               </Link>
             </div>
@@ -68,7 +106,7 @@ export default function Home() {
           <div className="max-w-3xl mx-auto text-center">
             <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-primary/10 text-primary text-sm font-medium mb-8">
               <Sparkles className="w-4 h-4" />
-              Real-time DoD Contract Intelligence
+              Beta Access Available
             </div>
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-foreground mb-6 tracking-tight text-balance leading-[1.1]">
               Defense Contract Signals for{" "}
@@ -84,14 +122,14 @@ export default function Home() {
                 href="/dashboard"
                 className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 bg-primary text-primary-foreground rounded-lg text-sm font-medium hover:bg-primary/90 transition-colors"
               >
-                Request Access
+                Explore Demo
                 <ArrowRight className="w-4 h-4" />
               </Link>
               <a
-                href="#features"
+                href="#demo"
                 className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 bg-secondary text-secondary-foreground rounded-lg text-sm font-medium hover:bg-secondary/80 transition-colors"
               >
-                Learn More
+                Request Full Access
                 <ChevronRight className="w-4 h-4" />
               </a>
             </div>
@@ -196,99 +234,85 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Pricing Section */}
+      {/* Demo Request Section */}
       <section
-        id="pricing"
+        id="demo"
         className="py-20 sm:py-28 bg-muted/30 border-y border-border/40"
       >
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-14">
+          <div className="max-w-xl mx-auto text-center">
             <p className="text-sm font-medium text-primary mb-3">
-              Pricing
+              Get Early Access
             </p>
             <h2 className="text-3xl sm:text-4xl font-bold text-foreground mb-4 text-balance">
-              Simple, transparent pricing
+              Request Full Access
             </h2>
-            <p className="text-muted-foreground max-w-xl mx-auto">
-              Start for free, upgrade when you need more.
+            <p className="text-muted-foreground mb-8">
+              Enter your email to get notified when we launch and receive early
+              access to all premium features.
             </p>
-          </div>
 
-          <div className="grid sm:grid-cols-2 gap-6 max-w-3xl mx-auto">
-            {/* Free Plan */}
-            <div className="p-7 rounded-xl bg-card border border-border/60">
-              <h3 className="text-lg font-semibold text-foreground mb-1">
-                Free
-              </h3>
-              <p className="text-3xl font-bold text-foreground mb-1">
-                $0
-                <span className="text-base font-normal text-muted-foreground">
-                  /mo
-                </span>
-              </p>
-              <p className="text-sm text-muted-foreground mb-6">
-                Perfect for getting started
-              </p>
-              <ul className="space-y-3 mb-6">
-                {[
-                  "10 notifications/month",
-                  "All signal types",
-                  "Email notifications",
-                ].map((item) => (
-                  <li
-                    key={item}
-                    className="flex items-center gap-3 text-sm text-foreground"
-                  >
-                    <div className="w-5 h-5 rounded-full bg-chart-2/15 flex items-center justify-center flex-shrink-0">
-                      <Check className="w-3 h-3 text-chart-2" />
-                    </div>
-                    {item}
-                  </li>
-                ))}
-              </ul>
-              <Link
-                href="/dashboard"
-                className="block w-full text-center px-5 py-2.5 rounded-lg border border-border text-foreground text-sm font-medium hover:bg-muted transition-colors"
-              >
-                Get Started
-              </Link>
-            </div>
-
-            {/* Pro Plan */}
-            <div className="relative p-7 rounded-xl bg-primary text-primary-foreground">
-              <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-                <span className="inline-flex items-center px-3 py-1 rounded-full bg-chart-3 text-foreground text-xs font-semibold">
-                  Popular
-                </span>
+            {isSubmitted ? (
+              <div className="flex flex-col items-center gap-4 p-8 rounded-xl bg-card border border-chart-2/30">
+                <div className="w-14 h-14 rounded-full bg-chart-2/10 flex items-center justify-center">
+                  <CheckCircle2 className="w-7 h-7 text-chart-2" />
+                </div>
+                <div>
+                  <h3 className="text-lg font-semibold text-foreground mb-1">
+                    You&apos;re on the list!
+                  </h3>
+                  <p className="text-sm text-muted-foreground">
+                    We&apos;ll notify you when full access is available.
+                  </p>
+                </div>
+                <Link
+                  href="/dashboard"
+                  className="inline-flex items-center gap-2 text-sm text-primary hover:text-primary/80 font-medium"
+                >
+                  Explore the demo in the meantime
+                  <ArrowRight className="w-4 h-4" />
+                </Link>
               </div>
-              <h3 className="text-lg font-semibold mb-1">Pro</h3>
-              <p className="text-3xl font-bold mb-1">
-                $29
-                <span className="text-base font-normal opacity-75">/mo</span>
-              </p>
-              <p className="text-sm opacity-75 mb-6">For serious contractors</p>
-              <ul className="space-y-3 mb-6">
-                {[
-                  "Unlimited notifications",
-                  "All signal types",
-                  "Email & in-app notifications",
-                  "Priority support",
-                ].map((item) => (
-                  <li key={item} className="flex items-center gap-3 text-sm">
-                    <div className="w-5 h-5 rounded-full bg-primary-foreground/20 flex items-center justify-center flex-shrink-0">
-                      <Check className="w-3 h-3" />
-                    </div>
-                    {item}
-                  </li>
-                ))}
-              </ul>
-              <Link
-                href="/dashboard"
-                className="block w-full text-center px-5 py-2.5 rounded-lg bg-primary-foreground text-primary text-sm font-medium hover:bg-primary-foreground/90 transition-colors"
-              >
-                Get Started
-              </Link>
-            </div>
+            ) : (
+              <form onSubmit={handleSubmit} className="space-y-4">
+                <div className="flex flex-col sm:flex-row gap-3">
+                  <div className="relative flex-1">
+                    <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                    <input
+                      type="email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      placeholder="Enter your work email"
+                      required
+                      className="w-full pl-10 pr-4 py-3 bg-card border border-border rounded-lg text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all"
+                    />
+                  </div>
+                  <button
+                    type="submit"
+                    disabled={isSubmitting}
+                    className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-primary text-primary-foreground rounded-lg text-sm font-medium hover:bg-primary/90 transition-colors disabled:opacity-70 disabled:cursor-not-allowed"
+                  >
+                    {isSubmitting ? (
+                      <>
+                        <Loader2 className="w-4 h-4 animate-spin" />
+                        Submitting...
+                      </>
+                    ) : (
+                      <>
+                        Request Access
+                        <ArrowRight className="w-4 h-4" />
+                      </>
+                    )}
+                  </button>
+                </div>
+                {error && (
+                  <p className="text-sm text-destructive">{error}</p>
+                )}
+                <p className="text-xs text-muted-foreground">
+                  No spam, ever. We&apos;ll only contact you about Lead Signals updates.
+                </p>
+              </form>
+            )}
           </div>
         </div>
       </section>
@@ -298,17 +322,17 @@ export default function Home() {
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="rounded-2xl bg-primary/5 border border-primary/20 p-10 sm:p-14 text-center">
             <h2 className="text-2xl sm:text-3xl font-bold text-foreground mb-4 text-balance">
-              Ready to win more contracts?
+              Ready to explore the platform?
             </h2>
             <p className="text-muted-foreground max-w-lg mx-auto mb-8">
-              Join hundreds of defense contractors who use Lead Signals to
-              stay ahead of the competition.
+              Try our live demo to see how Lead Signals can help you find and
+              track DoD contract opportunities.
             </p>
             <Link
               href="/dashboard"
               className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-primary text-primary-foreground rounded-lg text-sm font-medium hover:bg-primary/90 transition-colors"
             >
-              Get Started for Free
+              Launch Demo Dashboard
               <ArrowRight className="w-4 h-4" />
             </Link>
           </div>
