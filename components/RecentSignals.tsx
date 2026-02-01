@@ -87,6 +87,19 @@ export function RecentSignals({ selectedOffices = [], selectedSubtiers = [] }: R
           )
         }
         
+        // Sort by days left (least to greatest)
+        filteredSignals.sort((a: any, b: any) => {
+          const daysA = calculateDaysLeft(a.metadata?.responseDeadline)
+          const daysB = calculateDaysLeft(b.metadata?.responseDeadline)
+          
+          // Null values go to end
+          if (daysA === null && daysB === null) return 0
+          if (daysA === null) return 1
+          if (daysB === null) return -1
+          
+          return daysA - daysB
+        })
+        
         setSignals(filteredSignals)
         setLoading(false)
       })
