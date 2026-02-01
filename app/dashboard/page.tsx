@@ -5,6 +5,7 @@ import { StatsCards } from "@/components/StatsCards"
 import { DeadlinesChart } from "@/components/DeadlinesChart"
 import { BudgetAuthorityChart } from "@/components/BudgetAuthorityChart"
 import { SolicitationsChart } from "@/components/SolicitationsChart"
+import { FederalSpendingChart } from "@/components/FederalSpendingChart"
 import { RecentSignals } from "@/components/RecentSignals"
 import { InstallPWA } from "@/components/InstallPWA"
 import { Activity } from "lucide-react"
@@ -47,6 +48,11 @@ export default function DashboardPage() {
           <section className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <DeadlinesChart />
             <BudgetAuthorityChart />
+          </section>
+
+          {/* Federal Spending Analysis */}
+          <section>
+            <FederalSpendingChart />
           </section>
 
           {/* Solicitations Breakdown */}
