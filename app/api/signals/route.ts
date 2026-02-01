@@ -1,11 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { auth } from '@clerk/nextjs/server'
-import { prisma } from '@/lib/prisma'
+// import { auth } from '@clerk/nextjs/server'
+// import { prisma } from '@/lib/prisma'
 import { randomUUID } from 'crypto'
+import { sampleSignals } from '@/lib/sample-data'
 
 export async function GET(req: NextRequest) {
   try {
-    // Temporarily disable auth for testing
+    // Auth disabled - using sample data
     // const { userId } = await auth()
     
     // if (!userId) {
@@ -27,37 +28,29 @@ export async function GET(req: NextRequest) {
       'Special Notice'
     ]
     
-    // Build where clause with filters
-    const andConditions: any[] = [
-      {
-        OR: allowedTypes.map(type => ({
-          metadata: { path: ['contractType'], string_contains: type }
-        }))
-      }
-    ]
+    // Use sample data instead of database
+    let signals = [...sampleSignals]
     
-    // Add signal type filter if specified
+    // Filter by signal type if specified
     if (signalType) {
-      andConditions.push({ signalType })
+      signals = signals.filter(s => s.signalType === signalType)
     }
     
-    // Add agency filter if specified
+    // Filter by agency if specified
     if (agency === 'defense') {
-      andConditions.push({
-        OR: [
-          { companyName: { contains: 'DEFENSE', mode: 'insensitive' } },
-          { metadata: { path: ['agency'], string_contains: 'DEFENSE' } }
-        ]
-      })
+      signals = signals.filter(s => 
+        s.companyName.toLowerCase().includes('defense') ||
+        s.metadata?.agency?.toLowerCase().includes('defense')
+      )
     }
     
-    const signals = await prisma.leadSignal.findMany({
-      where: {
-        AND: andConditions
-      },
-      orderBy: { createdAt: 'desc' },
-      take: limit
-    })
+    // Filter by allowed contract types
+    signals = signals.filter(s => 
+      s.metadata?.contractType && allowedTypes.includes(s.metadata.contractType)
+    )
+    
+    // Apply limit
+    signals = signals.slice(0, limit)
     
     return NextResponse.json({ signals })
   } catch (error) {
@@ -73,7 +66,7 @@ export async function GET(req: NextRequest) {
 
 export async function POST(req: NextRequest) {
   try {
-    // Temporarily disable auth for testing
+    // Auth disabled - using sample data
     // const { userId } = await auth()
     
     // if (!userId) {
@@ -87,17 +80,17 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 })
     }
     
-    const signal = await prisma.leadSignal.create({
-      data: {
-        id: randomUUID(),
-        companyName,
-        signalType,
-        description,
-        source,
-        sourceUrl,
-        metadata
-      }
-    })
+    // Return mock signal - database write disabled
+    const signal = {
+      id: randomUUID(),
+      companyName,
+      signalType,
+      description,
+      source,
+      sourceUrl,
+      metadata,
+      createdAt: new Date()
+    }
     
     return NextResponse.json({ signal }, { status: 201 })
   } catch (error) {
