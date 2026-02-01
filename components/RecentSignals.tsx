@@ -144,7 +144,7 @@ export function RecentSignals({ selectedOffices = [], selectedSubtiers = [] }: R
   }
 
   return (
-    <Card className="bg-card/50 border-border/60">
+    <Card id="recent-signals" className="bg-card/50 border-border/60 scroll-mt-20">
       <CardHeader className="pb-3">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <CardTitle className="text-sm font-semibold text-foreground">Recent Opportunities</CardTitle>

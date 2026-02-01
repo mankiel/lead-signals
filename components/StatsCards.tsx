@@ -92,14 +92,25 @@ export function StatsCards({ selectedOffices = [], selectedSubtiers = [] }: Stat
       iconColor: "text-chart-5",
       iconBg: "bg-chart-5/10",
       urgent: true,
+      href: "#recent-signals",
     },
   ]
+
+  const handleCardClick = (href?: string) => {
+    if (href) {
+      const element = document.querySelector(href)
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth' })
+      }
+    }
+  }
 
   return (
     <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
       {statsData.map((stat) => (
         <Card
           key={stat.label}
+          onClick={() => handleCardClick(stat.href)}
           className="group bg-card/50 border-border/60 hover:bg-card hover:border-border transition-all cursor-pointer"
         >
           <CardContent className="p-4">
