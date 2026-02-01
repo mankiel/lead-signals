@@ -4,7 +4,8 @@ import { useEffect, useState } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { ExternalLink, ChevronLeft, ChevronRight, Clock, Building2 } from "lucide-react"
+import { ExternalLink, ChevronLeft, ChevronRight, Clock, Building2, Bookmark } from "lucide-react"
+import { useSavedSignals } from "@/hooks/use-saved-signals"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 
@@ -78,6 +79,25 @@ export function RecentSignals({ selectedOffices = [], selectedSubtiers = [] }: R
   const [signals, setSignals] = useState<Signal[]>([])
   const [loading, setLoading] = useState(true)
   const [timeFilter, setTimeFilter] = useState<string>("all")
+  const { isSignalSaved, saveSignal, unsaveSignal } = useSavedSignals()
+
+  const handleSaveToggle = async (signal: Signal, e: React.MouseEvent) => {
+    e.stopPropagation()
+    const meta = signal.metadata || {}
+    
+    if (isSignalSaved(signal.id)) {
+      await unsaveSignal(signal.id)
+    } else {
+      await saveSignal({
+        signalId: signal.id,
+        companyName: signal.companyName,
+        title: meta.title,
+        description: signal.description,
+        metadata: signal.metadata,
+        sourceUrl: meta.detailUrl || signal.sourceUrl
+      })
+    }
+  }
 
   // Listen for filter events from StatsCards
   useEffect(() => {
@@ -173,6 +193,7 @@ export function RecentSignals({ selectedOffices = [], selectedSubtiers = [] }: R
                   <SelectItem value="all" className="text-xs">All Time</SelectItem>
                   <SelectItem value="new" className="text-xs">New This Week</SelectItem>
                   <SelectItem value="urgent" className="text-xs">Closing Soon</SelectItem>
+                  <SelectItem value="saved" className="text-xs">Saved</SelectItem>
                 </SelectContent>
               </Select>
               <Select defaultValue="all">
@@ -203,6 +224,10 @@ export function RecentSignals({ selectedOffices = [], selectedSubtiers = [] }: R
           if (timeFilter === "all") return true
           const meta = signal.metadata || {}
           const now = new Date()
+          
+          if (timeFilter === "saved") {
+            return isSignalSaved(signal.id)
+          }
           
           if (timeFilter === "new") {
             // Show signals posted within the last 7 days
@@ -253,7 +278,20 @@ export function RecentSignals({ selectedOffices = [], selectedSubtiers = [] }: R
                         </Badge>
                       )}
                     </div>
-                    <div className="sm:hidden shrink-0">
+                    <div className="sm:hidden shrink-0 flex items-center gap-1.5">
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className={cn(
+                          "w-6 h-6 rounded",
+                          isSignalSaved(signal.id) 
+                            ? "text-primary" 
+                            : "text-muted-foreground"
+                        )}
+                        onClick={(e) => handleSaveToggle(signal, e)}
+                      >
+                        <Bookmark className={cn("w-3 h-3", isSignalSaved(signal.id) && "fill-current")} />
+                      </Button>
                       {daysLeft !== null && (
                         <Badge 
                           className={cn(
@@ -298,22 +336,38 @@ export function RecentSignals({ selectedOffices = [], selectedSubtiers = [] }: R
                     </a>
                   </div>
                 </div>
-                {daysLeft !== null && (
-                  <div className="hidden sm:flex flex-col items-end gap-1 min-w-28">
-                    <Badge 
-                      className={cn(
-                        "text-[10px] font-semibold rounded px-2 py-0.5",
-                        isUrgent 
-                          ? "bg-chart-5/10 text-chart-5 border-chart-5/20" 
-                          : "bg-muted text-muted-foreground border-border/50"
-                      )} 
-                      variant="outline"
-                    >
-                      {daysLeft} days left
-                    </Badge>
-                    <span className="text-[10px] text-muted-foreground">Due: {deadline}</span>
-                  </div>
-                )}
+                <div className="hidden sm:flex flex-col items-end gap-1.5 min-w-28">
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className={cn(
+                      "w-7 h-7 rounded-md",
+                      isSignalSaved(signal.id) 
+                        ? "text-primary bg-primary/10 hover:bg-primary/20" 
+                        : "text-muted-foreground hover:text-foreground hover:bg-muted"
+                    )}
+                    onClick={(e) => handleSaveToggle(signal, e)}
+                    title={isSignalSaved(signal.id) ? "Remove from saved" : "Save signal"}
+                  >
+                    <Bookmark className={cn("w-3.5 h-3.5", isSignalSaved(signal.id) && "fill-current")} />
+                  </Button>
+                  {daysLeft !== null && (
+                    <>
+                      <Badge 
+                        className={cn(
+                          "text-[10px] font-semibold rounded px-2 py-0.5",
+                          isUrgent 
+                            ? "bg-chart-5/10 text-chart-5 border-chart-5/20" 
+                            : "bg-muted text-muted-foreground border-border/50"
+                        )} 
+                        variant="outline"
+                      >
+                        {daysLeft} days left
+                      </Badge>
+                      <span className="text-[10px] text-muted-foreground">Due: {deadline}</span>
+                    </>
+                  )}
+                </div>
               </div>
             </div>
           )
