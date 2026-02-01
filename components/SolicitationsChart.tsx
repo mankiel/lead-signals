@@ -159,15 +159,15 @@ export function SolicitationsChart({ selectedOffices = [], selectedSubtiers = []
   const maxValue = Math.max(...data.map((d) => d.value), 1)
 
   return (
-    <Card className="border-border/50 bg-card/50">
-      <CardHeader className="flex flex-row items-start justify-between pb-2">
+    <Card className="border-border bg-card">
+      <CardHeader className="flex flex-row items-start justify-between pb-4">
         <div className="space-y-1">
-          <CardTitle className="text-lg font-semibold text-foreground">Active Solicitations by Agency</CardTitle>
-          <CardDescription className="text-muted-foreground">
+          <CardTitle className="text-base font-semibold text-foreground">Active Solicitations by Agency</CardTitle>
+          <CardDescription className="text-muted-foreground text-xs">
             Agencies with top subtier breakdown
           </CardDescription>
         </div>
-        <Button variant="link" className="h-auto p-0 text-sm text-muted-foreground hover:text-foreground">
+        <Button variant="link" className="h-auto p-0 text-xs text-chart-1 hover:text-chart-1/80 font-medium">
           View all
           <ExternalLink className="ml-1 h-3.5 w-3.5" />
         </Button>

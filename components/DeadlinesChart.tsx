@@ -111,28 +111,28 @@ export function DeadlinesChart({ selectedOffices = [], selectedSubtiers = [] }: 
   }, [selectedOffices, selectedSubtiers])
 
   return (
-    <Card className="bg-card/50 border-border/50">
-      <CardHeader className="pb-3">
+    <Card className="bg-card border-border">
+      <CardHeader className="pb-4">
         <div className="flex items-center justify-between">
           <div>
-            <CardTitle className="text-sm font-medium text-foreground">Upcoming Deadlines</CardTitle>
+            <CardTitle className="text-base font-semibold text-foreground">Upcoming Deadlines</CardTitle>
             <p className="text-xs text-muted-foreground mt-1">Response deadline distribution</p>
           </div>
-          <span className="px-2 py-1 text-xs font-medium bg-accent/10 text-accent rounded-md">{totalActive} active</span>
+          <span className="px-2.5 py-1 text-xs font-medium bg-chart-1/10 text-chart-1 rounded-lg">{totalActive} active</span>
         </div>
       </CardHeader>
       <CardContent>
-        <div className="h-45">
+        <div className="h-52">
           <ResponsiveContainer width="100%" height="100%">
             <BarChart data={data} margin={{ top: 10, right: 10, left: -10, bottom: 0 }}>
               <XAxis
                 dataKey="name"
                 axisLine={false}
                 tickLine={false}
-                tick={{ fontSize: 10, fill: "var(--color-muted-foreground)" }}
+                tick={{ fontSize: 11, fill: "var(--color-muted-foreground)" }}
               />
-              <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: "var(--color-muted-foreground)" }} />
-              <Tooltip content={<CustomTooltip />} cursor={{ fill: "var(--color-muted)", opacity: 0.3 }} />
+              <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 11, fill: "var(--color-muted-foreground)" }} />
+              <Tooltip content={<CustomTooltip />} cursor={{ fill: "var(--color-muted)", opacity: 0.2 }} />
               <Bar dataKey="urgent" stackId="a" fill="var(--color-chart-5)" radius={[0, 0, 0, 0]} />
               <Bar dataKey="soon" stackId="a" fill="var(--color-chart-3)" radius={[0, 0, 0, 0]} />
               <Bar dataKey="midterm" stackId="a" fill="var(--color-chart-1)" radius={[0, 0, 0, 0]} />
@@ -143,7 +143,7 @@ export function DeadlinesChart({ selectedOffices = [], selectedSubtiers = [] }: 
         <div className="flex flex-wrap gap-4 mt-4 pt-4 border-t border-border">
           {legendItems.map((item) => (
             <div key={item.name} className="flex items-center gap-2">
-              <div className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: item.color }} />
+              <div className="w-2.5 h-2.5 rounded-sm" style={{ backgroundColor: item.color }} />
               <span className="text-xs text-muted-foreground">{item.name}</span>
             </div>
           ))}
