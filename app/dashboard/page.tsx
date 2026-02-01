@@ -4,7 +4,7 @@ import { Header } from "@/components/Header"
 import { StatsCards } from "@/components/StatsCards"
 import { DeadlinesChart } from "@/components/DeadlinesChart"
 import { BudgetAuthorityChart } from "@/components/BudgetAuthorityChart"
-import { SolicitationsChart } from "@/components/SolicitationsChart"
+
 import { FederalSpendingChart } from "@/components/FederalSpendingChart"
 import { RecentSignals } from "@/components/RecentSignals"
 import { InstallPWA } from "@/components/InstallPWA"
@@ -53,11 +53,6 @@ export default function DashboardPage() {
           {/* Federal Spending Analysis */}
           <section>
             <FederalSpendingChart />
-          </section>
-
-          {/* Solicitations Breakdown */}
-          <section>
-            <SolicitationsChart />
           </section>
 
           {/* Recent Signals Feed */}
