@@ -77,6 +77,18 @@ interface RecentSignalsProps {
 export function RecentSignals({ selectedOffices = [], selectedSubtiers = [] }: RecentSignalsProps) {
   const [signals, setSignals] = useState<Signal[]>([])
   const [loading, setLoading] = useState(true)
+  const [timeFilter, setTimeFilter] = useState<string>("all")
+
+  // Listen for filter events from StatsCards
+  useEffect(() => {
+    const handleFilterEvent = (e: CustomEvent<{ filter: string }>) => {
+      if (e.detail.filter === "new") {
+        setTimeFilter("new")
+      }
+    }
+    window.addEventListener('setSignalFilter', handleFilterEvent as EventListener)
+    return () => window.removeEventListener('setSignalFilter', handleFilterEvent as EventListener)
+  }, [])
 
   useEffect(() => {
     fetch('/api/signals?type=government_contract&limit=20&agency=defense')
@@ -150,14 +162,17 @@ export function RecentSignals({ selectedOffices = [], selectedSubtiers = [] }: R
           <CardTitle className="text-sm font-semibold text-foreground">Recent Opportunities</CardTitle>
           <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 w-full sm:w-auto">
             <div className="flex items-center gap-1.5 w-full sm:w-auto">
-              <Select defaultValue="20">
-                <SelectTrigger className="w-full sm:w-24 h-7 text-[11px] bg-muted/50 border-border/60 rounded-md">
+              <Select value={timeFilter} onValueChange={setTimeFilter}>
+                <SelectTrigger className={cn(
+                  "w-full sm:w-28 h-7 text-[11px] bg-muted/50 border-border/60 rounded-md",
+                  timeFilter === "new" && "border-chart-1/50 bg-chart-1/10"
+                )}>
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="10" className="text-xs">10 per page</SelectItem>
-                  <SelectItem value="20" className="text-xs">20 per page</SelectItem>
-                  <SelectItem value="50" className="text-xs">50 per page</SelectItem>
+                  <SelectItem value="all" className="text-xs">All Time</SelectItem>
+                  <SelectItem value="new" className="text-xs">New This Week</SelectItem>
+                  <SelectItem value="urgent" className="text-xs">Closing Soon</SelectItem>
                 </SelectContent>
               </Select>
               <Select defaultValue="all">
@@ -184,7 +199,29 @@ export function RecentSignals({ selectedOffices = [], selectedSubtiers = [] }: R
         </div>
       </CardHeader>
       <CardContent className="space-y-2">
-        {signals.map((signal) => {
+        {signals.filter((signal) => {
+          if (timeFilter === "all") return true
+          const meta = signal.metadata || {}
+          const now = new Date()
+          
+          if (timeFilter === "new") {
+            // Show signals posted within the last 7 days
+            if (!meta.postedDate) return false
+            const postedDate = new Date(meta.postedDate)
+            const daysSincePosted = Math.ceil((now.getTime() - postedDate.getTime()) / (1000 * 60 * 60 * 24))
+            return daysSincePosted <= 7
+          }
+          
+          if (timeFilter === "urgent") {
+            // Show signals closing within 7 days
+            if (!meta.responseDeadline) return false
+            const deadline = new Date(meta.responseDeadline)
+            const daysLeft = Math.ceil((deadline.getTime() - now.getTime()) / (1000 * 60 * 60 * 24))
+            return daysLeft >= 0 && daysLeft <= 7
+          }
+          
+          return true
+        }).map((signal) => {
           const meta = signal.metadata || {}
           const daysLeft = calculateDaysLeft(meta.responseDeadline)
           const isUrgent = daysLeft !== null && daysLeft < 7

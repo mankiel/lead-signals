@@ -75,6 +75,8 @@ export function StatsCards({ selectedOffices = [], selectedSubtiers = [] }: Stat
       icon: FileText,
       iconColor: "text-chart-1",
       iconBg: "bg-chart-1/10",
+      href: "#recent-signals",
+      filter: "new",
     },
     {
       label: "Total Contract Value",
@@ -96,8 +98,12 @@ export function StatsCards({ selectedOffices = [], selectedSubtiers = [] }: Stat
     },
   ]
 
-  const handleCardClick = (href?: string) => {
+  const handleCardClick = (href?: string, filter?: string) => {
     if (href) {
+      // Dispatch custom event to set filter in RecentSignals
+      if (filter) {
+        window.dispatchEvent(new CustomEvent('setSignalFilter', { detail: { filter } }))
+      }
       const element = document.querySelector(href)
       if (element) {
         element.scrollIntoView({ behavior: 'smooth' })
@@ -110,7 +116,7 @@ export function StatsCards({ selectedOffices = [], selectedSubtiers = [] }: Stat
       {statsData.map((stat) => (
         <Card
           key={stat.label}
-          onClick={() => handleCardClick(stat.href)}
+          onClick={() => handleCardClick(stat.href, stat.filter)}
           className="group bg-card/50 border-border/60 hover:bg-card hover:border-border transition-all cursor-pointer"
         >
           <CardContent className="p-4">
