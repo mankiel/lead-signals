@@ -21,6 +21,7 @@ export const sampleSignals = [
       agency: 'Department of Defense',
       office: 'The Army',
       subtier: 'Army Contracting Command',
+      title: 'Advanced Tactical Communications Systems',
       value: 45000000,
       deadline: '2026-02-15',
       responseDeadline: addDays(today, 15), // 15 days - Soon
@@ -85,6 +86,7 @@ export const sampleSignals = [
       office: 'Defense Logistics Agency',
       subtier: 'Defense Logistics Agency Energy',
       value: 234000000,
+      title: 'Multi-Year Petroleum Products Delivery',
       deadline: '2026-02-20',
       responseDeadline: addDays(today, 45), // 45 days - Mid-term (31-60)
       naicsCode: '424710',
@@ -127,6 +129,7 @@ export const sampleSignals = [
       office: 'Defense Information Systems Agency',
       subtier: 'Defense Information Systems Agency',
       value: 156000000,
+      title: 'DoD Cloud Migration Services',
       deadline: '2026-03-15',
       responseDeadline: addDays(today, 55), // 55 days - Mid-term (31-60)
       naicsCode: '518210',
@@ -316,6 +319,7 @@ export const sampleSignals = [
       office: 'The Air Force',
       subtier: 'Space Force',
       value: 189000000,
+      title: 'Space-Based Communication Systems',
       deadline: '2026-03-20',
       responseDeadline: addDays(today, 100), // 100 days - Later (91+)
       naicsCode: '517410',
@@ -337,6 +341,7 @@ export const sampleSignals = [
       office: 'Defense Logistics Agency',
       subtier: 'Defense Logistics Agency Aviation',
       value: 145000000,
+      title: 'Aircraft Spare Parts Supply Chain',
       deadline: '2026-02-28',
       responseDeadline: addDays(today, 38), // 38 days - Mid-term (31-60)
       naicsCode: '336413',
@@ -400,6 +405,7 @@ export const sampleSignals = [
       office: 'The Air Force',
       subtier: 'Air Force Life Cycle Management Center',
       value: 156000000,
+      title: 'F-35 Aircraft Maintenance Support',
       deadline: '2026-03-10',
       responseDeadline: addDays(today, 21), // 21 days - Soon
       naicsCode: '336412',
@@ -442,6 +448,7 @@ export const sampleSignals = [
       office: 'The Navy',
       subtier: 'Naval Supply Systems Command',
       value: 134000000,
+      title: 'Advanced Sonar Technology',
       deadline: '2026-03-15',
       responseDeadline: addDays(today, 48), // 48 days - Mid-term (31-60)
       naicsCode: '334511',
@@ -463,6 +470,7 @@ export const sampleSignals = [
       office: 'The Army',
       subtier: 'Joint Munitions Command',
       value: 198000000,
+      title: 'Small Arms Ammunition Manufacturing',
       deadline: '2026-02-29',
       responseDeadline: addDays(today, 110), // 110 days - Later (91+)
       naicsCode: '332993',
@@ -526,6 +534,7 @@ export const sampleSignals = [
       office: 'Missile Defense Agency',
       subtier: 'Missile Defense Agency',
       value: 267000000,
+      title: 'Ground-Based Interceptor Radar Systems',
       deadline: '2026-03-25',
       responseDeadline: addDays(today, 2), // 2 days - Urgent
       naicsCode: '334511',
@@ -568,6 +577,7 @@ export const sampleSignals = [
       office: 'Defense Advanced Research Projects Agency',
       subtier: 'Defense Advanced Research Projects Agency',
       value: 125000000,
+      title: 'Advanced Machine Learning Systems',
       deadline: '2026-03-30',
       responseDeadline: addDays(today, 120), // 120 days - Later (91+)
       naicsCode: '541715',
