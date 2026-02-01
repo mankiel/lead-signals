@@ -195,7 +195,7 @@ export function SolicitationsChart({ selectedOffices = [], selectedSubtiers = []
     <Card className="border-border/50 bg-card/50">
       <CardHeader className="flex flex-row items-start justify-between pb-2">
         <div className="space-y-1">
-          <CardTitle className="text-lg font-semibold text-foreground">Active Solicitations by Subtier</CardTitle>
+          <CardTitle className="text-lg font-semibold text-foreground">Active Solicitations by Agency</CardTitle>
           <CardDescription className="text-muted-foreground">
             Defense Logistics Agency with Maritime, Aviation breakdown
           </CardDescription>
