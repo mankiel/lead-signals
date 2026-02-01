@@ -11,11 +11,8 @@ interface AgencyData {
   shortName: string
   value: number
   fullName: string
-  maritime: number
-  aviation: number
-  other: number
-  isHighlighted?: boolean
-  offices?: Array<{ name: string; count: number }>
+  subtiers?: Array<{ name: string; count: number }>
+  [key: string]: any // For dynamic subtier0, subtier1, etc.
 }
 
 const CustomTooltip = ({ active, payload }: any) => {
@@ -31,15 +28,15 @@ const CustomTooltip = ({ active, payload }: any) => {
           <span className="font-mono font-semibold text-card-foreground">{item.value.toLocaleString()}</span>
         </div>
         
-        {item.offices && item.offices.length > 0 && (
+        {item.subtiers && item.subtiers.length > 0 && (
           <>
             <div className="my-2 h-px bg-border" />
             <div className="space-y-1">
-              <p className="text-xs font-medium text-muted-foreground mb-1.5">Top Offices:</p>
-              {item.offices.slice(0, 5).map((office: { name: string; count: number }, idx: number) => (
+              <p className="text-xs font-medium text-muted-foreground mb-1.5">Subtiers:</p>
+              {item.subtiers.slice(0, 5).map((subtier: { name: string; count: number }, idx: number) => (
                 <div key={idx} className="flex items-center justify-between gap-4 text-xs">
-                  <span className="text-muted-foreground truncate">{office.name}</span>
-                  <span className="font-mono text-card-foreground whitespace-nowrap">{office.count}</span>
+                  <span className="text-muted-foreground truncate">{subtier.name.length > 30 ? subtier.name.substring(0, 30) + '...' : subtier.name}</span>
+                  <span className="font-mono text-card-foreground whitespace-nowrap">{subtier.count}</span>
                 </div>
               ))}
             </div>
@@ -94,97 +91,67 @@ export function SolicitationsChart({ selectedOffices = [], selectedSubtiers = []
           )
         }
         
-        // Count by subtier and track breakdown by office type
-        const subtierData: { [key: string]: { 
-          total: number; 
-          maritime: number; 
-          aviation: number; 
-          other: number;
-          offices: { [key: string]: number }
+        // Group by office (tier/agency) and track subtiers
+        const officeData: { [key: string]: { 
+          total: number;
+          subtiers: { [key: string]: number }
         } } = {}
         
         signals.forEach((s: any) => {
-          const subtier = s.metadata?.subtier || s.metadata?.office || s.metadata?.agency || 'Unknown Subtier'
           const office = s.metadata?.office || 'Unknown Office'
-          const officeLower = office.toLowerCase()
+          const subtier = s.metadata?.subtier || 'Other'
           
-          if (!subtierData[subtier]) {
-            subtierData[subtier] = { total: 0, maritime: 0, aviation: 0, other: 0, offices: {} }
+          if (!officeData[office]) {
+            officeData[office] = { total: 0, subtiers: {} }
           }
           
-          subtierData[subtier].total += 1
-          
-          // Track office counts
-          subtierData[subtier].offices[office] = (subtierData[subtier].offices[office] || 0) + 1
-          
-          // Categorize by office type
-          if (officeLower.includes('maritime') || officeLower.includes('navy')) {
-            subtierData[subtier].maritime += 1
-          } else if (officeLower.includes('aviation') || officeLower.includes('air')) {
-            subtierData[subtier].aviation += 1
-          } else {
-            subtierData[subtier].other += 1
-          }
+          officeData[office].total += 1
+          officeData[office].subtiers[subtier] = (officeData[office].subtiers[subtier] || 0) + 1
         })
         
-        // Convert to array and sort
-        const allSubtiers = Object.entries(subtierData)
-          .map(([name, counts]) => ({
-            name: name.length > 30 ? name.substring(0, 30) + '...' : name,
-            shortName: name.replace('Defense Logistics Agency', 'DLA')
-              .replace('The Army', 'Army')
-              .replace('The Navy', 'Navy')
-              .replace('The Air Force', 'Air Force')
-              .substring(0, 20),
-            fullName: name,
-            value: counts.total,
-            maritime: counts.maritime,
-            aviation: counts.aviation,
-            other: counts.other,
-            isHighlighted: name.toLowerCase().includes('defense logistics'),
-            offices: Object.entries(counts.offices)
-              .map(([officeName, count]) => ({ name: officeName, count: count as number }))
-              .sort((a, b) => b.count - a.count)
-          }))
+        // Convert to array and sort by total
+        const allOffices = Object.entries(officeData)
+          .map(([name, data]) => {
+            // Get top 3 subtiers for this office
+            const sortedSubtiers = Object.entries(data.subtiers)
+              .sort((a, b) => b[1] - a[1])
+            
+            const top3Subtiers = sortedSubtiers.slice(0, 3)
+            const remaining = sortedSubtiers.slice(3)
+            
+            // Create data structure for stacked bars
+            const result: any = {
+              name: name.length > 25 ? name.substring(0, 25) + '...' : name,
+              shortName: name.replace('Defense Logistics Agency', 'DLA')
+                .replace('The Army', 'Army')
+                .replace('The Navy', 'Navy')
+                .replace('The Air Force', 'Air Force')
+                .replace('National Geospatial-Intelligence Agency', 'NGA')
+                .replace('Defense Information Systems Agency', 'DISA')
+                .replace('Defense Health Agency', 'DHA')
+                .substring(0, 20),
+              fullName: name,
+              value: data.total,
+              subtiers: Object.entries(data.subtiers).map(([n, c]) => ({ name: n, count: c }))
+            }
+            
+            // Add each subtier as a separate bar segment
+            top3Subtiers.forEach(([subtierName, count], idx) => {
+              result[`subtier${idx}`] = count
+              result[`subtierName${idx}`] = subtierName
+            })
+            
+            // Add "other subtiers" if any
+            if (remaining.length > 0) {
+              const otherCount = remaining.reduce((sum, [, count]) => sum + count, 0)
+              result.subtierOther = otherCount
+            }
+            
+            return result
+          })
           .sort((a, b) => b.value - a.value)
         
-        // Take top 4 and combine rest into "Other"
-        const topSubtiers = allSubtiers.slice(0, 4)
-        const remainingSubtiers = allSubtiers.slice(4)
-        
-        const formattedData = [...topSubtiers]
-        
-        // Add "Other" category if there are remaining subtiers
-        if (remainingSubtiers.length > 0) {
-          const otherTotal = remainingSubtiers.reduce((sum, s) => sum + s.value, 0)
-          const otherMaritime = remainingSubtiers.reduce((sum, s) => sum + s.maritime, 0)
-          const otherAviation = remainingSubtiers.reduce((sum, s) => sum + s.aviation, 0)
-          const otherOther = remainingSubtiers.reduce((sum, s) => sum + s.other, 0)
-          
-          // Combine all offices from remaining subtiers
-          const combinedOffices: { [key: string]: number } = {}
-          remainingSubtiers.forEach(s => {
-            s.offices?.forEach(office => {
-              combinedOffices[office.name] = (combinedOffices[office.name] || 0) + office.count
-            })
-          })
-          
-          formattedData.push({
-            name: 'Other',
-            shortName: 'Other',
-            fullName: `Other (${remainingSubtiers.length} subtiers)`,
-            value: otherTotal,
-            maritime: otherMaritime,
-            aviation: otherAviation,
-            other: otherOther,
-            isHighlighted: false,
-            offices: Object.entries(combinedOffices)
-              .map(([name, count]) => ({ name, count }))
-              .sort((a, b) => b.count - a.count)
-          })
-        }
-        
-        setData(formattedData)
+        setData(allOffices.slice(0, 5))
       })
       .catch(err => console.error('Failed to fetch agency data:', err))
   }, [selectedOffices, selectedSubtiers])
@@ -197,7 +164,7 @@ export function SolicitationsChart({ selectedOffices = [], selectedSubtiers = []
         <div className="space-y-1">
           <CardTitle className="text-lg font-semibold text-foreground">Active Solicitations by Agency</CardTitle>
           <CardDescription className="text-muted-foreground">
-            Defense Logistics Agency with Maritime, Aviation breakdown
+            Agencies with top subtier breakdown
           </CardDescription>
         </div>
         <Button variant="link" className="h-auto p-0 text-sm text-muted-foreground hover:text-foreground">
@@ -212,18 +179,22 @@ export function SolicitationsChart({ selectedOffices = [], selectedSubtiers = []
             className="flex items-center gap-1.5 rounded-md px-3 py-2 text-foreground bg-muted/50 hover:bg-muted transition-colors border border-border/50"
           >
             {showBreakdown ? <ChevronUp className="h-3.5 w-3.5" /> : <ChevronDown className="h-3.5 w-3.5" />}
-            <span>{showBreakdown ? "Hide" : "Show"} breakdown</span>
+            <span>{showBreakdown ? "Hide" : "Show"} subtier breakdown</span>
           </button>
           
           {showBreakdown && (
             <div className="flex items-center gap-4">
               <div className="flex items-center gap-1.5">
+                <div className="h-2.5 w-2.5 rounded-sm bg-[#4f8ff7]" />
+                <span className="text-muted-foreground">Subtier 1</span>
+              </div>
+              <div className="flex items-center gap-1.5">
                 <div className="h-2.5 w-2.5 rounded-sm bg-[#22d3ee]" />
-                <span className="text-muted-foreground">Maritime</span>
+                <span className="text-muted-foreground">Subtier 2</span>
               </div>
               <div className="flex items-center gap-1.5">
                 <div className="h-2.5 w-2.5 rounded-sm bg-[#a78bfa]" />
-                <span className="text-muted-foreground">Aviation</span>
+                <span className="text-muted-foreground">Subtier 3</span>
               </div>
               <div className="flex items-center gap-1.5">
                 <div className="h-2.5 w-2.5 rounded-sm bg-[#64748b]" />
@@ -267,9 +238,10 @@ export function SolicitationsChart({ selectedOffices = [], selectedSubtiers = []
 
               {showBreakdown ? (
                 <>
-                  <Bar dataKey="maritime" stackId="a" fill="#22d3ee" radius={[4, 0, 0, 4]} onMouseEnter={(_, index) => setHoveredIndex(index)} onMouseLeave={() => setHoveredIndex(null)} />
-                  <Bar dataKey="aviation" stackId="a" fill="#a78bfa" onMouseEnter={(_, index) => setHoveredIndex(index)} onMouseLeave={() => setHoveredIndex(null)} />
-                  <Bar dataKey="other" stackId="a" fill="#64748b" radius={[0, 4, 4, 0]} onMouseEnter={(_, index) => setHoveredIndex(index)} onMouseLeave={() => setHoveredIndex(null)}>
+                  <Bar dataKey="subtier0" stackId="a" fill="#4f8ff7" radius={[4, 0, 0, 4]} onMouseEnter={(_, index) => setHoveredIndex(index)} onMouseLeave={() => setHoveredIndex(null)} />
+                  <Bar dataKey="subtier1" stackId="a" fill="#22d3ee" onMouseEnter={(_, index) => setHoveredIndex(index)} onMouseLeave={() => setHoveredIndex(null)} />
+                  <Bar dataKey="subtier2" stackId="a" fill="#a78bfa" onMouseEnter={(_, index) => setHoveredIndex(index)} onMouseLeave={() => setHoveredIndex(null)} />
+                  <Bar dataKey="subtierOther" stackId="a" fill="#64748b" radius={[0, 4, 4, 0]} onMouseEnter={(_, index) => setHoveredIndex(index)} onMouseLeave={() => setHoveredIndex(null)}>
                     <LabelList dataKey="value" position="right" offset={8} className="fill-muted-foreground text-xs" formatter={(value) => typeof value === 'number' ? value.toLocaleString() : ''} />
                   </Bar>
                 </>
@@ -292,7 +264,7 @@ export function SolicitationsChart({ selectedOffices = [], selectedSubtiers = []
             Total: <span className="font-medium text-foreground">{data.reduce((acc, d) => acc + d.value, 0).toLocaleString()}</span> solicitations
           </span>
           <span className="text-muted-foreground">
-            Across <span className="font-medium text-foreground">{data.length}</span> subtiers
+            Across <span className="font-medium text-foreground">{data.length}</span> agencies
           </span>
         </div>
       </CardContent>
