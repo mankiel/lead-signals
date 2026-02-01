@@ -1,33 +1,24 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { getAuth, clerkClient } from '@clerk/nextjs/server'
-import { prisma } from '@/lib/prisma'import { randomUUID } from 'crypto'
+// import { getAuth, clerkClient } from '@clerk/nextjs/server'
+// import { prisma } from '@/lib/prisma'
+import { randomUUID } from 'crypto'
+
 export async function GET(req: NextRequest) {
   try {
-    const { userId } = await getAuth(req)
+    // Auth disabled - return mock user
+    // const { userId } = await getAuth(req)
     
-    if (!userId) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-    }
+    // if (!userId) {
+    //   return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    // }
 
-    let user = await prisma.user.findUnique({
-      where: { clerkId: userId }
-    })
-
-    if (!user) {
-      const client = await clerkClient()
-      const clerkUser = await client.users.getUser(userId)
-      
-      user = await prisma.user.create({
-        data: {
-          clerkId: userId,
-          email: clerkUser.emailAddresses[0]?.emailAddress || '',
-          name: `${clerkUser.firstName || ''} ${clerkUser.lastName || ''}`.trim()
-        },
-        include: {
-          subscriptions: true,
-          notificationPrefs: true
-        }
-      })
+    const user = {
+      id: randomUUID(),
+      clerkId: 'demo-user',
+      email: 'demo@example.com',
+      name: 'Demo User',
+      subscriptions: [],
+      notificationPrefs: null
     }
     
     return NextResponse.json({ user })
