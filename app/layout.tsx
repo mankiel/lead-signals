@@ -40,7 +40,7 @@ export default function RootLayout({
 }>) {
   return (
     // <ClerkProvider>
-      <html lang="en" suppressHydrationWarning>
+      <html lang="en" className="dark" suppressHydrationWarning>
         <head>
           <link rel="manifest" href="/manifest.json" />
           <meta name="mobile-web-app-capable" content="yes" />
@@ -50,8 +50,10 @@ export default function RootLayout({
             dangerouslySetInnerHTML={{
               __html: `
                 try {
-                  const theme = localStorage.getItem('theme') || 'dark';
-                  document.documentElement.classList.toggle('dark', theme === 'dark');
+                  const theme = localStorage.getItem('theme');
+                  if (theme === 'light') {
+                    document.documentElement.classList.remove('dark');
+                  }
                 } catch (e) {}
               `,
             }}
