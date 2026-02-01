@@ -44,6 +44,27 @@ const calculateDaysLeft = (deadline: string) => {
   }
 }
 
+const formatValue = (value: any) => {
+  if (!value) return null
+  
+  // If already a formatted string, return as is
+  if (typeof value === 'string') return value
+  
+  // If number, format to millions
+  if (typeof value === 'number') {
+    const millions = value / 1000000
+    if (millions >= 1) {
+      return `$${Math.round(millions)}M`
+    } else if (value >= 1000) {
+      return `$${Math.round(value / 1000)}K`
+    } else {
+      return `$${value}`
+    }
+  }
+  
+  return value
+}
+
 interface RecentSignalsProps {
   selectedOffices?: string[]
   selectedSubtiers?: string[]
@@ -167,7 +188,7 @@ export function RecentSignals({ selectedOffices = [], selectedSubtiers = [] }: R
           const meta = signal.metadata || {}
           const daysLeft = calculateDaysLeft(meta.responseDeadline)
           const isUrgent = daysLeft !== null && daysLeft < 7
-          const posted = meta.postedDate ? new Date(meta.postedDate).toLocaleDateString('en-US', { month: '2-digit', day: '2-digit', year: 'numeric' }) : 'N/A'
+          const posted = meformatValue(meta.value)ate ? new Date(meta.postedDate).toLocaleDateString('en-US', { month: '2-digit', day: '2-digit', year: 'numeric' }) : 'N/A'
           const deadline = meta.responseDeadline ? new Date(meta.responseDeadline).toLocaleDateString('en-US', { month: '2-digit', day: '2-digit', year: 'numeric' }) : 'TBD'
           
           return (
