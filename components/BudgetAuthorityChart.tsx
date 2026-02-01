@@ -96,9 +96,13 @@ export function BudgetAuthorityChart({ selectedOffices = [], selectedSubtiers = 
           const title = s.metadata?.title || s.description?.split('|')[0]?.trim() || 'Untitled'
           const agency = s.metadata?.agency || s.companyName || 'Unknown'
           
-          // Parse value (remove $ , M K etc)
+          // Parse value (handle both numeric and string formats)
           let value = 0
-          if (valueStr) {
+          if (typeof valueStr === 'number') {
+            // If numeric, convert to millions
+            value = valueStr / 1000000
+          } else if (valueStr) {
+            // If string, parse with units (remove $ , M K etc)
             const cleaned = valueStr.replace(/[$,]/g, '')
             const match = cleaned.match(/([\d.]+)\s*([MKB])?/)
             if (match) {
